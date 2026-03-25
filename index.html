@@ -21,6 +21,8 @@
             --card-shadow: 0 12px 30px rgba(180, 190, 220, 0.2);
             /* 追加：グラデーション用 */
             --grad-primary: linear-gradient(135deg, #a6cbe3 0%, #fbe0e6 100%);
+            /* 追加：スピード表示用 */
+            --speed-bg: rgba(166, 203, 227, 0.15);
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -142,6 +144,12 @@
         .marquee-content { display: inline-block; animation: marquee-scroll 8s linear infinite; }
         @keyframes marquee-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
+        /* 追加スタイル：スピードとタイマー */
+        .f-top-controls { position: absolute; top: 70px; width: 100%; display: flex; justify-content: space-between; padding: 0 40px; z-index: 100; }
+        .speed-badge { background: var(--speed-bg); color: #6a89cc; font-size: 12px; font-weight: 800; padding: 6px 14px; border-radius: 12px; cursor: pointer; border: 1.5px solid rgba(255,255,255,0.5); }
+        .timer-badge { background: var(--speed-bg); color: #6a89cc; font-size: 15px; padding: 6px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 10px; cursor: pointer; }
+        .timer-active { background: var(--grad-primary); color: #fff; }
+
         /* レスポンシブ: 390px以下の端末では画面幅100%に展開 */
         @media (max-width: 390px) {
             body { max-width: 100%; width: 100%; box-shadow: none; }
@@ -184,6 +192,12 @@
 
     <div class="full-player" id="full">
         <div id="bg-blur-overlay"><div class="bg-sphere"></div></div>
+        
+        <div class="f-top-controls">
+            <div id="sleep-timer-btn" class="timer-badge" onclick="cycleSleepTimer()"><i class="fa-solid fa-clock"></i></div>
+            <div id="playback-speed-btn" class="speed-badge" onclick="cyclePlaybackSpeed()">1.0x</div>
+        </div>
+
         <div onclick="closeFull()" style="padding:30px; text-align:center;"><div style="width:45px; height:6px; border-radius:10px; background:rgba(166,203,227,0.3); margin:0 auto;"></div></div>
         
         <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:0 40px;">
@@ -293,6 +307,12 @@
         let playingTracks = [], currentTrackIdx = -1, isShuffle = false, repeatMode = 0; 
         let historyTracks = []; 
         let editingId = null, editingPlId = null, tempPlImg = null, editingArtistName = null;
+        
+        /* 新規追加変数：再生速度、タイマー */
+        let currentPlaybackSpeed = 1.0;
+        let sleepTimerId = null;
+        let sleepTimerMinutes = 0;
+
         const audio = document.getElementById('audio-element');
 
         const req = indexedDB.open("MusicStudioWishcore_V4", 3);
@@ -421,6 +441,37 @@
             document.getElementById('left-btn').innerText = (currentArtist || currentPlaylistId) ? "Back" : (isEditing ? "Done" : "Edit");
         }
 
+        /* 新規追加：再生速度変更ロジック */
+        function cyclePlaybackSpeed() {
+            const speeds = [1.0, 1.25, 1.5, 2.0, 0.5, 0.75];
+            let idx = speeds.indexOf(currentPlaybackSpeed);
+            currentPlaybackSpeed = speeds[(idx + 1) % speeds.length];
+            audio.playbackRate = currentPlaybackSpeed;
+            document.getElementById('playback-speed-btn').innerText = currentPlaybackSpeed.toFixed(1) + 'x';
+        }
+
+        /* 新規追加：スリープタイマーロジック */
+        function cycleSleepTimer() {
+            const timers = [0, 15, 30, 45, 60];
+            let idx = timers.indexOf(sleepTimerMinutes);
+            sleepTimerMinutes = timers[(idx + 1) % timers.length];
+            
+            if (sleepTimerId) clearTimeout(sleepTimerId);
+            
+            const btn = document.getElementById('sleep-timer-btn');
+            if (sleepTimerMinutes > 0) {
+                btn.classList.add('timer-active');
+                sleepTimerId = setTimeout(() => {
+                    audio.pause();
+                    sleepTimerMinutes = 0;
+                    btn.classList.remove('timer-active');
+                    alert("Sleep timer: Music paused.");
+                }, sleepTimerMinutes * 60 * 1000);
+            } else {
+                btn.classList.remove('timer-active');
+            }
+        }
+
         // --- Core Music Logic ---
         function next() { 
             if (playingTracks.length === 0) return;
@@ -455,6 +506,11 @@
             }
             if(audio.src) URL.revokeObjectURL(audio.src);
             audio.src = URL.createObjectURL(t.data);
+            
+            /* 修正：読み込み時に現在の再生速度を適用 */
+            audio.defaultPlaybackRate = currentPlaybackSpeed;
+            audio.playbackRate = currentPlaybackSpeed;
+
             document.getElementById('m-img').src = t.cover || ''; checkMarquee('m-title', t.name);
             document.getElementById('f-img').src = t.cover || ''; checkMarquee('f-title', t.name); document.getElementById('f-artist').innerText = t.artist;
             document.getElementById('mini').style.display = 'flex';
@@ -590,7 +646,6 @@
 
         function updateArtistSuggest(val) {
             const container = document.getElementById('artist-quick-select');
-            // 変更：入力内容に関わらず全件ソートして表示
             const artists = [...new Set(tracks.map(t => t.artist))].sort();
             container.innerHTML = artists.map(a => `<div class="artist-chip" onclick="document.getElementById('edit-artist').value='${a}'">${a}</div>`).join('');
         }
@@ -608,12 +663,16 @@
         function removeTrackFromPlaylist(sid) { const pl = playlists.find(p => p.id === currentPlaylistId); pl.songIds = pl.songIds.filter(id => id !== sid); db.transaction("playlists","readwrite").objectStore("playlists").put(pl).onsuccess = loadAll; }
 
         audio.onended = () => { if(repeatMode === 2) { audio.currentTime = 0; audio.play(); } else { next(); } };
-        audio.onplay = () => { document.getElementById('m-pp').className = 'fa-solid fa-pause'; document.getElementById('f-pp').className = 'fa-solid fa-pause'; };
+        audio.onplay = () => { 
+            document.getElementById('m-pp').className = 'fa-solid fa-pause'; 
+            document.getElementById('f-pp').className = 'fa-solid fa-pause';
+            /* 修正：再生再開時にも速度を維持 */
+            audio.playbackRate = currentPlaybackSpeed;
+        };
         audio.onpause = () => { document.getElementById('m-pp').className = 'fa-solid fa-play'; document.getElementById('f-pp').className = 'fa-solid fa-play'; };
         audio.ontimeupdate = () => { if(!isNaN(audio.duration)){ const s = document.getElementById('seeker'); s.max = audio.duration; s.value = audio.currentTime; document.getElementById('cur-time').innerText = formatTime(audio.currentTime); document.getElementById('dur-time').innerText = formatTime(audio.duration); } };
         function formatTime(s) { let m=Math.floor(s/60), sec=Math.floor(s%60); return `${m}:${sec<10?'0':''}${sec}`; }
 
-        // 追加：長いタイトル用のマーキー（横スクロール）チェック機能
         function checkMarquee(elId, text) {
             const el = document.getElementById(elId);
             el.innerHTML = `<span id="${elId}-span" style="display:inline-block; white-space:nowrap;">${text}</span>`;
@@ -625,7 +684,6 @@
             }
         }
 
-        /* 修正: ファイル読み込みごとに都度トランザクションを生成するように変更（非同期エラー回避） */
         document.getElementById('audio-upload').onchange = (e) => {
             const files = e.target.files; if (files.length === 0) return;
             for (let f of files) {
