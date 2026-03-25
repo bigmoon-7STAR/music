@@ -278,12 +278,28 @@
         // 1. ファイル追加 & メタデータ解析
         dropZone.onclick = () => {
             const input = document.createElement('input');
-            input.type = 'file'; input.accept = 'audio/m4a, audio/mp4'; input.multiple = true;
+            input.type = 'file'; input.accept = 'audio/*'; input.multiple = true;
             input.onchange = (e) => handleFiles(e.target.files);
             input.click();
         };
 
+        async function handleFiles(files)
         async function handleFiles(files) {
+    console.log("ファイルを受け取りました:", files.length, "個"); // ←追加
+    for (const file of Array.from(files)) {
+        console.log("解析開始:", file.name); // ←追加
+        
+        const metadata = await musicMetadata.parseBlob(file).catch((err) => {
+            console.error("解析エラー:", err); // ←追加
+            return null;
+        });
+
+        if (!metadata) {
+            console.warn("メタデータが取得できませんでした。ファイル名で代用します。");
+        }
+        
+        // ...以下そのまま
+{
             for (const file of Array.from(files)) {
                 // M4Aファイル解析開始
                 const metadata = await musicMetadata.parseBlob(file).catch(() => null);
