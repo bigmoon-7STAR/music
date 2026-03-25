@@ -79,8 +79,84 @@
     </div>
 
     <script>
-        // ここにJavaScriptを書いていきます（色抽出や再生ロジック）
-        const dropZone = document.getElementById('drop-zone');
+        
+   const dropZone = document.getElementById('drop-zone');
+const trackList = document.getElementById('track-list');
+const playBtn = document.getElementById('play-btn');
+const playerTitle = document.getElementById('player-title');
+const playerArtist = document.getElementById('player-artist');
+
+// オーディオ再生用の本体
+let audio = new Audio();
+let isPlaying = false;
+
+// ドラッグ＆ドロップおよびファイル選択の処理
+dropZone.addEventListener('click', () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'audio/m4a, audio/mp4, audio/mpeg';
+    input.multiple = true;
+    input.onchange = (e) => handleFiles(e.target.files);
+    input.click();
+});
+
+dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.style.borderColor = '#1e90ff'; });
+dropZone.addEventListener('dragleave', () => { dropZone.style.borderColor = '#444'; });
+dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    handleFiles(e.dataTransfer.files);
+});
+
+// ファイルをライブラリに追加する関数
+function handleFiles(files) {
+    trackList.innerHTML = ''; // リストをリセット
+    Array.from(files).forEach((file, index) => {
+        const url = URL.createObjectURL(file);
+        
+        // リスト用の要素を作成
+        const item = document.createElement('div');
+        item.className = 'track-item';
+        item.innerHTML = `
+            <div style="flex: 1;">
+                <strong>${file.name}</strong><br>
+                <small>M4A Audio</small>
+            </div>
+        `;
+
+        // クリックしたら再生
+        item.onclick = () => playTrack(url, file.name);
+        trackList.appendChild(item);
+    });
+}
+
+// 再生処理
+function playTrack(url, name) {
+    audio.src = url;
+    audio.play();
+    isPlaying = true;
+    playBtn.innerText = '⏸';
+    playerTitle.innerText = name;
+    playerArtist.innerText = 'Local File';
+    
+    // 背景色をランダムに変える演出（仮）
+    const colors = ['#1e90ff', '#ff4757', '#2ed573', '#ffa502'];
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    document.getElementById('bg-overlay').style.background = 
+        `linear-gradient(135deg, ${randomColor}33 0%, rgba(0,0,0,0.9) 100%)`;
+}
+
+// 再生・停止ボタンの切り替え
+playBtn.onclick = () => {
+    if (isPlaying) {
+        audio.pause();
+        playBtn.innerText = '▶️';
+    } else {
+        audio.play();
+        playBtn.innerText = '⏸';
+    }
+    isPlaying = !isPlaying;
+};
+
         
         // ドラッグ＆ドロップの基本処理
         dropZone.addEventListener('dragover', (e) => {
