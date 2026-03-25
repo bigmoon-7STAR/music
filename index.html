@@ -3,233 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wishcore Player ✧.｡.:*</title>
+    <title>𝒲𝒾𝓈𝒽 𝒫𝓁𝒶𝓎𝑒𝓇 ✧</title>
     <style>
         :root {
-            --bg-color: #fdf2f8; /* 極めて淡いピンク */
-            --primary-color: #a78bfa; /* 淡い紫（ドリーミー） */
-            --accent-color: #38bdf8; /* 淡い青（憧れ） */
-            --text-color: #4c1d95; /* 濃い紫（可読性確保） */
-            --card-bg: rgba(255, 255, 255, 0.7); /* 半透明の白（雲のイメージ） */
-            --shadow: 0 4px 6px rgba(167, 139, 250, 0.3); /* 紫がかった影 */
+            --glass-bg: rgba(255, 255, 255, 0.4);
+            --text-main: #5e5e7e;
+            --accent-soft: #dcdcf7;
+            --border-light: rgba(255, 255, 255, 0.6);
         }
 
         body {
-            font-family: 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
-            background-color: var(--bg-color);
-            background-image: 
-                radial-gradient(at 10% 20%, rgba(255, 228, 230, 0.8) 0, transparent 40%),
-                radial-gradient(at 80% 10%, rgba(167, 139, 250, 0.5) 0, transparent 40%),
-                radial-gradient(at 90% 90%, rgba(56, 189, 248, 0.5) 0, transparent 40%),
-                radial-gradient(at 10% 90%, rgba(217, 249, 157, 0.5) 0, transparent 40%);
-            /* グリッド風の模様を薄く追加 (Y2K/Wish.comへのオマージュ) */
-            background-size: 20px 20px;
-            color: var(--text-color);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 40px 10px;
+            font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", "Hiragino Kaku Gothic ProN", sans-serif;
             margin: 0;
             min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf9 50%, #fdf2f8 100%);
+            color: var(--text-main);
+            letter-spacing: 0.05em;
+            overflow-x: hidden;
         }
 
-        /* アプリ全体のコンテナ */
-        .main-container {
-            background-color: var(--card-bg);
-            backdrop-filter: blur(8px); /* グラスモフィズム（夢心地） */
-            border-radius: 20px;
-            padding: 30px;
-            width: 350px;
-            max-width: 90%;
-            box-shadow: var(--shadow);
-            border: 2px solid rgba(255, 255, 255, 0.8);
+        /* 夢のような浮遊する光 */
+        .orb {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.4;
+            animation: float 10s infinite alternate;
+        }
+        .orb-1 { background: #e0e7ff; top: 10%; left: 10%; }
+        .orb-2 { background: #fae8ff; bottom: 10%; right: 10%; animation-delay: -2s; }
+
+        @keyframes float {
+            from { transform: translate(0, 0); }
+            to { transform: translate(20px, 40px); }
+        }
+
+        /* メインコンテナ */
+        .player-card {
+            width: 380px;
+            max-width: 90vw;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-light);
+            border-radius: 32px;
+            padding: 40px 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.03);
             text-align: center;
         }
 
-        h2 {
-            font-size: 2rem;
-            margin-bottom: 5px;
-            margin-top: 0;
-            text-shadow: 2px 2px 0 rgba(167, 139, 250, 0.3);
-            color: var(--text-color);
+        /* アートワーク部分 (Apple Music風) */
+        .artwork-area {
+            width: 240px;
+            height: 240px;
+            margin: 0 auto 30px;
+            background: linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%);
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 5rem;
+            box-shadow: 0 10px 30px rgba(167, 139, 250, 0.1);
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.8);
         }
 
-        p.subtitle {
-            font-size: 0.9rem;
-            color: var(--primary-color);
+        .artwork-area::after {
+            content: "✧";
+            position: absolute;
+            top: 10px; right: 10px; font-size: 1.2rem; opacity: 0.4;
+        }
+
+        h1 { font-size: 1.2rem; font-weight: 500; margin: 0; opacity: 0.8; }
+        p.artist { font-size: 0.9rem; margin: 5px 0 25px; opacity: 0.5; }
+
+        /* Apple Music風コントロール */
+        audio {
+            width: 100%;
+            height: 40px;
             margin-bottom: 25px;
-            font-weight: bold;
+            opacity: 0.7;
+            filter: invert(10%) sepia(10%) saturate(500%) hue-rotate(200deg);
         }
 
-        /* ファイル入力（見えなくする） */
-        #fileInput {
-            display: none;
-        }
-
-        /* おしゃれなファイル追加ボタン */
-        .custom-file-upload {
-            display: inline-block;
-            padding: 10px 20px;
+        /* ファイル選択ボタン (消えそうな質感) */
+        .add-btn {
+            display: block;
+            margin: 0 auto 30px;
+            padding: 8px 16px;
+            background: transparent;
+            border: 1px solid var(--border-light);
+            border-radius: 20px;
+            font-size: 0.75rem;
             cursor: pointer;
-            background: linear-gradient(135deg, var(--accent-color) 0%, var(--primary-color) 100%);
-            color: white;
-            border-radius: 50px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            box-shadow: var(--shadow);
-            border: 2px solid rgba(255, 255, 255, 0.6);
-            transition: all 0.3s ease;
+            color: var(--text-main);
+            transition: 0.3s;
         }
+        .add-btn:hover { background: rgba(255,255,255,0.4); letter-spacing: 0.15em; }
 
-        .custom-file-upload:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 10px rgba(167, 139, 250, 0.5);
-        }
-
-        /* プレイリスト */
+        /* リスト部分 */
         #playlist {
             list-style: none;
             padding: 0;
-            width: 100%;
-            margin-top: 30px;
-            margin-bottom: 20px;
-            max-height: 250px;
-            overflow-y: auto; /* スクロール可能に */
+            margin: 0;
+            max-height: 180px;
+            overflow-y: auto;
+            text-align: left;
+            border-top: 0.5px solid rgba(0,0,0,0.05);
         }
 
-        /* プレイリストのリスト項目 */
         #playlist li {
+            padding: 12px 8px;
+            border-bottom: 0.5px solid rgba(0,0,0,0.03);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 12px;
-            margin-bottom: 8px;
-            padding: 8px 15px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            transition: all 0.2s ease;
+            transition: 0.2s;
         }
 
-        #playlist li:hover {
-            transform: translateX(5px);
-            background: rgba(255, 255, 255, 0.9);
-            box-shadow: 0 2px 8px rgba(167, 139, 250, 0.2);
-        }
+        #playlist li:hover { background: rgba(255,255,255,0.2); }
 
-        /* 曲名表示 */
-        #playlist .song-name {
+        .song-info {
             cursor: pointer;
-            flex-grow: 1;
-            text-align: left;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
+            white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            white-space: nowrap; /* 長い曲名は省略 */
-            color: var(--text-color);
+            max-width: 80%;
+            opacity: 0.7;
         }
 
-        /* 削除ボタン（ウィッシュコア風に調整） */
-        #playlist .delete-btn {
-            margin-left: 10px;
-            background: rgba(255, 100, 100, 0.1);
-            color: #ff5555;
-            border: 2px solid rgba(255, 100, 100, 0.3);
-            border-radius: 50%; /* 丸い */
-            width: 30px;
-            height: 30px;
-            font-size: 0.8rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .del-icon {
+            font-size: 0.7rem;
             cursor: pointer;
-            transition: all 0.2s ease;
+            opacity: 0.3;
+            padding: 5px;
         }
+        .del-icon:hover { opacity: 0.8; color: #ff8e8e; }
 
-        #playlist .delete-btn:hover {
-            background: #ff5555;
-            color: white;
-            border-color: #ff5555;
-        }
+        /* スクロールバー隠し */
+        #playlist::-webkit-scrollbar { width: 0; }
 
-        /* オーディオプレイヤー本体 */
-        #audioPlayer {
-            width: 100%;
-            margin-top: 10px;
-            border-radius: 50px;
-            background-color: var(--accent-color); /* ブラウザによって対応状況が異なるが */
-            color: white;
-            box-shadow: var(--shadow);
-        }
-
-        /* ブラウザのaudioプレイヤーをカスタムするのは限界があるため、
-           Wishcoreな色使いに合わせた配色を（気休め程度に）CSSで指定。
-           実際はブラウザの標準UIに依存します。 */
-        audio::-webkit-media-controls-panel {
-            background-color: rgba(255, 255, 255, 0.7);
-        }
-        audio::-webkit-media-controls-current-time-display,
-        audio::-webkit-media-controls-time-remaining-display {
-            color: var(--text-color);
-        }
-
-        /* スクロールバーのカスタマイズ（ドリーミーに） */
-        #playlist::-webkit-scrollbar {
-            width: 6px;
-        }
-        #playlist::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.05);
-            border-radius: 10px;
-        }
-        #playlist::-webkit-scrollbar-thumb {
-            background: rgba(167, 139, 250, 0.5);
-            border-radius: 10px;
-        }
-
-        /* キラキラしたエフェクト（擬似要素で表現） */
-        body::before {
-            content: "✧ * . ｡";
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            color: white;
-            font-size: 1.5rem;
-            opacity: 0.5;
-            text-shadow: 0 0 5px var(--accent-color);
-        }
-
-        body::after {
-            content: "｡ . * ✧";
-            position: fixed;
-            bottom: 10px;
-            left: 10px;
-            color: white;
-            font-size: 1.5rem;
-            opacity: 0.5;
-            text-shadow: 0 0 5px var(--accent-color);
-        }
-
+        input[type="file"] { display: none; }
     </style>
 </head>
 <body>
 
-    <div class="main-container">
-        <h2>Your Dreams ✧.｡.:*</h2>
-        <p class="subtitle">Offline Music Player</p>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <div class="player-card">
+        <div class="artwork-area">🪽</div>
         
-        <label for="fileInput" class="custom-file-upload">
-            Add Wish List ｡.:*☆
-        </label>
+        <h1 id="currentTitle">Waiting for wish...</h1>
+        <p class="artist">Your Library</p>
+
+        <audio id="audioPlayer" controls></audio>
+
+        <label for="fileInput" class="add-btn">Add to memories ｡.ﾟ</label>
         <input type="file" id="fileInput" accept="audio/*" multiple>
         
         <ul id="playlist"></ul>
-        
-        <audio id="audioPlayer" controls></audio>
     </div>
 
     <script>
-        // JSのロジックは前回と同じ（ID名などは変更なし）
-
         let db;
         const request = indexedDB.open("MusicDB", 1);
 
@@ -247,11 +190,9 @@
             const files = e.target.files;
             const transaction = db.transaction(["songs"], "readwrite");
             const store = transaction.objectStore("songs");
-
             for (const file of files) {
                 store.put({ name: file.name, data: file });
             }
-
             transaction.oncomplete = () => displayPlaylist();
         });
 
@@ -264,48 +205,36 @@
             store.getAll().onsuccess = (e) => {
                 e.target.result.forEach(song => {
                     const li = document.createElement('li');
-
-                    // 曲名表示部分
-                    const nameSpan = document.createElement('span');
-                    nameSpan.textContent = song.name;
-                    nameSpan.className = 'song-name';
-                    nameSpan.onclick = () => playSong(song.data);
                     
-                    // 削除ボタン
-                    const deleteBtn = document.createElement('button');
-                    deleteBtn.innerHTML = "×"; // ✕マークにする
-                    deleteBtn.className = 'delete-btn';
-                    
-                    deleteBtn.onclick = (event) => {
-                        event.stopPropagation();
-                        deleteSong(song.name);
-                    };
+                    const info = document.createElement('div');
+                    info.className = 'song-info';
+                    info.textContent = song.name;
+                    info.onclick = () => playSong(song);
 
-                    li.appendChild(nameSpan);
-                    li.appendChild(deleteBtn);
+                    const del = document.createElement('div');
+                    del.className = 'del-icon';
+                    del.textContent = "✕";
+                    del.onclick = () => deleteSong(song.name);
+
+                    li.appendChild(info);
+                    li.appendChild(del);
                     list.appendChild(li);
                 });
             };
         }
 
-        function playSong(blob) {
-            const url = URL.createObjectURL(blob);
+        function playSong(song) {
+            const url = URL.createObjectURL(song.data);
             const player = document.getElementById('audioPlayer');
+            document.getElementById('currentTitle').textContent = song.name;
             player.src = url;
             player.play();
         }
 
         function deleteSong(name) {
-            // ダイアログも少し優しく
-            if (!confirm(`Are you sure to delete "${name}" from your Wish List? ｡.:*`)) return;
-
             const transaction = db.transaction(["songs"], "readwrite");
-            const store = transaction.objectStore("songs");
-            const request = store.delete(name);
-
-            request.onsuccess = () => {
-                displayPlaylist();
-            };
+            transaction.objectStore("songs").delete(name);
+            transaction.oncomplete = () => displayPlaylist();
         }
 
         if ('serviceWorker' in navigator) {
