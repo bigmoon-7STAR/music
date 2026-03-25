@@ -45,8 +45,19 @@
         .card-sub { font-size:11px; color: var(--sub-text); }
         .card-tag { display: inline-block; font-size: 9px; background: rgba(255,45,85,0.05); color: var(--key-color); padding: 1px 5px; border-radius: 4px; margin-top: 4px; font-weight: bold; }
 
-        .list-item { position: relative; display: flex; align-items: center; padding: 12px 20px; border-bottom: 0.5px solid rgba(0,0,0,0.03); cursor: pointer; }
+        /* Swipeable List Item */
+        .swipe-container { position: relative; overflow: hidden; background: #FF3B30; border-bottom: 0.5px solid rgba(0,0,0,0.03); }
+        .list-item { 
+            position: relative; display: flex; align-items: center; padding: 12px 20px; 
+            background: white; cursor: pointer; z-index: 2;
+            transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.15);
+        }
         .list-item img { width: 50px; height: 50px; border-radius: 10px; margin-right: 15px; object-fit: cover; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .swipe-delete-btn {
+            position: absolute; right: 0; top: 0; bottom: 0; width: 80px;
+            background: #FF3B30; color: white; display: flex; align-items: center;
+            justify-content: center; font-size: 14px; font-weight: bold; z-index: 1;
+        }
 
         /* --- Full Player --- */
         .full-player { position: fixed; inset: 0; z-index: 5000; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1); visibility: hidden; background: linear-gradient(150deg, #fef2f2, #e0e7ff, #fae8ff); background-size: 300% 300%; animation: moveBG 15s ease infinite; }
@@ -78,8 +89,6 @@
 
         .del-badge { position: absolute; top: -8px; left: -8px; width: 24px; height: 24px; background: #FF3B30; color: white; border-radius: 50%; display: none; align-items: center; justify-content: center; border: 2px solid white; z-index: 10; font-size: 12px; }
         .editing .del-badge { display: flex; }
-        .pl-song-del { width: 22px; height: 22px; background: #FF3B30; color: white; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 10px; margin-right: 15px; flex-shrink: 0; }
-        .editing .pl-song-del { display: flex; }
     </style>
 </head>
 <body>
@@ -101,6 +110,8 @@
     </div>
 
     <div id="content"><div id="main-display"></div></div>
+
+    <datalist id="artist-list"></datalist>
 
     <div class="mini-player" id="mini" onclick="openFull()">
         <img id="m-img" src="">
@@ -143,12 +154,11 @@
                 <h3 style="margin:0; font-size:18px;">再生待ち</h3>
                 <button onclick="toggleQueue()" style="background:none; border:none; font-size:18px; color:var(--key-color); font-weight:bold;">完了</button>
             </div>
-            <div id="queue-list" style="flex:1; overflow-y:auto;">
-                </div>
+            <div id="queue-list" style="flex:1; overflow-y:auto;"></div>
         </div>
     </div>
 
-    <div id="edit-modal" class="modal"><div class="header"><div class="header-top"><button onclick="closeEdit()">閉じる</button><h2>編集</h2><button onclick="saveEdit()" style="color:var(--key-color); font-weight:bold;">保存</button></div></div><div class="modal-body" style="padding:25px;"><label style="font-size:12px; color:var(--sub-text);">曲名</label><input type="text" id="edit-name" class="edit-input"><label style="font-size:12px; color:var(--sub-text);">アーティスト</label><input type="text" id="edit-artist" class="edit-input"><label style="font-size:12px; color:var(--sub-text);">発行日 (Year)</label><input type="number" id="edit-year" class="edit-input" placeholder="2026"><label style="font-size:12px; color:var(--sub-text);">歌詞</label><textarea id="edit-lyrics" class="edit-input" style="height:100px;"></textarea></div></div>
+    <div id="edit-modal" class="modal"><div class="header"><div class="header-top"><button onclick="closeEdit()">閉じる</button><h2>編集</h2><button onclick="saveEdit()" style="color:var(--key-color); font-weight:bold;">保存</button></div></div><div class="modal-body" style="padding:25px;"><label style="font-size:12px; color:var(--sub-text);">曲名</label><input type="text" id="edit-name" class="edit-input"><label style="font-size:12px; color:var(--sub-text);">アーティスト</label><input type="text" id="edit-artist" class="edit-input" list="artist-list"><label style="font-size:12px; color:var(--sub-text);">発行日 (Year)</label><input type="number" id="edit-year" class="edit-input" placeholder="2026"><label style="font-size:12px; color:var(--sub-text);">歌詞</label><textarea id="edit-lyrics" class="edit-input" style="height:100px;"></textarea></div></div>
 
     <div id="pl-edit-modal" class="modal"><div class="header"><div class="header-top"><button onclick="closePlEdit()">閉じる</button><h2>リスト設定</h2><button onclick="savePlEdit()" style="color:var(--key-color); font-weight:bold;">保存</button></div></div><div class="modal-body" style="padding:25px; text-align:center;"><img id="pl-edit-img" style="width:150px; height:150px; border-radius:15px; object-fit:cover; background:#eee; margin-bottom:20px; border:1px solid #fff; cursor:pointer;" onclick="document.getElementById('pl-img-input').click()"><input type="file" id="pl-img-input" style="display:none" onchange="previewPlImg(event)"><input type="text" id="pl-edit-name" class="edit-input" placeholder="リスト名"><input type="text" id="pl-edit-tag" class="edit-input" placeholder="タグ (例: #Favorite)"></div></div>
 
@@ -164,7 +174,7 @@
     <script>
         let db, tracks = [], playlists = [], isEditing = false, currentView = 'artists', currentArtist = null, currentPlaylistId = null;
         let playingTracks = [], currentTrackIdx = -1, isShuffle = false, repeatMode = 0;
-        let historyTracks = []; // 再生履歴
+        let historyTracks = [];
         let editingId = null, editingPlId = null, tempPlImg = null;
         const audio = document.getElementById('audio-element');
 
@@ -178,8 +188,18 @@
 
         function loadAll() {
             const tx = db.transaction(["songs", "playlists"], "readonly");
-            tx.objectStore("songs").getAll().onsuccess = (e) => { tracks = e.target.result; render(); };
+            tx.objectStore("songs").getAll().onsuccess = (e) => { 
+                tracks = e.target.result; 
+                updateArtistSuggest();
+                render(); 
+            };
             tx.objectStore("playlists").getAll().onsuccess = (e) => { playlists = e.target.result; render(); };
+        }
+
+        function updateArtistSuggest() {
+            const list = document.getElementById('artist-list');
+            const artists = [...new Set(tracks.map(t => t.artist))].sort();
+            list.innerHTML = artists.map(a => `<option value="${a}">`).join('');
         }
 
         function render() {
@@ -220,12 +240,60 @@
                     const pl = playlists.find(p => p.id === currentPlaylistId);
                     title.innerText = pl.name; display.className = "";
                     let plSongs = pl.songIds.map(id => tracks.find(t => t.id === id)).filter(t => t);
-                    display.innerHTML = plSongs.map(t => `<div class="list-item ${isEditing?'editing':''}" onclick="isEditing?removeTrackFromPlaylist(${t.id}):playSong(${t.id},'pl')"><div class="pl-song-del"><i class="fa-solid fa-minus"></i></div><img src="${t.cover||''}"><div><div style="font-weight:700;">${t.name}</div><div style="font-size:12px; color:var(--key-color);">${t.artist}</div></div></div>`).join('') + `<div style="padding:40px; text-align:center;"><button onclick="openAddModal()" style="background:var(--key-color); color:white; border:none; padding:12px 24px; border-radius:24px; font-weight:bold; font-size:14px; box-shadow: 0 4px 10px rgba(255,45,85,0.2);">曲を追加</button></div>`;
+                    
+                    display.innerHTML = plSongs.map(t => `
+                        <div class="swipe-container" id="swipe-${t.id}">
+                            <div class="swipe-delete-btn" onclick="removeTrackFromPlaylist(${t.id})">削除</div>
+                            <div class="list-item" 
+                                 onclick="playSong(${t.id},'pl')"
+                                 ontouchstart="handleTouchStart(event, ${t.id})"
+                                 ontouchmove="handleTouchMove(event, ${t.id})"
+                                 ontouchend="handleTouchEnd(event, ${t.id})">
+                                <img src="${t.cover||''}">
+                                <div>
+                                    <div style="font-weight:700;">${t.name}</div>
+                                    <div style="font-size:12px; color:var(--key-color);">${t.artist}</div>
+                                </div>
+                            </div>
+                        </div>`).join('') + 
+                        `<div style="padding:40px; text-align:center;"><button onclick="openAddModal()" style="background:var(--key-color); color:white; border:none; padding:12px 24px; border-radius:24px; font-weight:bold; font-size:14px; box-shadow: 0 4px 10px rgba(255,45,85,0.2);">曲を追加</button></div>`;
                 }
             }
             document.getElementById('left-btn').innerText = (currentArtist || currentPlaylistId) ? "戻る" : (isEditing ? "完了" : "編集");
         }
 
+        // Swipe Logic
+        let touchStartX = 0, currentSwipeId = null;
+        function handleTouchStart(e, id) {
+            touchStartX = e.touches[0].clientX;
+            currentSwipeId = id;
+            const el = e.currentTarget;
+            el.style.transition = 'none';
+        }
+        function handleTouchMove(e, id) {
+            let x = e.touches[0].clientX - touchStartX;
+            if (x > 0) x = 0;
+            if (x < -100) x = -100 - (Math.abs(x+100) ** 0.7); // 抵抗感
+            e.currentTarget.style.transform = `translateX(${x}px)`;
+        }
+        function handleTouchEnd(e, id) {
+            const el = e.currentTarget;
+            const x = new WebKitCSSMatrix(getComputedStyle(el).transform).m41;
+            el.style.transition = 'transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.15)';
+            if (x < -70) {
+                el.style.transform = 'translateX(-80px)';
+            } else {
+                el.style.transform = 'translateX(0)';
+            }
+        }
+
+        function removeTrackFromPlaylist(sid) {
+            const pl = playlists.find(p => p.id === currentPlaylistId);
+            pl.songIds = pl.songIds.filter(id => id !== sid);
+            db.transaction("playlists","readwrite").objectStore("playlists").put(pl).onsuccess = loadAll;
+        }
+
+        // 他の基本機能
         function playSong(id, mode) {
             let original = [];
             if(mode === 'pl') original = playlists.find(p => p.id === currentPlaylistId).songIds.map(sid => tracks.find(tx => tx.id === sid)).filter(x=>x);
@@ -238,7 +306,6 @@
 
         function loadTrack(t) {
             if(!t) return;
-            // 履歴に追加
             if(currentTrackIdx !== -1 && !historyTracks.some(h => h.id === t.id)) {
                 historyTracks.unshift(t);
                 if(historyTracks.length > 20) historyTracks.pop();
@@ -253,19 +320,14 @@
         }
 
         function toggleQueue() { document.getElementById('queue-panel').classList.toggle('open'); renderQueue(); }
-
         function renderQueue() {
             const list = document.getElementById('queue-list');
             let html = "";
-            
-            // 次に再生される曲
             const nextTracks = playingTracks.slice(currentTrackIdx + 1);
             if (nextTracks.length > 0) {
                 html += `<div style="padding:15px 20px; font-size:12px; font-weight:bold; color:var(--sub-text);">次に再生</div>`;
                 html += nextTracks.map((t, i) => `<div class="list-item" onclick="jumpToQueue(${currentTrackIdx + 1 + i})"><img src="${t.cover||''}" style="width:40px; height:40px;"><div><div style="font-weight:600; font-size:14px;">${t.name}</div><div style="font-size:11px; color:var(--key-color);">${t.artist}</div></div></div>`).join('');
             }
-
-            // 履歴
             if (historyTracks.length > 0) {
                 html += `<div style="padding:15px 20px; font-size:12px; font-weight:bold; color:var(--sub-text);">履歴</div>`;
                 html += historyTracks.map(t => `<div class="list-item" onclick="loadTrackById(${t.id})"><img src="${t.cover||''}" style="width:40px; height:40px; filter: grayscale(0.5);"><div><div style="font-weight:600; font-size:14px; opacity:0.7;">${t.name}</div><div style="font-size:11px; color:var(--sub-text);">${t.artist}</div></div></div>`).join('');
@@ -300,7 +362,7 @@
         function switchTab(v) { currentView=v; currentArtist=null; currentPlaylistId=null; isEditing=false; render(); }
         function openArtist(n) { currentArtist=n; render(); }
         function openPlaylist(id) { currentPlaylistId=id; render(); }
-        function handleHeaderLeft() { if(currentArtist) currentArtist=null; else if(currentPlaylistId) { if(isEditing) isEditing=false; else currentPlaylistId=null; } else isEditing=!isEditing; render(); }
+        function handleHeaderLeft() { if(currentArtist) currentArtist=null; else if(currentPlaylistId) currentPlaylistId=null; else isEditing=!isEditing; render(); }
         function handleHeaderRight() { if(currentPlaylistId) openAddModal(); else if(currentView==='library') document.getElementById('audio-upload').click(); else if(currentView==='playlist'){ const n=prompt("名前"); if(n) db.transaction("playlists","readwrite").objectStore("playlists").add({name:n, songIds:[], tag:"", cover:null}).oncomplete=loadAll; } }
 
         function openAddModal() {
@@ -310,12 +372,6 @@
             document.body.appendChild(div);
         }
         function toggleToPl(sid) { const pl = playlists.find(p => p.id === currentPlaylistId); if(!pl.songIds.includes(sid)) pl.songIds.push(sid); db.transaction("playlists","readwrite").objectStore("playlists").put(pl).onsuccess = () => { loadAll(); document.getElementById('add-modal').remove(); }; }
-
-        function removeTrackFromPlaylist(sid) {
-            const pl = playlists.find(p => p.id === currentPlaylistId);
-            pl.songIds = pl.songIds.filter(id => id !== sid);
-            db.transaction("playlists","readwrite").objectStore("playlists").put(pl).onsuccess = loadAll;
-        }
 
         function openFull() { document.getElementById('full').classList.add('active'); }
         function closeFull() { document.getElementById('full').classList.remove('active'); document.getElementById('queue-panel').classList.remove('open'); }
