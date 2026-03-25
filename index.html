@@ -22,14 +22,13 @@
             --grad-primary: linear-gradient(135deg, #a6cbe3 0%, #fbe0e6 100%);
         }
 
-        /* 全体的なスクロールバーの非表示（グレーのバー対策） */
         * { 
             box-sizing: border-box; 
             -webkit-tap-highlight-color: transparent; 
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none; /* IE/Edge */
+            scrollbar-width: none; 
+            -ms-overflow-style: none; 
         }
-        *::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+        *::-webkit-scrollbar { display: none; }
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Hiragino Sans", sans-serif;
@@ -40,24 +39,24 @@
                 linear-gradient(135deg, #fff 0%, #f9f9ff 100%);
             margin: 0 auto; 
             height: 100vh; 
-            height: -webkit-fill-available; /* モバイル対応 */
+            height: -webkit-fill-available; 
             overflow: hidden; 
             display: flex; 
             flex-direction: column;
             color: var(--text-main);
             letter-spacing: 0.01em;
-            max-width: 390px; /* iPhone 12 Width */
+            max-width: 390px; 
             position: relative;
             box-shadow: 0 0 30px rgba(0,0,0,0.05);
-            overscroll-behavior: none; /* バウンス時のグレー背景防止 */
+            overscroll-behavior: none; 
         }
 
         .bg-orb { position: absolute; border-radius: 50%; filter: blur(60px); z-index: -1; opacity: 0.5; animation: float 15s infinite alternate; }
         @keyframes float { from { transform: translate(0,0); } to { transform: translate(30px, 50px); } }
 
-        /* --- Header: iPhone 12の縦幅・上部余白対応 --- */
+        /* --- Header: 高さを統一し、より上に配置 --- */
         .header { 
-            padding: calc(44px + env(safe-area-inset-top)) 20px 20px; /* iPhone12のノッチ対応 */
+            padding: calc(25px + env(safe-area-inset-top)) 20px 12px; 
             background: var(--glass); 
             backdrop-filter: blur(40px); 
             -webkit-backdrop-filter: blur(40px); 
@@ -69,7 +68,7 @@
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
-            min-height: 110px; /* 各画面での高さ統一 */
+            min-height: 90px; /* 全画面で高さを統一 */
         }
         .header-top { 
             display: flex; 
@@ -79,25 +78,29 @@
             z-index: 1001; 
             width: 100%;
         }
-        .header-top h2 { font-size: 19px; font-weight: 800; color: #6a89cc; margin: 0; letter-spacing: 0.05em; text-align: center; flex: 1; }
-        #left-btn, #right-btn { 
-            background: none; border: none; color: #a6cbe3; font-size: 14px; font-weight: 700; cursor: pointer; padding: 10px; min-width: 60px;
-            display: flex; align-items: center; justify-content: center;
+        .header-top h2 { font-size: 18px; font-weight: 800; color: #6a89cc; margin: 0; letter-spacing: 0.05em; text-align: center; flex: 1; }
+        
+        #left-btn, #right-btn, .modal-close-btn { 
+            background: none; border: none; color: #a6cbe3; font-size: 18px; cursor: pointer; padding: 10px; min-width: 50px;
+            display: flex; align-items: center; justify-content: center; transition: 0.2s;
         }
-        #left-btn { justify-content: flex-start; }
+        #left-btn:active { opacity: 0.5; transform: scale(0.9); }
+        #left-btn { justify-content: flex-start; font-size: 20px; }
         #right-btn { justify-content: flex-end; }
         #right-btn i { font-size: 18px; color: #fff; background: var(--grad-primary); width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; box-shadow: 0 4px 12px rgba(166,203,227,0.3); }
 
-        /* 検索バーのデザイン */
         .search-container { position: relative; z-index: 90; padding: 12px 20px; background: rgba(255,255,255,0.4); backdrop-filter: blur(10px); display: flex; flex-direction: column; gap: 8px; border-bottom: 0.5px solid rgba(255,255,255,0.5); }
         .search-bar-row { display: flex; gap: 10px; align-items: center; width: 100%; }
         #search-input, .bulk-search-input { flex: 1; padding: 10px 18px; border-radius: 20px; border: 2px solid #fff; background: rgba(255,255,255,0.9); font-size: 13px; outline: none; box-shadow: 0 4px 12px rgba(0,0,0,0.03); color: var(--text-main); }
         .sort-select { background: #fff; border: 1.5px solid #fff; border-radius: 12px; font-size: 11px; color: #7d8bb1; padding: 6px 10px; outline: none; font-weight: 600; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
 
-        /* サジェストチップの共通スタイル */
-        #bulk-artist-suggestions, #playlist-tag-suggestions, #artist-filter-container { display: flex; gap: 10px; overflow-x: auto; padding: 6px 0; scrollbar-width: none; }
+        #playlist-tag-suggestions, #artist-filter-container, #bulk-artist-suggestions { 
+            display: flex; gap: 10px; overflow-x: auto; padding: 4px 0; scrollbar-width: none; 
+        }
+        .tag-chip { flex-shrink: 0; padding: 6px 14px; background: #fff; border: 1.5px solid #e1f1fa; border-radius: 15px; font-size: 11px; font-weight: 800; color: #6a89cc; cursor: pointer; }
+
         .bulk-artist-icon-chip { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; animation: fadeIn 0.3s ease; }
-        .bulk-artist-icon-chip img, .bulk-artist-icon-chip .placeholder { width: 42px; height: 42px; clip-path: var(--star-clip); object-fit: cover; background: var(--grad-primary); border: 2px solid #fff; }
+        .bulk-artist-icon-chip img, .bulk-artist-icon-chip .placeholder { width: 42px; height: 42px; clip-path: var(--star-clip); object-fit: cover; background: var(--grad-primary); border: 2px solid #fff; transition: 0.3s; }
         .bulk-artist-icon-chip span { font-size: 9px; font-weight: 800; color: #a6cbe3; max-width: 55px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
         #content { flex: 1; overflow-y: auto; padding-bottom: 160px; -webkit-overflow-scrolling: touch; }
@@ -120,7 +123,6 @@
         .artist-icon-container { width: 68px; height: 68px; margin-right: 18px; flex-shrink: 0; filter: drop-shadow(0 8px 12px rgba(180,180,210,0.3)); position: relative; }
         .artist-icon { width: 100%; height: 100%; object-fit: cover; background: var(--grad-primary); display: flex; align-items: center; justify-content: center; color: #fff; clip-path: var(--star-clip); }
 
-        /* スワイプ削除 */
         .swipe-container { position: relative; overflow: hidden; background: #fdfdff; }
         .swipe-container .list-item { background: #ffffff; z-index: 2; position: relative; }
         .swipe-delete-btn { position: absolute; right: 0; top: 0; bottom: 0; width: 85px; background: #ffebee; color: #ff8a80; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; z-index: 1; }
@@ -150,7 +152,6 @@
         #f-artwork-container { width: 82vw; max-width: 340px; aspect-ratio: 1/1; position: relative; transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1); z-index: 10; }
         #f-img { width: 100%; height: 100%; border-radius: 42px; object-fit: cover; box-shadow: 0 40px 80px rgba(150,150,180,0.25); border: 8px solid #fff; }
         
-        /* 歌詞表示：透過感のあるデザイン */
         #f-lyrics-view { 
             position: absolute; inset: 0; 
             background: rgba(255, 255, 255, 0.25); 
@@ -161,23 +162,25 @@
             font-size: 19px; line-height: 2.4; color: #2d2d44; 
             text-shadow: 0 0 15px rgba(255,255,255,0.8);
             font-weight: 800; z-index: 20; border: 1px solid rgba(255,255,255,0.4); 
-            touch-action: pan-y; /* 歌詞自体のスクロールを許可 */
+            touch-action: pan-y; 
         }
         #f-lyrics-view.active { display: flex; }
 
         .seeker { -webkit-appearance: none; width: 100%; height: 6px; background: rgba(166,203,227,0.25); border-radius: 10px; outline: none; margin: 40px 0 10px; }
         .seeker::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; background: #fff; border: 3px solid #a6cbe3; border-radius: 50%; box-shadow: 0 2px 8px rgba(166,203,227,0.3); cursor: pointer; }
 
-        .mini-player { position: fixed; bottom: calc(65px + env(safe-area-inset-bottom)); height: 64px; background: rgba(255,255,255,0.8); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border-radius: 24px; display: none; align-items: center; padding: 0 16px; box-shadow: 0 10px 30px rgba(180,190,220,0.2); z-index: 2000; border: 2px solid rgba(255,255,255,0.8); max-width: 360px; margin: 0 auto; left: 0; right: 0; width: 92%; }
+        .mini-player { position: fixed; bottom: calc(75px + env(safe-area-inset-bottom)); height: 64px; background: rgba(255,255,255,0.8); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border-radius: 24px; display: none; align-items: center; padding: 0 16px; box-shadow: 0 10px 30px rgba(180,190,220,0.2); z-index: 2000; border: 2px solid rgba(255,255,255,0.8); max-width: 360px; margin: 0 auto; left: 0; right: 0; width: 92%; }
         #m-img { width: 48px; height: 48px; border-radius: 14px; margin-right: 14px; object-fit: cover; border: 2px solid #fff; }
         
-        /* --- Tab Bar: リボン内に収まるよう調整 --- */
+        /* --- Tab Bar: 以前より少し下に配置 --- */
         .tab-bar { 
-            position: fixed; bottom: 0; width: 100%; 
-            height: calc(60px + env(safe-area-inset-bottom)); 
+            position: fixed; 
+            bottom: -5px; /* 全体的に少し下に下げる */
+            width: 100%; 
+            height: calc(75px + env(safe-area-inset-bottom)); 
             background: rgba(255,255,255,0.92); backdrop-filter: blur(40px); display: flex; justify-content: space-around; 
-            padding-top: 10px; 
-            padding-bottom: env(safe-area-inset-bottom);
+            padding-top: 12px; 
+            padding-bottom: calc(5px + env(safe-area-inset-bottom));
             border-top: 1px solid rgba(255,255,255,0.8); z-index: 3000; max-width: 390px; margin: 0 auto; left: 0; right: 0; 
         }
         .tab-item { border:none; background:none; color: #bcc1d8; font-weight: 800; font-size: 10px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 4px; width: 33%; transition: 0.3s; }
@@ -187,7 +190,8 @@
         .modal { position: fixed; inset: 0; background: #ffffff; z-index: 7000; display: none; flex-direction: column; animation: modalSlide 0.4s cubic-bezier(0.1, 0.9, 0.2, 1); max-width: 390px; margin: 0 auto; left: 0; right: 0; }
         @keyframes modalSlide { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         
-        .modal .header { min-height: 110px; padding-top: calc(44px + env(safe-area-inset-top)); }
+        /* モーダル内のヘッダーも統一 */
+        .modal .header { min-height: 90px; padding-top: calc(25px + env(safe-area-inset-top)); }
 
         .modal-body { padding: 30px; overflow-y: auto; flex: 1; -webkit-overflow-scrolling: touch; }
         .edit-input { width: 100%; padding: 18px; border: 2.5px solid #f2f2f7; border-radius: 20px; margin-bottom: 22px; outline: none; font-size: 15px; background: #fbfbfc; color: var(--text-main); font-weight: 600; }
@@ -224,7 +228,7 @@
 
     <div class="header">
         <div class="header-top">
-            <button id="left-btn" onclick="handleHeaderLeft()">Edit</button>
+            <button id="left-btn" onclick="handleHeaderLeft()"><i class="fa-solid fa-sliders"></i></button>
             <h2 id="view-title">Artists</h2>
             <button id="right-btn" onclick="handleHeaderRight()"><i class="fa-solid fa-plus"></i></button>
         </div>
@@ -232,7 +236,7 @@
     
     <div class="search-container">
         <div class="search-bar-row">
-            <input type="text" id="search-input" placeholder="Search track, artist..." oninput="handleSearchInput()">
+            <input type="text" id="search-input" placeholder="Search track, artist, tag..." oninput="handleSearchInput()">
             <select id="sort-type" class="sort-select" onchange="render()">
                 <option value="added">Newest</option>
                 <option value="name_asc">A-Z</option>
@@ -302,7 +306,7 @@
     </div>
 
     <div id="edit-modal" class="modal">
-        <div class="header"><div class="header-top"><button onclick="closeEdit()">Cancel</button><h2>Track Info</h2><button onclick="saveEdit()" style="color:#a6cbe3; font-weight:900;">Save</button></div></div>
+        <div class="header"><div class="header-top"><button class="modal-close-btn" onclick="closeEdit()"><i class="fa-solid fa-xmark"></i></button><h2>Track Info</h2><button onclick="saveEdit()" style="color:#a6cbe3; font-weight:900;">Save</button></div></div>
         <div class="modal-body">
             <span class="field-label">Title</span><input type="text" id="edit-name" class="edit-input">
             <span class="field-label">Artist</span><input type="text" id="edit-artist" class="edit-input" oninput="updateArtistSuggest(this.value)">
@@ -313,7 +317,7 @@
     </div>
 
     <div id="pl-edit-modal" class="modal">
-        <div class="header"><div class="header-top"><button onclick="closePlEdit()">Cancel</button><h2>Playlist</h2><button onclick="savePlEdit()" style="color:#a6cbe3; font-weight:900;">Done</button></div></div>
+        <div class="header"><div class="header-top"><button class="modal-close-btn" onclick="closePlEdit()"><i class="fa-solid fa-xmark"></i></button><h2>Playlist</h2><button onclick="savePlEdit()" style="color:#a6cbe3; font-weight:900;">Done</button></div></div>
         <div class="modal-body" style="text-align:center;">
             <div style="position:relative; display:inline-block; margin-bottom:30px;">
                 <img id="pl-edit-img" style="width:200px; height:200px; border-radius:35px; object-fit:cover; border:5px solid #fff; box-shadow:0 15px 40px rgba(0,0,0,0.08); cursor:pointer;" onclick="document.getElementById('pl-img-input').click()">
@@ -345,9 +349,8 @@
         let editingId = null, editingPlId = null, tempPlImg = null, editingArtistName = null;
         const audio = document.getElementById('audio-element');
 
-        // 検索クエリを画面ごとに独立管理
         let searchQueries = { artists: '', library: '', playlist: '', playlistDetail: '', bulkAdd: '' };
-        let activeArtistFilter = null; // プレイリスト内でのアーティスト絞り込み用
+        let activeArtistFilter = null; 
 
         const req = indexedDB.open("MusicStudioWishcore_V5", 1);
         req.onupgradeneeded = (e) => {
@@ -371,7 +374,6 @@
 
         function handleSearchInput() {
             const val = document.getElementById('search-input').value;
-            // 現在の表示状態に合わせてクエリを保存
             if (currentView === 'playlist' && currentPlaylistId !== null) {
                 searchQueries.playlistDetail = val;
             } else {
@@ -384,15 +386,14 @@
             const display = document.getElementById('main-display');
             const title = document.getElementById('view-title');
             const rightBtn = document.getElementById('right-btn');
+            const leftBtn = document.getElementById('left-btn');
             const searchInputEl = document.getElementById('search-input');
             const tagSuggest = document.getElementById('playlist-tag-suggestions');
             const artistFilter = document.getElementById('artist-filter-container');
             
-            // 検索・フィルタの初期化
             tagSuggest.style.display = 'none';
             artistFilter.style.display = 'none';
 
-            // クエリの復元
             let currentSearch = (currentView === 'playlist' && currentPlaylistId !== null) ? searchQueries.playlistDetail : searchQueries[currentView];
             if (searchInputEl && searchInputEl.value !== currentSearch) searchInputEl.value = currentSearch;
 
@@ -414,7 +415,6 @@
                     title.innerText = "Artists"; display.className = "";
                     let artists = [...new Set(tracks.map(t => t.artist))].filter(a => a.toLowerCase().includes(search));
                     
-                    // アーティスト検索時もサジェスト（アイコン付き）を表示
                     if (search.length > 0 && artists.length > 0) {
                         artistFilter.style.display = 'flex';
                         artistFilter.innerHTML = artists.map(a => {
@@ -440,6 +440,17 @@
             } else if (currentView === 'playlist') {
                 if (currentPlaylistId === null) {
                     title.innerText = "Playlists"; display.className = "grid";
+                    
+                    // プレイリストのタグサジェスト機能を追加
+                    const allTags = [...new Set(playlists.map(p => p.tag).filter(t => t))];
+                    if (search.length > 0) {
+                        const matchedTags = allTags.filter(t => t.toLowerCase().includes(search));
+                        if (matchedTags.length > 0) {
+                            tagSuggest.style.display = 'flex';
+                            tagSuggest.innerHTML = matchedTags.map(t => `<div class="tag-chip" onclick="applyTagFilter('${t}')">#${t}</div>`).join('');
+                        }
+                    }
+
                     let list = playlists.filter(p => p.name.toLowerCase().includes(search) || (p.tag && p.tag.toLowerCase().includes(search)));
                     display.innerHTML = list.map(p => {
                         const firstSong = tracks.find(t => p.songIds.includes(t.id));
@@ -458,9 +469,9 @@
                     title.innerText = pl.name; display.className = "";
                     let plSongs = pl.songIds.map(id => tracks.find(t => t.id === id)).filter(t => t);
                     
-                    // アーティストアイコンでの絞り込みチップを表示
-                    const artistsInPl = [...new Set(plSongs.map(s => s.artist))];
-                    if (artistsInPl.length > 1) {
+                    // プレイリスト内のアーティスト絞り込みアイコン
+                    const artistsInPl = [...new Set(plSongs.map(s => s.artist))].filter(a => a.toLowerCase().includes(search));
+                    if (artistsInPl.length > 0 && search.length > 0) {
                         artistFilter.style.display = 'flex';
                         artistFilter.innerHTML = artistsInPl.map(a => {
                             const icon = artistMeta[a] ? `<img src="${artistMeta[a]}" style="${activeArtistFilter===a?'border-color:#a6cbe3; opacity:1;':'opacity:0.6;'}">` : `<div class="placeholder"><i class="fa-solid fa-user"></i></div>`;
@@ -482,7 +493,13 @@
                         </div>`).join('') + `<div style="padding:40px; text-align:center;"><button onclick="openBulkAddModal()" style="background:#fff; color:#6a89cc; border:2px solid #e1f1fa; padding:15px 30px; border-radius:30px; font-weight:900; font-size:12px;">+ Add Tracks</button></div>`;
                 }
             }
-            document.getElementById('left-btn').innerText = (currentArtist || currentPlaylistId) ? "Back" : (isEditing ? "Done" : "Edit");
+
+            // Editボタンをアイコン化
+            if (currentArtist || currentPlaylistId) {
+                leftBtn.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
+            } else {
+                leftBtn.innerHTML = isEditing ? '<i class="fa-solid fa-check"></i>' : '<i class="fa-solid fa-sliders"></i>';
+            }
             rightBtn.innerHTML = currentArtist ? '<i class="fa-solid fa-play"></i>' : '<i class="fa-solid fa-plus"></i>';
         }
 
@@ -502,17 +519,22 @@
                 </div>`).join('');
         }
 
+        function applyTagFilter(tag) {
+            const searchInput = document.getElementById('search-input');
+            searchInput.value = tag;
+            searchQueries[currentView] = tag;
+            render();
+        }
+
         function toggleArtistFilter(a) {
             activeArtistFilter = (activeArtistFilter === a) ? null : a;
             render();
         }
 
-        // --- Full Player Swipe Logic (iPhone 12対応) ---
         const fPlayer = document.getElementById('full');
         let startY = 0, currentY = 0;
         
         fPlayer.addEventListener('touchstart', (e) => {
-            // 歌詞表示中かつ歌詞エリアをスクロールしている場合はプレイヤーのスワイプを無効化
             if (document.getElementById('f-lyrics-view').classList.contains('active')) {
                 const lyricsEl = document.getElementById('f-lyrics-view');
                 if (lyricsEl.scrollTop > 0) return; 
@@ -525,7 +547,6 @@
             const lyricsActive = document.getElementById('f-lyrics-view').classList.contains('active');
             currentY = e.touches[0].clientY;
             let diff = currentY - startY;
-            
             if (diff > 0) {
                 if (lyricsActive && document.getElementById('f-lyrics-view').scrollTop > 0) return;
                 fPlayer.style.transform = `translateY(${diff}px)`;
@@ -552,7 +573,7 @@
             const pl = playlists.find(p => p.id === currentPlaylistId);
             const div = document.createElement('div'); div.id="bulk-modal"; div.className="modal"; div.style.display = "flex";
             div.innerHTML = `
-                <div class="header"><div class="header-top"><button onclick="this.closest('.modal').remove()">Cancel</button><h2>Select Songs</h2><button onclick="saveBulkAdd()" style="font-weight:900; color:#a6cbe3;">Done</button></div></div>
+                <div class="header"><div class="header-top"><button class="modal-close-btn" onclick="this.closest('.modal').remove()"><i class="fa-solid fa-xmark"></i></button><h2>Select Songs</h2><button onclick="saveBulkAdd()" style="font-weight:900; color:#a6cbe3;">Done</button></div></div>
                 <div class="search-container"><div class="search-bar-row"><input type="text" id="bulk-search-box" class="bulk-search-input" placeholder="Search track or artist..." oninput="filterBulk(this.value)"></div><div id="bulk-artist-suggestions"></div></div>
                 <div id="bulk-list" style="flex:1; overflow-y:auto; padding-bottom:50px;">
                     ${tracks.map(t => `
@@ -563,14 +584,12 @@
                     </label>`).join('')}
                 </div>`;
             document.body.appendChild(div);
-            searchQueries.bulkAdd = ''; // モーダルごとにリセット
         }
 
         function filterBulk(val) {
             const v = val.toLowerCase();
             const items = document.querySelectorAll('#bulk-list .check-item');
             items.forEach(el => el.style.display = el.getAttribute('data-search').includes(v) ? 'flex' : 'none');
-            
             const suggest = document.getElementById('bulk-artist-suggestions');
             const matchedArtists = [...new Set(tracks.map(t => t.artist))].filter(a => a.toLowerCase().includes(v));
             if (v.length > 0 && matchedArtists.length > 0) {
@@ -579,12 +598,9 @@
                     const icon = artistMeta[a] ? `<img src="${artistMeta[a]}">` : `<div class="placeholder"><i class="fa-solid fa-user" style="margin-top:10px;"></i></div>`;
                     return `<div class="bulk-artist-icon-chip" onclick="document.getElementById('bulk-search-box').value='${a}'; filterBulk('${a}')">${icon}<span>${a}</span></div>`;
                 }).join('');
-            } else {
-                suggest.style.display = 'none';
-            }
+            } else { suggest.style.display = 'none'; }
         }
 
-        // --- 共通ロジックの維持 ---
         function switchTab(v) { 
             currentView=v; currentArtist=null; currentPlaylistId=null; isEditing=false; activeArtistFilter=null;
             render(); 
@@ -606,9 +622,14 @@
             else if(currentView==='playlist') { const n = prompt("Playlist Name:"); if(n) db.transaction("playlists","readwrite").objectStore("playlists").add({ name: n, songIds: [], tag: "", cover: null }).onsuccess = loadAll; } 
         }
         function togglePlay() { audio.paused ? audio.play() : audio.pause(); }
+
+        // シャッフルとリピートを同時に考慮した再生ロジック
         function next() { 
             if (playingTracks.length === 0) return;
             if (repeatMode === 2) { loadTrack(playingTracks[currentTrackIdx]); return; }
+            if (currentTrackIdx === playingTracks.length - 1 && repeatMode === 0) {
+                audio.pause(); audio.currentTime = 0; return;
+            }
             currentTrackIdx = (currentTrackIdx + 1) % playingTracks.length;
             loadTrack(playingTracks[currentTrackIdx]);
         }
@@ -621,9 +642,11 @@
             if(mode === 'pl') {
                 const pl = playlists.find(p => p.id === currentPlaylistId);
                 original = pl.songIds.map(sid => tracks.find(tx => tx.id === sid)).filter(x=>x);
+            } else if(mode === 'art') {
+                original = tracks.filter(tx => tx.artist === currentArtist);
+            } else {
+                original = [...tracks];
             }
-            else if(mode === 'art') original = tracks.filter(tx => tx.artist === currentArtist);
-            else original = [...tracks];
             playingTracks = isShuffle ? [...original].sort(() => Math.random() - 0.5) : [...original];
             currentTrackIdx = playingTracks.findIndex(x => x.id === id);
             loadTrack(playingTracks[currentTrackIdx]);
@@ -650,7 +673,6 @@
         audio.onpause = () => { document.getElementById('m-pp').className = 'fa-solid fa-play'; document.getElementById('f-pp').className = 'fa-solid fa-play'; };
         audio.onended = () => { next(); };
 
-        // 既存モーダル制御
         function openEdit(id) { editingId = id; const t = tracks.find(x => x.id === id); document.getElementById('edit-name').value = t.name; document.getElementById('edit-artist').value = t.artist; document.getElementById('edit-year').value = t.year || ""; document.getElementById('edit-lyrics').value = t.lyrics || ""; updateArtistSuggest(t.artist); document.getElementById('edit-modal').style.display = 'flex'; }
         function closeEdit() { document.getElementById('edit-modal').style.display = 'none'; }
         function saveEdit() { const t = tracks.find(x => x.id === editingId); t.name = document.getElementById('edit-name').value; t.artist = document.getElementById('edit-artist').value; t.year = document.getElementById('edit-year').value; t.lyrics = document.getElementById('edit-lyrics').value; db.transaction("songs","readwrite").objectStore("songs").put(t).onsuccess = () => { closeEdit(); loadAll(); }; }
@@ -691,7 +713,6 @@
             }
         };
 
-        // スワイプ削除（リスト項目）
         let touchStartX = 0;
         function handleTouchStart(e, id) { if(isEditing) return; touchStartX = e.touches[0].clientX; }
         function handleTouchMove(e, id) {
