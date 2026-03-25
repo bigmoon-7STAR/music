@@ -3,241 +3,316 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Wish Player ✧</title>
+    <title>𝒲𝒾𝓈𝒽 𝒫𝓁𝒶𝓎𝑒𝓇 ✧</title>
     <style>
         :root {
-            --glass: rgba(255, 255, 255, 0.1);
-            --glass-heavy: rgba(255, 255, 255, 0.2);
-            --text: #ffffff;
-            --sub-text: rgba(255, 255, 255, 0.6);
+            /* 儚い夢のパレット */
+            --glass-bg: rgba(255, 255, 255, 0.4);
+            --text-main: #5e5e7e; /* 濃すぎない紫 */
+            --accent-soft: #dcdcf7; /* 淡い紫 */
+            --accent-pink: rgba(255, 45, 85, 0.5); /* Apple Musicのピンクを儚く */
+            --border-light: rgba(255, 255, 255, 0.6);
         }
 
         body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", "Segoe UI", "Hiragino Kaku Gothic ProN", sans-serif;
             margin: 0;
-            height: 100dvh;
+            min-height: 100dvh;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-family: -apple-system, "SF Pro Display", sans-serif;
-            color: var(--text);
-            /* 動くオーロラ背景（ウィッシュコアの儚い色調） */
-            background: linear-gradient(45deg, #0f172a, #334155, #1e293b);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            overflow: hidden;
+            /* 儚いグラデーション背景 */
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf9 50%, #fdf2f8 100%);
+            color: var(--text-main);
+            letter-spacing: 0.03em;
+            overflow-x: hidden;
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* 画面全体のぼかしレイヤー（これがApple Musicの肝） */
-        .blur-overlay {
+        /* 浮遊する夢のオーブ（背景エフェクト） */
+        .orb {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 20% 30%, rgba(167, 139, 250, 0.3), transparent 50%),
-                        radial-gradient(circle at 80% 70%, rgba(255, 45, 85, 0.2), transparent 50%);
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(80px);
             z-index: -1;
+            opacity: 0.3;
+            animation: float 15s infinite alternate ease-in-out;
+        }
+        .orb-1 { background: #e0e7ff; top: 10%; left: 15%; }
+        .orb-2 { background: #fae8ff; bottom: 15%; right: 10%; animation-delay: -3s; }
+
+        @keyframes float {
+            from { transform: translate(0, 0); }
+            to { transform: translate(30px, 50px); }
         }
 
+        /* メインコンテナ（Apple Music風クリーン・レイアウト） */
         .player-card {
-            width: 90%;
-            max-width: 380px;
-            height: 85vh;
+            width: 380px;
+            max-width: 90vw;
+            height: 85dvh;
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--border-light);
+            border-radius: 32px;
+            padding: 40px 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.03);
+            text-align: center;
             display: flex;
             flex-direction: column;
-            z-index: 1;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.8);
         }
 
-        /* アートワーク：影と角丸をApple Musicに忠実に */
-        .artwork-box {
-            width: 100%;
-            aspect-ratio: 1/1;
-            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+        /* アートワーク部分 (中央に大きく) */
+        .artwork-area {
+            width: 260px;
+            height: 260px;
+            margin: 0 auto 30px;
+            background: linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%);
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 8rem;
-            margin-bottom: 40px;
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-size: 6rem;
+            box-shadow: 0 10px 30px rgba(167, 139, 250, 0.1);
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.9);
+            transition: transform 0.3s ease;
         }
 
-        /* 再生中の心拍のようなアニメーション */
-        .artwork-box.playing { transform: scale(1.02); }
+        .artwork-area.playing { transform: scale(1.03); }
 
-        .info { margin-bottom: 30px; }
-        .info h1 { font-size: 1.6rem; margin: 0; font-weight: 700; letter-spacing: -0.02em; }
-        .info p { font-size: 1.2rem; margin: 5px 0; color: var(--sub-text); }
+        .artwork-area::after {
+            content: "✧";
+            position: absolute;
+            top: 10px; right: 10px; font-size: 1.2rem; opacity: 0.4;
+        }
 
-        /* プログレスバー（Apple Music特有の細さ） */
-        .slider-container {
+        h1 { font-size: 1.4rem; font-weight: 600; margin: 0; letter-spacing: -0.01em; color: #000; opacity: 0.8; }
+        p.artist { font-size: 1.0rem; margin: 5px 0 25px; color: var(--accent-pink); font-weight: 500; }
+
+        /* Apple Music風プログレスバー */
+        .progress-container {
             width: 100%;
             height: 4px;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(0,0,0,0.05);
             border-radius: 10px;
-            margin-bottom: 40px;
-            position: relative;
+            margin-bottom: 25px;
             cursor: pointer;
-        }
-        #fill {
-            height: 100%;
-            background: #fff;
-            width: 0%;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(255,255,255,0.5);
+            position: relative;
         }
 
-        /* コントロール */
+        #progressBar {
+            position: absolute;
+            height: 100%;
+            background: #8e8e93; /* Apple Music風のグレー */
+            border-radius: 10px;
+            width: 0%;
+        }
+
+        /* Apple Music風コントロール */
         .controls {
             display: flex;
-            justify-content: space-around;
+            justify-content: center;
             align-items: center;
+            gap: 40px;
             margin-bottom: 30px;
         }
         .btn {
             background: none;
             border: none;
-            color: #fff;
-            font-size: 2rem;
+            color: #1d1d1f;
+            font-size: 2.2rem;
             cursor: pointer;
             padding: 10px;
             transition: opacity 0.2s, transform 0.1s;
         }
         .btn:active { transform: scale(0.9); opacity: 0.6; }
-        .play-pause { font-size: 4rem; }
+        .play-pause { font-size: 3.8rem; }
 
-        /* リスト：半透明のフロストガラス */
-        .queue {
-            flex-grow: 1;
-            background: var(--glass);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border-radius: 24px;
-            padding: 20px;
-            overflow-y: auto;
-            border: 1px solid rgba(255,255,255,0.1);
+        /* ファイル選択ボタン (消えそうな質感) */
+        .add-btn {
+            display: inline-block;
+            margin: 0 auto 30px;
+            padding: 6px 14px;
+            background: transparent;
+            border: 1px solid var(--border-light);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            color: var(--text-main);
+            transition: 0.3s;
         }
-        .song {
+        .add-btn:hover { background: rgba(255,255,255,0.4); letter-spacing: 0.1em; }
+
+        /* プレイリスト部分 (下部) */
+        .queue-list {
+            flex-grow: 1;
+            margin-top: 10px;
+            overflow-y: auto;
+            text-align: left;
+            border-top: 1px solid rgba(0,0,0,0.03);
+            border-radius: 20px 20px 0 0;
+            padding: 10px 5px;
+        }
+
+        .song-item {
+            padding: 14px 10px;
+            border-bottom: 1px solid rgba(0,0,0,0.03);
             display: flex;
             justify-content: space-between;
-            padding: 15px 10px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            font-size: 1rem;
+            align-items: center;
             cursor: pointer;
+            font-size: 0.95rem;
+            transition: background 0.2s;
         }
-        .active { color: #ff2d55; text-shadow: 0 0 10px rgba(255,45,85,0.5); }
+        .song-item:hover { background: rgba(255,255,255,0.2); }
+        .song-item.active { color: var(--accent-pink); font-weight: 600; }
 
-        .add-label {
-            position: absolute;
-            top: 20px; right: 20px;
-            font-size: 0.8rem;
-            color: var(--sub-text);
-            cursor: pointer;
-            border: 1px solid var(--sub-text);
-            padding: 4px 12px;
-            border-radius: 20px;
+        .song-info {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 85%;
         }
+
+        .del-icon {
+            font-size: 0.8rem;
+            opacity: 0.3;
+            padding: 5px;
+        }
+        .del-icon:hover { opacity: 1; color: #ff5e5e; }
+
+        /* スクロールバー隠し */
+        .queue-list::-webkit-scrollbar { width: 0; }
+
+        input[type="file"] { display: none; }
     </style>
 </head>
 <body>
 
-<div class="blur-overlay"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
 
-<label for="fileInput" class="add-label">Library +</label>
-<input type="file" id="fileInput" accept=".mp3,.m4a" multiple style="display:none">
+    <div class="player-card">
+        <label for="fileInput" class="add-btn">Add Memories ｡.ﾟ</label>
+        <input type="file" id="fileInput" accept=".mp3,.m4a" multiple>
 
-<div class="player-card">
-    <div class="artwork-box" id="art">✧</div>
+        <div class="artwork-area" id="artwork">🪽</div>
+        
+        <div class="track-info">
+            <h1 id="currentTitle">Waiting for wish...</h1>
+            <p class="artist">Memory Library</p>
+        </div>
 
-    <div class="info">
-        <h1 id="title">Waiting...</h1>
-        <p id="artist">Wishcore Library</p>
+        <div class="progress-container" id="progressArea">
+            <div id="progressBar"></div>
+        </div>
+
+        <div class="controls">
+            <button class="btn" id="prevBtn">⏮</button>
+            <button class="btn play-pause" id="playBtn">▶︎</button>
+            <button class="btn" id="nextBtn">⏭</button>
+        </div>
+
+        <div class="queue-list" id="queue">
+            </div>
     </div>
 
-    <div class="slider-container" id="trackBox">
-        <div id="fill"></div>
-    </div>
+    <audio id="audioPlayer"></audio>
 
-    <div class="controls">
-        <button class="btn" id="prev">⏮</button>
-        <button class="btn play-pause" id="play">▶︎</button>
-        <button class="btn" id="next">⏭</button>
-    </div>
+    <script>
+        let db;
+        let playlist = [];
+        let currentIndex = -1;
 
-    <div class="queue" id="queue"></div>
-</div>
+        const player = document.getElementById('audioPlayer');
+        const playBtn = document.getElementById('playBtn');
+        const progressBar = document.getElementById('progressBar');
+        const titleDisplay = document.getElementById('currentTitle');
 
-<audio id="audio"></audio>
+        // IndexedDB 初期化 (AppleMusicWishDB に変更)
+        const request = indexedDB.open("AppleMusicWishDB", 1);
+        request.onupgradeneeded = e => e.target.result.createObjectStore("songs", { keyPath: "name" });
+        request.onsuccess = e => { db = e.target.result; loadLibrary(); };
 
-<script>
-    let db, playlist = [], cur = -1;
-    const audio = document.getElementById('audio');
-    const playBtn = document.getElementById('play');
-
-    const req = indexedDB.open("ProWishDB", 1);
-    req.onupgradeneeded = e => e.target.result.createObjectStore("songs", { keyPath: "name" });
-    req.onsuccess = e => { db = e.target.result; load(); };
-
-    document.getElementById('fileInput').onchange = e => {
-        const tx = db.transaction("songs", "readwrite");
-        for(let f of e.target.files) tx.objectStore("songs").put({name: f.name, data: f});
-        tx.oncomplete = load;
-    };
-
-    function load() {
-        db.transaction("songs").objectStore("songs").getAll().onsuccess = e => {
-            playlist = e.target.result;
-            render();
-        };
-    }
-
-    function render() {
-        const q = document.getElementById('queue');
-        q.innerHTML = "";
-        playlist.forEach((s, i) => {
-            const d = document.createElement('div');
-            d.className = `song ${i === cur ? 'active' : ''}`;
-            d.innerHTML = `<span>${s.name}</span>`;
-            d.onclick = () => playAt(i);
-            q.appendChild(d);
+        // ファイル追加
+        document.getElementById('fileInput').addEventListener('change', e => {
+            const transaction = db.transaction(["songs"], "readwrite");
+            for (let f of e.target.files) transaction.objectStore("songs").put({name: f.name, data: f});
+            transaction.oncomplete = loadLibrary;
         });
-    }
 
-    function playAt(i) {
-        if(i < 0 || i >= playlist.length) return;
-        cur = i;
-        const s = playlist[cur];
-        audio.src = URL.createObjectURL(s.data);
-        document.getElementById('title').textContent = s.name;
-        document.getElementById('art').classList.add('playing');
-        audio.play();
-        playBtn.textContent = "⏸";
-        render();
-    }
+        function loadLibrary() {
+            db.transaction("songs").objectStore("songs").getAll().onsuccess = e => {
+                playlist = e.target.result;
+                renderQueue();
+            };
+        }
 
-    playBtn.onclick = () => {
-        if(audio.paused) { audio.play(); playBtn.textContent = "⏸"; }
-        else { audio.pause(); playBtn.textContent = "▶︎"; }
-    };
+        function renderQueue() {
+            const queue = document.getElementById('queue');
+            queue.innerHTML = "";
+            playlist.forEach((song, i) => {
+                const item = document.createElement('div');
+                item.className = `song-item ${i === currentIndex ? 'active' : ''}`;
+                item.innerHTML = `
+                    <div class="song-info">${song.name}</div>
+                    <div class="del-icon" onclick="deleteSong(event, '${song.name}')">✕</div>
+                `;
+                item.onclick = () => playAtIndex(i);
+                queue.appendChild(item);
+            });
+        }
 
-    document.getElementById('next').onclick = () => playAt((cur + 1) % playlist.length);
-    document.getElementById('prev').onclick = () => playAt((cur - 1 + playlist.length) % playlist.length);
-    
-    audio.ontimeupdate = () => {
-        document.getElementById('fill').style.width = (audio.currentTime / audio.duration * 100) + "%";
-    };
+        function playAtIndex(index) {
+            if(index < 0 || index >= playlist.length) return;
+            currentIndex = index;
+            const song = playlist[currentIndex];
+            player.src = URL.createObjectURL(song.data);
+            titleDisplay.textContent = song.name;
+            document.getElementById('artwork').classList.add('playing');
+            player.play();
+            playBtn.textContent = "⏸";
+            renderQueue();
+        }
 
-    audio.onended = () => document.getElementById('next').click();
+        function deleteSong(e, name) {
+            e.stopPropagation();
+            if(!confirm(`Delete "${name}" from memories?`)) return;
+            const transaction = db.transaction(["songs"], "readwrite");
+            transaction.objectStore("songs").delete(name);
+            transaction.oncomplete = loadLibrary;
+        }
 
-    document.getElementById('trackBox').onclick = e => {
-        const r = e.currentTarget.getBoundingClientRect();
-        audio.currentTime = ((e.clientX - r.left) / r.width) * audio.duration;
-    };
-</script>
+        // --- コントロール系 ---
+        playBtn.onclick = () => {
+            if(player.paused) { player.play(); playBtn.textContent = "⏸"; }
+            else { player.pause(); playBtn.textContent = "▶︎"; }
+        };
+
+        document.getElementById('nextBtn').onclick = () => playAtIndex((currentIndex + 1) % playlist.length);
+        document.getElementById('prevBtn').onclick = () => playAtIndex((currentIndex - 1 + playlist.length) % playlist.length);
+        
+        // 自動次曲再生
+        player.onended = () => document.getElementById('nextBtn').click();
+
+        player.ontimeupdate = () => {
+            progressBar.style.width = (player.currentTime / player.duration * 100) + "%";
+        };
+
+        // バークリックでスキップ
+        document.getElementById('progressArea').onclick = e => {
+            const r = e.currentTarget.getBoundingClientRect();
+            player.currentTime = ((e.clientX - r.left) / r.width) * player.duration;
+        };
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
 </body>
 </html>
