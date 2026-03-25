@@ -3,104 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Music Studio ✧ Wishcore</title>
+    <title>Music Studio ✧ Pure Wish</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js"></script>
     <style>
         :root {
-            --key-color: #ff7eb9; /* 魔法少女らしいピンク */
-            --text-main: #5e5e7e;
-            --sub-text: rgba(94, 94, 126, 0.6);
-            --glass: rgba(255, 255, 255, 0.4);
+            /* 極薄パステルパレット */
+            --key-color: #f8c9d4; /* 非常に淡いピンク */
+            --accent-blue: #d4eaf7; /* 淡い水色 */
+            --accent-green: #e2f0d9; /* 淡い黄緑 */
+            --accent-purple: #e5d9f2; /* 淡い紫 */
+            --text-main: #5b5b7e; /* 柔らかいグレーパープル */
+            --sub-text: #9fa4c4;
+            --glass: rgba(255, 255, 255, 0.6);
             --star-clip: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
-            background-image: linear-gradient(135deg, #fdf2f8 0%, #eef2ff 50%, #f5f3ff 100%);
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Hiragino Sans", sans-serif;
+            background: #ffffff;
+            background-image: 
+                radial-gradient(at 0% 0%, var(--accent-blue) 0%, transparent 50%),
+                radial-gradient(at 100% 0%, var(--accent-purple) 0%, transparent 50%),
+                radial-gradient(at 0% 100%, var(--accent-green) 0%, transparent 50%),
+                radial-gradient(at 100% 100%, var(--key-color) 0%, transparent 50%);
             margin: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column;
             color: var(--text-main);
-            letter-spacing: 0.02em;
+            letter-spacing: 0.01em;
         }
 
-        /* --- Header & Search --- */
-        .header { padding: calc(45px + env(safe-area-inset-top)) 20px 10px; background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 0.5px solid rgba(255,255,255,0.3); z-index: 100; }
+        /* --- Header --- */
+        .header { padding: calc(45px + env(safe-area-inset-top)) 20px 10px; background: var(--glass); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border-bottom: 1px solid rgba(255,255,255,0.8); z-index: 100; }
         .header-top { display: flex; justify-content: space-between; align-items: center; }
-        .header-top h2 { font-size: 18px; font-weight: 700; color: #444; margin: 0; }
-        #left-btn, #right-btn { background: none; border: none; color: var(--key-color); font-size: 15px; font-weight: 600; cursor: pointer; }
-        #right-btn i { font-size: 20px; }
+        .header-top h2 { font-size: 18px; font-weight: 500; color: var(--text-main); margin: 0; letter-spacing: 0.05em; }
+        #left-btn, #right-btn { background: none; border: none; color: var(--sub-text); font-size: 14px; font-weight: 500; cursor: pointer; transition: opacity 0.2s; }
+        #right-btn i { font-size: 18px; color: var(--sub-text); }
 
-        .search-container { padding: 10px 20px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); display: flex; gap: 10px; align-items: center; border-bottom: 0.5px solid rgba(255,255,255,0.2); }
-        #search-input { flex: 1; padding: 10px 15px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.5); background: rgba(255,255,255,0.5); font-size: 14px; outline: none; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
-        .sort-select { background: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.5); border-radius: 12px; font-size: 11px; color: var(--text-main); padding: 5px 8px; outline: none; }
+        .search-container { padding: 10px 20px; background: rgba(255,255,255,0.2); backdrop-filter: blur(15px); display: flex; gap: 10px; align-items: center; border-bottom: 0.5px solid rgba(255,255,255,0.5); }
+        #search-input { flex: 1; padding: 10px 18px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.9); background: rgba(255,255,255,0.8); font-size: 13px; outline: none; color: var(--text-main); }
+        .sort-select { background: rgba(255,255,255,0.8); border: 1px solid rgba(255,255,255,0.9); border-radius: 15px; font-size: 10px; color: var(--sub-text); padding: 6px 10px; outline: none; }
 
         /* --- Content Area --- */
-        #content { flex: 1; overflow-y: auto; padding-bottom: 180px; scroll-behavior: smooth; }
-        .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; padding: 15px; width: 100%; }
+        #content { flex: 1; overflow-y: auto; padding-bottom: 180px; }
+        .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; padding: 20px; width: 100%; }
         
-        .card { position: relative; cursor: pointer; transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); width: 100%; }
-        .card:active { transform: scale(0.95); }
-        .card-img { width: 100%; aspect-ratio: 1/1; border-radius: 18px; object-fit: cover; box-shadow: 0 10px 25px rgba(255, 126, 185, 0.15); border: 2px solid #fff; display: block; }
-        .card-title { margin-top:10px; font-size:13px; font-weight:700; color:#444; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-        .card-sub { font-size:11px; color: var(--sub-text); margin-top: 2px; }
-        .card-tag { display: inline-block; font-size: 9px; background: var(--key-color); color: #fff; padding: 2px 7px; border-radius: 10px; margin-top: 6px; font-weight: bold; }
+        .card { position: relative; cursor: pointer; transition: transform 0.3s cubic-bezier(0.2, 0, 0.2, 1); width: 100%; }
+        .card:active { transform: scale(0.96) translateY(2px); }
+        .card-img { width: 100%; aspect-ratio: 1/1; border-radius: 24px; object-fit: cover; box-shadow: 0 15px 35px rgba(150, 150, 180, 0.1); border: 4px solid #fff; display: block; }
+        .card-title { margin-top:12px; font-size:13px; font-weight:600; color: var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .card-sub { font-size:11px; color: var(--sub-text); margin-top: 3px; }
+        .card-tag { display: inline-block; font-size: 9px; background: var(--accent-blue); color: var(--text-main); padding: 3px 9px; border-radius: 12px; margin-top: 8px; font-weight: 500; border: 1px solid #fff; }
 
-        .list-item { position: relative; display: flex; align-items: center; padding: 12px 20px; border-bottom: 0.5px solid rgba(0,0,0,0.02); cursor: pointer; background: rgba(255,255,255,0.3); transition: background 0.2s; }
-        .list-item:active { background: rgba(255,255,255,0.5); }
-        .list-item img:not(.artist-icon) { width: 52px; height: 52px; border-radius: 12px; margin-right: 15px; object-fit: cover; border: 1.5px solid #fff; }
+        .list-item { position: relative; display: flex; align-items: center; padding: 14px 22px; border-bottom: 0.5px solid rgba(255,255,255,0.5); cursor: pointer; transition: background 0.3s; }
+        .list-item:active { background: rgba(255,255,255,0.4); }
+        .list-item img:not(.artist-icon) { width: 54px; height: 54px; border-radius: 15px; margin-right: 18px; object-fit: cover; border: 2px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
 
-        /* アーティストアイコンを角丸星形に設定 */
-        .artist-icon-container { width: 60px; height: 60px; margin-right: 15px; flex-shrink: 0; filter: drop-shadow(0 4px 6px rgba(255,126,185,0.2)); }
+        .artist-icon-container { width: 64px; height: 64px; margin-right: 18px; flex-shrink: 0; filter: drop-shadow(0 6px 12px rgba(150,150,180,0.15)); }
         .artist-icon { 
-            width: 100%; height: 100%; 
-            object-fit: cover; 
-            background: linear-gradient(45deg, #ffcce5, #ff7eb9); 
+            width: 100%; height: 100%; object-fit: cover; 
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); 
             display: flex; align-items: center; justify-content: center; 
-            color: #fff; 
-            clip-path: var(--star-clip);
-            border: none;
+            color: #fff; clip-path: var(--star-clip); border: none;
         }
 
-        .swipe-container { position: relative; overflow: hidden; background: #ff5e7e; }
-        .swipe-delete-btn { position: absolute; right: 0; top: 0; bottom: 0; width: 80px; background: #ff5e7e; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; }
+        .swipe-container { position: relative; overflow: hidden; background: #fef0f0; }
+        .swipe-delete-btn { position: absolute; right: 0; top: 0; bottom: 0; width: 80px; background: #ffeded; color: #ff9999; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px; }
 
         /* --- Full Player --- */
-        .full-player { position: fixed; inset: 0; z-index: 5000; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); visibility: hidden; background: linear-gradient(160deg, #fff5f8, #f0f4ff, #fae8ff); }
+        .full-player { position: fixed; inset: 0; z-index: 5000; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.7s cubic-bezier(0.15, 0, 0.15, 1); visibility: hidden; background: #fff; }
         .full-player.active { transform: translateY(0); visibility: visible; }
-        #bg-blur-overlay { position: absolute; inset: 0; z-index: -1; backdrop-filter: blur(80px); -webkit-backdrop-filter: blur(80px); background: rgba(255, 255, 255, 0.2); }
+        #bg-blur-overlay { position: absolute; inset: 0; z-index: -1; background: 
+            linear-gradient(180deg, rgba(255,255,255,0.8) 0%, #fff 100%),
+            radial-gradient(circle at 50% 30%, var(--accent-blue) 0%, transparent 70%); 
+        }
 
-        #f-artwork-container { width: 82vw; max-width: 320px; aspect-ratio: 1/1; position: relative; transform: scale(1); transition: transform 0.5s ease; }
-        #f-img { width: 100%; height: 100%; border-radius: 24px; object-fit: cover; box-shadow: 0 30px 60px rgba(255,126,185,0.25); border: 3px solid #fff; }
-        #f-lyrics-view { position: absolute; inset: 0; background: rgba(255,255,255,0.7); backdrop-filter: blur(20px); border-radius: 24px; padding: 30px 20px; overflow-y: auto; display: none; flex-direction: column; align-items: center; text-align: center; font-size: 18px; line-height: 1.8; color: #444; font-weight: 600; }
+        #f-artwork-container { width: 84vw; max-width: 330px; aspect-ratio: 1/1; position: relative; }
+        #f-img { width: 100%; height: 100%; border-radius: 35px; object-fit: cover; box-shadow: 0 40px 80px rgba(150,150,180,0.18); border: 6px solid #fff; }
+        #f-lyrics-view { position: absolute; inset: 0; background: rgba(255,255,255,0.85); backdrop-filter: blur(25px); border-radius: 35px; padding: 40px 25px; overflow-y: auto; display: none; flex-direction: column; align-items: center; text-align: center; font-size: 17px; line-height: 2.2; color: var(--text-main); }
         #f-lyrics-view.active { display: flex; }
 
-        .seeker { -webkit-appearance: none; width: 100%; height: 6px; background: rgba(255,126,185,0.15); border-radius: 10px; outline: none; margin: 30px 0 10px; }
-        .seeker::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; background: #fff; border: 3px solid var(--key-color); border-radius: 50%; box-shadow: 0 3px 8px rgba(255,126,185,0.3); }
+        .seeker { -webkit-appearance: none; width: 100%; height: 4px; background: rgba(0,0,0,0.03); border-radius: 10px; outline: none; margin: 40px 0 15px; }
+        .seeker::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; background: #fff; border: 1px solid #eee; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
 
-        .queue-panel { position: absolute; inset: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(30px); z-index: 6000; transform: translateY(100%); transition: transform 0.4s ease; display: flex; flex-direction: column; }
+        .queue-panel { position: absolute; inset: 0; background: rgba(255,255,255,0.98); backdrop-filter: blur(40px); z-index: 6000; transform: translateY(100%); transition: transform 0.5s ease-out; display: flex; flex-direction: column; }
         .queue-panel.open { transform: translateY(0); }
 
-        .mini-player { position: fixed; bottom: calc(90px + env(safe-area-inset-bottom)); left: 15px; right: 15px; height: 64px; background: rgba(255,255,255,0.7); backdrop-filter: blur(25px); border-radius: 20px; display: none; align-items: center; padding: 0 15px; box-shadow: 0 12px 35px rgba(255,126,185,0.15); z-index: 2000; border: 1.5px solid rgba(255,255,255,0.8); }
-        #m-img { width: 44px; height: 44px; border-radius: 10px; margin-right: 12px; object-fit: cover; border: 1px solid #fff; }
+        .mini-player { position: fixed; bottom: calc(95px + env(safe-area-inset-bottom)); left: 20px; right: 20px; height: 68px; background: rgba(255,255,255,0.85); backdrop-filter: blur(30px); border-radius: 22px; display: none; align-items: center; padding: 0 18px; box-shadow: 0 15px 45px rgba(0,0,0,0.04); z-index: 2000; border: 1px solid rgba(255,255,255,0.9); }
+        #m-img { width: 46px; height: 46px; border-radius: 12px; margin-right: 14px; object-fit: cover; border: 2px solid #fff; }
         
         /* --- Tab Bar --- */
-        .tab-bar { position: fixed; bottom: 0; width: 100%; height: calc(70px + env(safe-area-inset-bottom)); background: rgba(255,255,255,0.5); backdrop-filter: blur(25px); display: flex; justify-content: space-around; padding-top: 12px; border-top: 0.5px solid rgba(255,255,255,0.3); z-index: 1000; }
-        .tab-item { border:none; background:none; color: #b0b0c5; font-weight: 700; font-size: 10px; display: flex; flex-direction: column; align-items: center; gap: 5px; width: 33%; transition: color 0.3s; }
-        .tab-item.active { color: var(--key-color); }
-        .tab-item i { font-size: 22px; filter: drop-shadow(0 2px 4px rgba(255,126,185,0.1)); }
+        .tab-bar { position: fixed; bottom: 0; width: 100%; height: calc(75px + env(safe-area-inset-bottom)); background: rgba(255,255,255,0.7); backdrop-filter: blur(30px); display: flex; justify-content: space-around; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.5); z-index: 1000; }
+        .tab-item { border:none; background:none; color: #d1d4e3; font-weight: 500; font-size: 10px; display: flex; flex-direction: column; align-items: center; gap: 6px; width: 33%; transition: all 0.3s; }
+        .tab-item.active { color: var(--text-main); }
+        .tab-item i { font-size: 20px; }
 
-        .modal { position: fixed; inset: 0; background: #fff; z-index: 7000; display: none; flex-direction: column; }
-        .modal.active { display: flex; }
-        .edit-input { width: 100%; padding: 14px; border: 1.5px solid rgba(255,126,185,0.1); border-radius: 15px; margin-bottom: 15px; outline: none; font-size: 15px; background: #fefaff; }
+        .modal { position: fixed; inset: 0; background: #ffffff; z-index: 7000; display: none; flex-direction: column; animation: modalFade 0.3s ease; }
+        @keyframes modalFade { from { opacity: 0; transform: scale(1.05); } to { opacity: 1; transform: scale(1); } }
+        .edit-input { width: 100%; padding: 16px; border: 1px solid #f0f0f5; border-radius: 18px; margin-bottom: 20px; outline: none; font-size: 15px; background: #fafafb; color: var(--text-main); }
 
-        .artist-chip { display: inline-block; padding: 7px 15px; background: #fff; border: 1px solid var(--key-color); border-radius: 20px; font-size: 11px; margin: 0 6px 10px 0; color: var(--key-color); font-weight: 600; }
-        .del-badge { position: absolute; top: -6px; left: -6px; width: 26px; height: 26px; background: #ff5e7e; color: white; border-radius: 50%; display: none; align-items: center; justify-content: center; border: 2.5px solid white; z-index: 10; font-size: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .artist-chip { display: inline-block; padding: 8px 18px; background: #fff; border: 1px solid #f0f0f5; border-radius: 25px; font-size: 11px; margin: 0 8px 12px 0; color: var(--sub-text); font-weight: 500; }
+        .del-badge { position: absolute; top: -8px; left: -8px; width: 28px; height: 28px; background: #fff; color: #ff9999; border-radius: 50%; display: none; align-items: center; justify-content: center; border: 1px solid #fee; z-index: 10; font-size: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .editing .del-badge { display: flex; }
 
-        .check-item { display: flex; align-items: center; padding: 12px 20px; border-bottom: 0.5px solid rgba(0,0,0,0.02); }
-        .check-item input[type="checkbox"] { width: 22px; height: 22px; margin-right: 15px; accent-color: var(--key-color); }
+        .check-item { display: flex; align-items: center; padding: 15px 25px; border-bottom: 0.5px solid #fafafa; }
+        .check-item input[type="checkbox"] { width: 20px; height: 20px; margin-right: 18px; accent-color: var(--accent-blue); }
     </style>
 </head>
 <body>
@@ -109,17 +117,17 @@
         <div class="header-top">
             <button id="left-btn" onclick="handleHeaderLeft()">Edit</button>
             <h2 id="view-title">Artists</h2>
-            <button id="right-btn" onclick="handleHeaderRight()"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
+            <button id="right-btn" onclick="handleHeaderRight()"><i class="fa-solid fa-plus"></i></button>
         </div>
     </div>
     
     <div class="search-container">
-        <input type="text" id="search-input" placeholder="Search music or artists..." oninput="render()">
+        <input type="text" id="search-input" placeholder="Search..." oninput="render()">
         <select id="sort-type" class="sort-select" onchange="render()">
-            <option value="added">Recently Added</option>
-            <option value="name_asc">Title (A-Z)</option>
-            <option value="name_desc">Title (Z-A)</option>
-            <option value="year">Release Date</option>
+            <option value="added">Newest</option>
+            <option value="name_asc">Title A-Z</option>
+            <option value="name_desc">Title Z-A</option>
+            <option value="year">Date</option>
         </select>
     </div>
 
@@ -127,72 +135,72 @@
 
     <div class="mini-player" id="mini" onclick="openFull()">
         <img id="m-img" src="">
-        <div id="m-title" style="flex:1; font-weight:700; font-size:14px; color:#444; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;"></div>
-        <i id="m-pp" class="fa-solid fa-play" style="font-size:22px; color:var(--key-color); padding:10px;" onclick="event.stopPropagation(); togglePlay();"></i>
+        <div id="m-title" style="flex:1; font-weight:500; font-size:14px; color:var(--text-main); overflow:hidden; white-space:nowrap; text-overflow:ellipsis;"></div>
+        <i id="m-pp" class="fa-solid fa-play" style="font-size:20px; color:var(--sub-text); padding:10px;" onclick="event.stopPropagation(); togglePlay();"></i>
     </div>
 
     <div class="full-player" id="full">
         <div id="bg-blur-overlay"></div>
-        <div onclick="closeFull()" style="padding:20px; text-align:center;"><div style="width:40px; height:5px; border-radius:10px; background:rgba(0,0,0,0.08); margin:0 auto;"></div></div>
+        <div onclick="closeFull()" style="padding:25px; text-align:center;"><div style="width:35px; height:4px; border-radius:10px; background:rgba(0,0,0,0.05); margin:0 auto;"></div></div>
         
-        <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:0 35px;">
+        <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:0 40px;">
             <div id="f-artwork-container" onclick="toggleLyrics()">
                 <img id="f-img">
                 <div id="f-lyrics-view"></div>
             </div>
             
-            <div style="width:100%; margin-top:45px; display:flex; justify-content:space-between; align-items:flex-end;">
-                <div style="flex:1; overflow:hidden; padding-right:15px;">
-                    <div id="f-title" style="font-size:24px; font-weight:800; color:#333; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></div>
-                    <div id="f-artist" style="font-size:17px; color:var(--key-color); margin-top:4px; font-weight:600;"></div>
+            <div style="width:100%; margin-top:50px; display:flex; justify-content:space-between; align-items:flex-end;">
+                <div style="flex:1; overflow:hidden; padding-right:20px;">
+                    <div id="f-title" style="font-size:22px; font-weight:600; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></div>
+                    <div id="f-artist" style="font-size:16px; color:var(--sub-text); margin-top:6px; font-weight:400;"></div>
                 </div>
-                <div style="display:flex; gap:5px;">
-                    <button id="f-lyric-icon" onclick="toggleLyrics()" style="background:none; border:none; color:rgba(0,0,0,0.3); font-size:18px; padding:10px;"><i class="fa-solid fa-star"></i></button>
-                    <button onclick="toggleQueue()" style="background:none; border:none; color:rgba(0,0,0,0.3); font-size:18px; padding:10px;"><i class="fa-solid fa-list-ul"></i></button>
+                <div style="display:flex; gap:8px;">
+                    <button id="f-lyric-icon" onclick="toggleLyrics()" style="background:none; border:none; color:var(--sub-text); opacity:0.4; font-size:16px; padding:10px;"><i class="fa-solid fa-sparkles"></i></button>
+                    <button onclick="toggleQueue()" style="background:none; border:none; color:var(--sub-text); opacity:0.4; font-size:16px; padding:10px;"><i class="fa-solid fa-layer-group"></i></button>
                 </div>
             </div>
             
             <input type="range" class="seeker" id="seeker" value="0" step="0.1" oninput="audio.currentTime=this.value">
-            <div style="width:100%; display:flex; justify-content:space-between; color:rgba(0,0,0,0.3); font-size:11px; font-weight:700;">
+            <div style="width:100%; display:flex; justify-content:space-between; color:var(--sub-text); font-size:10px; font-weight:500; letter-spacing:0.05em;">
                 <span id="cur-time">0:00</span><span id="dur-time">0:00</span>
             </div>
 
-            <div style="display:flex; width:100%; justify-content:space-between; align-items:center; margin-top:40px;">
-                <button onclick="toggleShuffle()" id="btn-shuffle" style="background:none; border:none; font-size:20px; color:rgba(0,0,0,0.15);"><i class="fa-solid fa-shuffle"></i></button>
-                <div style="display:flex; align-items:center; gap:40px;">
-                    <i class="fa-solid fa-backward-step" style="font-size:28px; color:#444;" onclick="prev()"></i>
-                    <i id="f-pp" class="fa-solid fa-play" style="font-size:55px; color:#444;" onclick="togglePlay()"></i>
-                    <i class="fa-solid fa-forward-step" style="font-size:28px; color:#444;" onclick="next()"></i>
+            <div style="display:flex; width:100%; justify-content:space-between; align-items:center; margin-top:45px;">
+                <button onclick="toggleShuffle()" id="btn-shuffle" style="background:none; border:none; font-size:18px; color:var(--sub-text); opacity:0.3;"><i class="fa-solid fa-shuffle"></i></button>
+                <div style="display:flex; align-items:center; gap:45px;">
+                    <i class="fa-solid fa-chevron-left" style="font-size:24px; color:var(--sub-text);" onclick="prev()"></i>
+                    <i id="f-pp" class="fa-solid fa-play" style="font-size:48px; color:var(--text-main);" onclick="togglePlay()"></i>
+                    <i class="fa-solid fa-chevron-right" style="font-size:24px; color:var(--sub-text);" onclick="next()"></i>
                 </div>
-                <button onclick="toggleRepeat()" id="btn-repeat" style="background:none; border:none; font-size:20px; color:rgba(0,0,0,0.15); position:relative;"><i class="fa-solid fa-repeat"></i><span id="repeat-badge" style="display:none; position:absolute; top:-5px; right:-8px; background:var(--key-color); color:white; border-radius:50%; width:14px; height:14px; font-size:8px; text-align:center; line-height:14px;">1</span></button>
+                <button onclick="toggleRepeat()" id="btn-repeat" style="background:none; border:none; font-size:18px; color:var(--sub-text); opacity:0.3; position:relative;"><i class="fa-solid fa-rotate"></i><span id="repeat-badge" style="display:none; position:absolute; top:-6px; right:-8px; background:var(--accent-blue); color:var(--text-main); border-radius:50%; width:14px; height:14px; font-size:8px; text-align:center; line-height:14px; font-weight:bold;">1</span></button>
             </div>
         </div>
 
         <div class="queue-panel" id="queue-panel">
-            <div style="padding:20px; border-bottom:0.5px solid rgba(0,0,0,0.05); display:flex; justify-content:space-between; align-items:center;">
-                <h3 style="margin:0; font-size:18px; font-weight:800;">Next Up</h3>
-                <button onclick="toggleQueue()" style="background:none; border:none; font-size:16px; color:var(--key-color); font-weight:bold;">Done</button>
+            <div style="padding:25px; border-bottom:1px solid #f9f9f9; display:flex; justify-content:space-between; align-items:center;">
+                <h3 style="margin:0; font-size:16px; font-weight:500; color:var(--text-main);">Queue</h3>
+                <button onclick="toggleQueue()" style="background:none; border:none; font-size:14px; color:var(--sub-text);">Close</button>
             </div>
             <div id="queue-list" style="flex:1; overflow-y:auto;"></div>
         </div>
     </div>
 
     <div id="edit-modal" class="modal">
-        <div class="header"><div class="header-top"><button onclick="closeEdit()">Cancel</button><h2>Song Details</h2><button onclick="saveEdit()" style="color:var(--key-color); font-weight:bold;">Save</button></div></div>
-        <div class="modal-body" style="padding:25px; overflow-y:auto;">
-            <label style="font-size:11px; color:var(--sub-text); font-weight:bold;">TITLE</label><input type="text" id="edit-name" class="edit-input">
-            <label style="font-size:11px; color:var(--sub-text); font-weight:bold;">ARTIST</label><input type="text" id="edit-artist" class="edit-input" oninput="updateArtistSuggest(this.value)"><div id="artist-quick-select" style="margin-bottom: 15px;"></div>
-            <label style="font-size:11px; color:var(--sub-text); font-weight:bold;">RELEASE YEAR</label><input type="text" id="edit-year" class="edit-input">
-            <label style="font-size:11px; color:var(--sub-text); font-weight:bold;">LYRICS</label><textarea id="edit-lyrics" class="edit-input" style="height:150px; resize:none;"></textarea>
+        <div class="header"><div class="header-top"><button onclick="closeEdit()">Cancel</button><h2>Information</h2><button onclick="saveEdit()" style="color:var(--text-main); font-weight:bold;">Save</button></div></div>
+        <div class="modal-body" style="padding:30px; overflow-y:auto;">
+            <label style="font-size:10px; color:var(--sub-text); font-weight:600; letter-spacing:0.1em; display:block; margin-bottom:8px;">TITLE</label><input type="text" id="edit-name" class="edit-input">
+            <label style="font-size:10px; color:var(--sub-text); font-weight:600; letter-spacing:0.1em; display:block; margin-bottom:8px;">ARTIST</label><input type="text" id="edit-artist" class="edit-input" oninput="updateArtistSuggest(this.value)"><div id="artist-quick-select" style="margin-bottom: 20px;"></div>
+            <label style="font-size:10px; color:var(--sub-text); font-weight:600; letter-spacing:0.1em; display:block; margin-bottom:8px;">DATE</label><input type="text" id="edit-year" class="edit-input">
+            <label style="font-size:10px; color:var(--sub-text); font-weight:600; letter-spacing:0.1em; display:block; margin-bottom:8px;">LYRICS</label><textarea id="edit-lyrics" class="edit-input" style="height:180px; resize:none;"></textarea>
         </div>
     </div>
 
-    <div id="pl-edit-modal" class="modal"><div class="header"><div class="header-top"><button onclick="closePlEdit()">Cancel</button><h2>Playlist Settings</h2><button onclick="savePlEdit()" style="color:var(--key-color); font-weight:bold;">Save</button></div></div><div class="modal-body" style="padding:25px; text-align:center;"><img id="pl-edit-img" style="width:160px; height:160px; border-radius:25px; object-fit:cover; background:#f0f0f0; margin-bottom:20px; border:3px solid #fff; box-shadow:0 10px 20px rgba(0,0,0,0.05); cursor:pointer;" onclick="document.getElementById('pl-img-input').click()"><input type="file" id="pl-img-input" style="display:none" onchange="previewPlImg(event)"><input type="text" id="pl-edit-name" class="edit-input" placeholder="Playlist Name"><input type="text" id="pl-edit-tag" class="edit-input" placeholder="Tag (e.g. #Magic)"></div></div>
+    <div id="pl-edit-modal" class="modal"><div class="header"><div class="header-top"><button onclick="closePlEdit()">Cancel</button><h2>List Editor</h2><button onclick="savePlEdit()" style="color:var(--text-main); font-weight:bold;">Save</button></div></div><div class="modal-body" style="padding:30px; text-align:center;"><img id="pl-edit-img" style="width:180px; height:180px; border-radius:30px; object-fit:cover; background:#fafafa; margin-bottom:25px; border:4px solid #fff; box-shadow:0 20px 40px rgba(0,0,0,0.03); cursor:pointer;" onclick="document.getElementById('pl-img-input').click()"><input type="file" id="pl-img-input" style="display:none" onchange="previewPlImg(event)"><input type="text" id="pl-edit-name" class="edit-input" placeholder="Name"><input type="text" id="pl-edit-tag" class="edit-input" placeholder="#Tag"></div></div>
 
     <div class="tab-bar">
-        <button class="tab-item active" id="tab-artist" onclick="switchTab('artists')"><i class="fa-solid fa-wand-sparkles"></i><span>Artists</span></button>
-        <button class="tab-item" id="tab-lib" onclick="switchTab('library')"><i class="fa-solid fa-clover"></i><span>Library</span></button>
-        <button class="tab-item" id="tab-play" onclick="switchTab('playlist')"><i class="fa-solid fa-heart"></i><span>Playlists</span></button>
+        <button class="tab-item active" id="tab-artist" onclick="switchTab('artists')"><i class="fa-solid fa-star-of-david"></i><span>Artists</span></button>
+        <button class="tab-item" id="tab-lib" onclick="switchTab('library')"><i class="fa-solid fa-shapes"></i><span>Library</span></button>
+        <button class="tab-item" id="tab-play" onclick="switchTab('playlist')"><i class="fa-solid fa-moon"></i><span>Playlists</span></button>
     </div>
 
     <input type="file" id="audio-upload" multiple style="display:none">
@@ -201,10 +209,9 @@
 
     <script>
         let db, tracks = [], playlists = [], artistMeta = {}, isEditing = false, currentView = 'artists', currentArtist = null, currentPlaylistId = null;
-        let playingTracks = [], currentTrackIdx = -1, isShuffle = false, repeatMode = 0; // 0:Off, 1:All, 2:One
+        let playingTracks = [], currentTrackIdx = -1, isShuffle = false, repeatMode = 0; 
         let historyTracks = []; 
         let editingId = null, editingPlId = null, tempPlImg = null, editingArtistName = null;
-        let pressTimer;
         const audio = document.getElementById('audio-element');
 
         const req = indexedDB.open("MusicStudioWishcore_V4", 3);
@@ -249,7 +256,7 @@
             if (currentArtist) {
                 rightBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
             } else {
-                rightBtn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i>';
+                rightBtn.innerHTML = '<i class="fa-solid fa-plus"></i>';
             }
 
             if (currentView === 'library') {
@@ -258,7 +265,7 @@
                 list = sortList(list, sort);
                 display.innerHTML = list.map(t => `
                     <div class="card ${isEditing?'editing':''}" onclick="isEditing?openEdit(${t.id}):playSong(${t.id},'lib')">
-                        <div class="del-badge" onclick="event.stopPropagation(); deleteSong(${t.id})"><i class="fa-solid fa-minus"></i></div>
+                        <div class="del-badge" onclick="event.stopPropagation(); deleteSong(${t.id})">Remove</div>
                         <img src="${t.cover||''}" class="card-img">
                         <div class="card-title">${t.name}</div>
                         <div class="card-sub">${t.artist}</div>
@@ -272,13 +279,10 @@
                     else artists.sort((a,b) => a.localeCompare(b,'ja'));
 
                     display.innerHTML = artists.map(a => {
-                        const icon = artistMeta[a] ? `<img src="${artistMeta[a]}" class="artist-icon">` : `<div class="artist-icon"><i class="fa-solid fa-wand-sparkles"></i></div>`;
-                        return `<div class="list-item" 
-                                onclick="isEditing ? selectArtistIcon('${a}') : openArtist('${a}')"
-                                oncontextmenu="event.preventDefault(); createAutoPlaylist('${a}')"
-                                ontouchstart="startPressTimer('${a}')" ontouchend="clearPressTimer()">
+                        const icon = artistMeta[a] ? `<img src="${artistMeta[a]}" class="artist-icon">` : `<div class="artist-icon"><i class="fa-solid fa-star-of-david"></i></div>`;
+                        return `<div class="list-item" onclick="isEditing ? selectArtistIcon('${a}') : openArtist('${a}')">
                                 <div class="artist-icon-container">${icon}</div>
-                                <div style="font-weight:700; color:#444;">${a}</div>
+                                <div style="font-weight:500;">${a}</div>
                             </div>`;
                     }).join('');
                 } else {
@@ -301,7 +305,7 @@
                     display.innerHTML = list.map(p => {
                         const firstSong = tracks.find(t => p.songIds.includes(t.id));
                         return `<div class="card ${isEditing?'editing':''}" onclick="isEditing?openPlEdit(${p.id}):openPlaylist(${p.id})">
-                            <div class="del-badge" onclick="event.stopPropagation(); deletePlaylist(${p.id})"><i class="fa-solid fa-minus"></i></div>
+                            <div class="del-badge" onclick="event.stopPropagation(); deletePlaylist(${p.id})">Delete</div>
                             <img src="${p.cover || (firstSong?firstSong.cover:'')}" class="card-img" style="background:#fff;">
                             <div class="card-title">${p.name}</div>
                             <div class="card-sub">${p.songIds.length} tracks</div>
@@ -319,48 +323,32 @@
                                  ontouchstart="handleTouchStart(event, ${t.id})" ontouchmove="handleTouchMove(event, ${t.id})" ontouchend="handleTouchEnd(event, ${t.id})">
                                 <img src="${t.cover||''}">
                                 <div>
-                                    <div style="font-weight:700; color:#444;">${t.name}</div>
-                                    <div style="font-size:12px; color:var(--key-color); font-weight:600;">${t.artist}</div>
+                                    <div style="font-weight:600;">${t.name}</div>
+                                    <div style="font-size:11px; color:var(--sub-text); margin-top:2px;">${t.artist}</div>
                                 </div>
                             </div>
                         </div>`).join('') + 
-                        `<div style="padding:40px; text-align:center;"><button onclick="openBulkAddModal()" style="background:linear-gradient(45deg, #ff7eb9, #ff9ecd); color:white; border:none; padding:14px 28px; border-radius:30px; font-weight:bold; font-size:14px; box-shadow: 0 5px 15px rgba(255,126,185,0.3);">Add Songs</button></div>`;
+                        `<div style="padding:50px; text-align:center;"><button onclick="openBulkAddModal()" style="background:#fff; color:var(--sub-text); border:1px solid #f0f0f5; padding:15px 35px; border-radius:30px; font-weight:500; font-size:12px; box-shadow: 0 10px 25px rgba(0,0,0,0.02);">Add More Songs</button></div>`;
                 }
             }
             document.getElementById('left-btn').innerText = (currentArtist || currentPlaylistId) ? "Back" : (isEditing ? "Done" : "Edit");
         }
 
-        // --- 修正されたリピート機能を含む再生ロジック ---
+        // --- Core Logic ---
         function next() { 
             if (playingTracks.length === 0) return;
-            if (repeatMode === 2) { // 1曲リピート
-                loadTrack(playingTracks[currentTrackIdx]);
-                return;
-            }
-            
+            if (repeatMode === 2) { loadTrack(playingTracks[currentTrackIdx]); return; }
             let nextIdx = currentTrackIdx + 1;
             if (nextIdx >= playingTracks.length) {
-                if (repeatMode === 1) { // 全曲リピート
-                    nextIdx = 0; 
-                } else {
-                    audio.pause();
-                    audio.currentTime = 0;
-                    return;
-                }
+                if (repeatMode === 1) nextIdx = 0; 
+                else { audio.pause(); audio.currentTime = 0; return; }
             }
-            currentTrackIdx = nextIdx;
-            loadTrack(playingTracks[currentTrackIdx]);
+            currentTrackIdx = nextIdx; loadTrack(playingTracks[currentTrackIdx]);
         }
-
         function prev() { 
-            if (audio.currentTime > 3) {
-                audio.currentTime = 0;
-            } else {
-                currentTrackIdx = (currentTrackIdx - 1 + playingTracks.length) % playingTracks.length;
-                loadTrack(playingTracks[currentTrackIdx]);
-            }
+            if (audio.currentTime > 3) audio.currentTime = 0;
+            else { currentTrackIdx = (currentTrackIdx - 1 + playingTracks.length) % playingTracks.length; loadTrack(playingTracks[currentTrackIdx]); }
         }
-
         function playSong(id, mode) {
             let original = [];
             if(mode === 'pl') {
@@ -369,12 +357,10 @@
             }
             else if(mode === 'art') original = tracks.filter(tx => tx.artist === currentArtist);
             else original = [...tracks];
-            
             playingTracks = isShuffle ? [...original].sort(() => Math.random() - 0.5) : [...original];
             currentTrackIdx = playingTracks.findIndex(x => x.id === id);
             loadTrack(playingTracks[currentTrackIdx]);
         }
-
         function loadTrack(t) {
             if(!t) return;
             if(currentTrackIdx !== -1 && !historyTracks.some(h => h.id === t.id)) {
@@ -387,70 +373,47 @@
             document.getElementById('mini').style.display = 'flex';
             document.getElementById('f-lyrics-view').classList.remove('active');
             document.getElementById('f-img').style.opacity = "1";
-            audio.play();
-            renderQueue();
+            audio.play(); renderQueue();
         }
 
         function togglePlay() { audio.paused ? audio.play() : audio.pause(); }
-        function toggleShuffle() { isShuffle = !isShuffle; document.getElementById('btn-shuffle').style.color = isShuffle ? "var(--key-color)" : "rgba(0,0,0,0.15)"; }
+        function toggleShuffle() { isShuffle = !isShuffle; document.getElementById('btn-shuffle').style.opacity = isShuffle ? "1" : "0.3"; }
         function toggleRepeat() { 
             repeatMode = (repeatMode + 1) % 3; 
-            const btn = document.getElementById('btn-repeat');
-            const badge = document.getElementById('repeat-badge');
-            btn.style.color = repeatMode > 0 ? "var(--key-color)" : "rgba(0,0,0,0.15)"; 
-            badge.style.display = repeatMode === 2 ? "block" : "none"; 
+            document.getElementById('btn-repeat').style.opacity = repeatMode > 0 ? "1" : "0.3"; 
+            document.getElementById('repeat-badge').style.display = repeatMode === 2 ? "block" : "none"; 
         }
 
-        // --- Helper functions & UI Event Handlers ---
-        function startPressTimer(artist) { pressTimer = setTimeout(() => createAutoPlaylist(artist), 800); }
-        function clearPressTimer() { clearTimeout(pressTimer); }
-        function createAutoPlaylist(artistName) {
-            const artistTracks = tracks.filter(t => t.artist === artistName).map(t => t.id);
-            const newPl = { name: artistName + " Best", songIds: artistTracks, tag: "#Auto", cover: artistMeta[artistName] || null };
-            db.transaction("playlists", "readwrite").objectStore("playlists").add(newPl).onsuccess = loadAll;
-        }
-
+        // --- Handlers & Helpers ---
         function toggleLyrics() {
             const view = document.getElementById('f-lyrics-view');
-            const img = document.getElementById('f-img');
             const isActive = view.classList.toggle('active');
-            img.style.opacity = isActive ? "0.1" : "1";
-            if(isActive) {
-                const track = playingTracks[currentTrackIdx];
-                view.innerText = track?.lyrics || "No lyrics found for this magic song.";
-            }
+            document.getElementById('f-img').style.opacity = isActive ? "0.05" : "1";
+            if(isActive) view.innerText = playingTracks[currentTrackIdx]?.lyrics || "Pure silence...";
         }
-
         function openBulkAddModal() {
             const pl = playlists.find(p => p.id === currentPlaylistId);
             const div = document.createElement('div'); div.id="bulk-modal"; div.className="modal active";
-            let html = `<div class="header"><div class="header-top"><button onclick="this.closest('.modal').remove()">Cancel</button><h2>Select Songs</h2><button onclick="saveBulkAdd()" style="color:var(--key-color); font-weight:bold;">Add</button></div></div>`;
-            html += `<div class="search-container"><input type="text" placeholder="Search..." oninput="filterBulk(this.value)"></div>`;
-            html += `<div id="bulk-list" style="flex:1; overflow-y:auto; padding-bottom:40px; background:#fff;">`;
+            let html = `<div class="header"><div class="header-top"><button onclick="this.closest('.modal').remove()">Cancel</button><h2>Select</h2><button onclick="saveBulkAdd()">Done</button></div></div>`;
+            html += `<div class="search-container"><input type="text" placeholder="Filter..." oninput="filterBulk(this.value)"></div>`;
+            html += `<div id="bulk-list" style="flex:1; overflow-y:auto; padding-bottom:50px;">`;
             html += tracks.map(t => `
                 <label class="check-item" data-search="${t.name.toLowerCase()} ${t.artist.toLowerCase()}">
                     <input type="checkbox" value="${t.id}" ${pl.songIds.includes(t.id)?'checked':''}>
-                    <img src="${t.cover||''}" style="width:40px; height:40px; border-radius:8px; margin-right:12px; border:1px solid #eee;">
-                    <div style="font-size:14px;"><b>${t.name}</b><br><span style="font-size:11px; color:var(--key-color);">${t.artist}</span></div>
+                    <img src="${t.cover||''}" style="width:42px; height:42px; border-radius:10px; margin-right:15px; border:1px solid #eee;">
+                    <div style="font-size:14px;"><b>${t.name}</b><br><span style="font-size:11px; color:var(--sub-text);">${t.artist}</span></div>
                 </label>`).join('');
             html += `</div>`;
-            div.innerHTML = html;
-            document.body.appendChild(div);
+            div.innerHTML = html; document.body.appendChild(div);
         }
         function filterBulk(val) {
             const v = val.toLowerCase();
-            document.querySelectorAll('#bulk-list .check-item').forEach(el => {
-                el.style.display = el.getAttribute('data-search').includes(v) ? 'flex' : 'none';
-            });
+            document.querySelectorAll('#bulk-list .check-item').forEach(el => { el.style.display = el.getAttribute('data-search').includes(v) ? 'flex' : 'none'; });
         }
         function saveBulkAdd() {
             const pl = playlists.find(p => p.id === currentPlaylistId);
-            const checked = Array.from(document.querySelectorAll('#bulk-list input:checked')).map(i => parseInt(i.value));
-            pl.songIds = checked;
-            db.transaction("playlists","readwrite").objectStore("playlists").put(pl).onsuccess = () => {
-                document.getElementById('bulk-modal').remove();
-                loadAll();
-            };
+            pl.songIds = Array.from(document.querySelectorAll('#bulk-list input:checked')).map(i => parseInt(i.value));
+            db.transaction("playlists","readwrite").objectStore("playlists").put(pl).onsuccess = () => { document.getElementById('bulk-modal').remove(); loadAll(); };
         }
 
         function handleHeaderRight() { 
@@ -461,7 +424,7 @@
             else if(currentPlaylistId) openBulkAddModal();
             else if(currentView==='library') document.getElementById('audio-upload').click(); 
             else if(currentView==='playlist') {
-                const n = prompt("Enter playlist name:");
+                const n = prompt("New List Name:");
                 if(n) db.transaction("playlists","readwrite").objectStore("playlists").add({ name: n, songIds: [], tag: "", cover: null }).onsuccess = loadAll;
             } 
         }
@@ -479,19 +442,18 @@
             let html = "";
             const nextTracks = playingTracks.slice(currentTrackIdx + 1);
             if (nextTracks.length > 0) {
-                html += `<div style="padding:15px 20px; font-size:11px; font-weight:800; color:var(--sub-text); letter-spacing:0.1em;">NEXT</div>`;
-                html += nextTracks.map((t, i) => `<div class="list-item" onclick="jumpToQueue(${currentTrackIdx + 1 + i})"><img src="${t.cover||''}" style="width:40px; height:40px;"><div><div style="font-weight:700; font-size:14px; color:#444;">${t.name}</div><div style="font-size:11px; color:var(--key-color); font-weight:600;">${t.artist}</div></div></div>`).join('');
+                html += `<div style="padding:20px; font-size:10px; font-weight:700; color:var(--sub-text); letter-spacing:0.1em;">NEXT</div>`;
+                html += nextTracks.map((t, i) => `<div class="list-item" onclick="jumpToQueue(${currentTrackIdx + 1 + i})"><img src="${t.cover||''}" style="width:40px; height:40px;"><div><div style="font-weight:600; font-size:14px;">${t.name}</div><div style="font-size:11px; color:var(--sub-text);">${t.artist}</div></div></div>`).join('');
             }
             if (historyTracks.length > 0) {
-                html += `<div style="padding:15px 20px; font-size:11px; font-weight:800; color:var(--sub-text); letter-spacing:0.1em;">HISTORY</div>`;
-                html += historyTracks.map(t => `<div class="list-item" onclick="loadTrackById(${t.id})"><img src="${t.cover||''}" style="width:40px; height:40px; filter: grayscale(0.8); opacity:0.6;"><div><div style="font-weight:700; font-size:14px; color:#666;">${t.name}</div><div style="font-size:11px; color:#999;">${t.artist}</div></div></div>`).join('');
+                html += `<div style="padding:20px; font-size:10px; font-weight:700; color:var(--sub-text); letter-spacing:0.1em;">HISTORY</div>`;
+                html += historyTracks.map(t => `<div class="list-item" onclick="loadTrackById(${t.id})"><img src="${t.cover||''}" style="width:40px; height:40px; opacity:0.4;"><div><div style="font-weight:600; font-size:14px; color:#ccc;">${t.name}</div><div style="font-size:11px; color:#ddd;">${t.artist}</div></div></div>`).join('');
             }
-            list.innerHTML = html || `<div style="padding:40px; text-align:center; color:#ccc;">No queue.</div>`;
+            list.innerHTML = html || `<div style="padding:50px; text-align:center; color:#eee;">Queue is empty.</div>`;
         }
         function jumpToQueue(idx) { currentTrackIdx = idx; loadTrack(playingTracks[idx]); }
         function loadTrackById(id) { const t = tracks.find(x => x.id === id); if(t) loadTrack(t); }
 
-        // --- Swipe functionality (Existing) ---
         let touchStartX = 0;
         function handleTouchStart(e, id) { if(isEditing) return; touchStartX = e.touches[0].clientX; }
         function handleTouchMove(e, id) {
@@ -504,11 +466,10 @@
             if(isEditing) return;
             const el = document.querySelector(`#swipe-${id} .list-item`);
             let moveX = e.changedTouches[0].clientX - touchStartX;
-            el.style.transition = "transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)";
+            el.style.transition = "transform 0.4s cubic-bezier(0.15, 0, 0.15, 1)";
             el.style.transform = moveX < -50 ? `translateX(-80px)` : `translateX(0)`;
         }
 
-        // --- Data management (Existing but with same line count) ---
         function openEdit(id) { 
             editingId = id; const t = tracks.find(x => x.id === id); 
             document.getElementById('edit-name').value = t.name; 
@@ -532,7 +493,6 @@
             t.lyrics = document.getElementById('edit-lyrics').value; 
             db.transaction("songs","readwrite").objectStore("songs").put(t).onsuccess = () => { closeEdit(); loadAll(); }; 
         }
-
         function openPlEdit(id) { editingPlId = id; const pl = playlists.find(p => p.id === id); document.getElementById('pl-edit-name').value = pl.name; document.getElementById('pl-edit-tag').value = pl.tag || ""; tempPlImg = pl.cover; document.getElementById('pl-edit-img').src = tempPlImg || ""; document.getElementById('pl-edit-modal').classList.add('active'); }
         function closePlEdit() { document.getElementById('pl-edit-modal').classList.remove('active'); }
         function previewPlImg(e) { const f = e.target.files[0]; if(f){ const r = new FileReader(); r.onload = (ev) => { tempPlImg = ev.target.result; document.getElementById('pl-edit-img').src = tempPlImg; }; r.readAsDataURL(f); } }
@@ -546,8 +506,8 @@
                 r.readAsDataURL(f);
             }
         }
-        function deleteSong(id) { if(confirm("Magic deletion?")) db.transaction("songs","readwrite").objectStore("songs").delete(id).onsuccess=loadAll; }
-        function deletePlaylist(id) { if(confirm("Magic deletion?")) db.transaction("playlists","readwrite").objectStore("playlists").delete(id).onsuccess=loadAll; }
+        function deleteSong(id) { if(confirm("Remove?")) db.transaction("songs","readwrite").objectStore("songs").delete(id).onsuccess=loadAll; }
+        function deletePlaylist(id) { if(confirm("Delete list?")) db.transaction("playlists","readwrite").objectStore("playlists").delete(id).onsuccess=loadAll; }
         function removeTrackFromPlaylist(sid) { const pl = playlists.find(p => p.id === currentPlaylistId); pl.songIds = pl.songIds.filter(id => id !== sid); db.transaction("playlists","readwrite").objectStore("playlists").put(pl).onsuccess = loadAll; }
 
         audio.onended = () => { if(repeatMode === 2) { audio.currentTime = 0; audio.play(); } else { next(); } };
@@ -557,8 +517,7 @@
         function formatTime(s) { let m=Math.floor(s/60), sec=Math.floor(s%60); return `${m}:${sec<10?'0':''}${sec}`; }
 
         document.getElementById('audio-upload').onchange = (e) => {
-            const files = e.target.files;
-            if (files.length === 0) return;
+            const files = e.target.files; if (files.length === 0) return;
             const tx = db.transaction("songs", "readwrite");
             const store = tx.objectStore("songs");
             let processed = 0;
@@ -569,7 +528,7 @@
                         c = `data:${tag.tags.picture.format};base64,${btoa(s)}`;
                     }
                     store.add({ name: tag.tags.title || f.name, artist: tag.tags.artist || "Unknown", year: tag.tags.year || "", cover: c, data: f, lyrics: "" });
-                    processed++; if(processed === files.length) { /* complete */ }
+                    processed++; 
                 }});
             }
             tx.oncomplete = () => { loadAll(); };
