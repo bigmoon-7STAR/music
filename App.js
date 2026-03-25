@@ -57,8 +57,11 @@
             <span class="player-title" id="player-title">未選択</span>
             <span class="player-artist" id="player-artist">-</span>
         </div>
-        <div class="controls"><span id="play-btn" style="cursor:pointer;">▶️</span></div>
-    </div>
+<div class="controls">
+    <span id="shuffle-btn" style="cursor:pointer; font-size: 18px; opacity: 0.5;">🔀</span>
+    <span id="play-btn" style="cursor:pointer;">▶️</span>
+    <span id="repeat-btn" style="cursor:pointer; font-size: 18px; opacity: 0.5;">🔁</span>
+</div>
 
     <script>
         const canvas = document.getElementById('color-canvas');
