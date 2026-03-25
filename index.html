@@ -2,26 +2,234 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>Offline Web Player</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wishcore Player ✧.｡.:*</title>
     <style>
-        body { font-family: sans-serif; background: #121212; color: white; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-        #playlist { list-style: none; padding: 0; width: 300px; }
-        li { background: #333; margin: 5px 0; padding: 10px; cursor: pointer; border-radius: 5px; }
-        li:hover { background: #444; }
-        audio { margin-top: 20px; width: 300px; }
+        :root {
+            --bg-color: #fdf2f8; /* 極めて淡いピンク */
+            --primary-color: #a78bfa; /* 淡い紫（ドリーミー） */
+            --accent-color: #38bdf8; /* 淡い青（憧れ） */
+            --text-color: #4c1d95; /* 濃い紫（可読性確保） */
+            --card-bg: rgba(255, 255, 255, 0.7); /* 半透明の白（雲のイメージ） */
+            --shadow: 0 4px 6px rgba(167, 139, 250, 0.3); /* 紫がかった影 */
+        }
+
+        body {
+            font-family: 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(at 10% 20%, rgba(255, 228, 230, 0.8) 0, transparent 40%),
+                radial-gradient(at 80% 10%, rgba(167, 139, 250, 0.5) 0, transparent 40%),
+                radial-gradient(at 90% 90%, rgba(56, 189, 248, 0.5) 0, transparent 40%),
+                radial-gradient(at 10% 90%, rgba(217, 249, 157, 0.5) 0, transparent 40%);
+            /* グリッド風の模様を薄く追加 (Y2K/Wish.comへのオマージュ) */
+            background-size: 20px 20px;
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 10px;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        /* アプリ全体のコンテナ */
+        .main-container {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(8px); /* グラスモフィズム（夢心地） */
+            border-radius: 20px;
+            padding: 30px;
+            width: 350px;
+            max-width: 90%;
+            box-shadow: var(--shadow);
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 5px;
+            margin-top: 0;
+            text-shadow: 2px 2px 0 rgba(167, 139, 250, 0.3);
+            color: var(--text-color);
+        }
+
+        p.subtitle {
+            font-size: 0.9rem;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+
+        /* ファイル入力（見えなくする） */
+        #fileInput {
+            display: none;
+        }
+
+        /* おしゃれなファイル追加ボタン */
+        .custom-file-upload {
+            display: inline-block;
+            padding: 10px 20px;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--primary-color) 100%);
+            color: white;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            box-shadow: var(--shadow);
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            transition: all 0.3s ease;
+        }
+
+        .custom-file-upload:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 10px rgba(167, 139, 250, 0.5);
+        }
+
+        /* プレイリスト */
+        #playlist {
+            list-style: none;
+            padding: 0;
+            width: 100%;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            max-height: 250px;
+            overflow-y: auto; /* スクロール可能に */
+        }
+
+        /* プレイリストのリスト項目 */
+        #playlist li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 12px;
+            margin-bottom: 8px;
+            padding: 8px 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.2s ease;
+        }
+
+        #playlist li:hover {
+            transform: translateX(5px);
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 8px rgba(167, 139, 250, 0.2);
+        }
+
+        /* 曲名表示 */
+        #playlist .song-name {
+            cursor: pointer;
+            flex-grow: 1;
+            text-align: left;
+            font-size: 0.95rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap; /* 長い曲名は省略 */
+            color: var(--text-color);
+        }
+
+        /* 削除ボタン（ウィッシュコア風に調整） */
+        #playlist .delete-btn {
+            margin-left: 10px;
+            background: rgba(255, 100, 100, 0.1);
+            color: #ff5555;
+            border: 2px solid rgba(255, 100, 100, 0.3);
+            border-radius: 50%; /* 丸い */
+            width: 30px;
+            height: 30px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        #playlist .delete-btn:hover {
+            background: #ff5555;
+            color: white;
+            border-color: #ff5555;
+        }
+
+        /* オーディオプレイヤー本体 */
+        #audioPlayer {
+            width: 100%;
+            margin-top: 10px;
+            border-radius: 50px;
+            background-color: var(--accent-color); /* ブラウザによって対応状況が異なるが */
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        /* ブラウザのaudioプレイヤーをカスタムするのは限界があるため、
+           Wishcoreな色使いに合わせた配色を（気休め程度に）CSSで指定。
+           実際はブラウザの標準UIに依存します。 */
+        audio::-webkit-media-controls-panel {
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+        audio::-webkit-media-controls-current-time-display,
+        audio::-webkit-media-controls-time-remaining-display {
+            color: var(--text-color);
+        }
+
+        /* スクロールバーのカスタマイズ（ドリーミーに） */
+        #playlist::-webkit-scrollbar {
+            width: 6px;
+        }
+        #playlist::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+        }
+        #playlist::-webkit-scrollbar-thumb {
+            background: rgba(167, 139, 250, 0.5);
+            border-radius: 10px;
+        }
+
+        /* キラキラしたエフェクト（擬似要素で表現） */
+        body::before {
+            content: "✧ * . ｡";
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            color: white;
+            font-size: 1.5rem;
+            opacity: 0.5;
+            text-shadow: 0 0 5px var(--accent-color);
+        }
+
+        body::after {
+            content: "｡ . * ✧";
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            color: white;
+            font-size: 1.5rem;
+            opacity: 0.5;
+            text-shadow: 0 0 5px var(--accent-color);
+        }
+
     </style>
 </head>
 <body>
 
-    <h2>Offline Player</h2>
-    <input type="file" id="fileInput" accept="audio/*" multiple>
-    
-    <ul id="playlist"></ul>
-    
-    <audio id="audioPlayer" controls></audio>
+    <div class="main-container">
+        <h2>Your Dreams ✧.｡.:*</h2>
+        <p class="subtitle">Offline Music Player</p>
+        
+        <label for="fileInput" class="custom-file-upload">
+            Add Wish List ｡.:*☆
+        </label>
+        <input type="file" id="fileInput" accept="audio/*" multiple>
+        
+        <ul id="playlist"></ul>
+        
+        <audio id="audioPlayer" controls></audio>
+    </div>
 
     <script>
-        // 1. IndexedDBの初期化
+        // JSのロジックは前回と同じ（ID名などは変更なし）
+
         let db;
         const request = indexedDB.open("MusicDB", 1);
 
@@ -35,7 +243,6 @@
             displayPlaylist();
         };
 
-        // 2. ファイルを保存する
         document.getElementById('fileInput').addEventListener('change', async (e) => {
             const files = e.target.files;
             const transaction = db.transaction(["songs"], "readwrite");
@@ -48,65 +255,59 @@
             transaction.oncomplete = () => displayPlaylist();
         });
 
-       // 3. リスト表示（削除ボタン付き）
-function displayPlaylist() {
-    const list = document.getElementById('playlist');
-    list.innerHTML = "";
-    const transaction = db.transaction(["songs"], "readonly");
-    const store = transaction.objectStore("songs");
+        function displayPlaylist() {
+            const list = document.getElementById('playlist');
+            list.innerHTML = "";
+            const transaction = db.transaction(["songs"], "readonly");
+            const store = transaction.objectStore("songs");
 
-    store.getAll().onsuccess = (e) => {
-        e.target.result.forEach(song => {
-            const li = document.createElement('li');
-            li.style.display = "flex";
-            li.style.justifyContent = "between";
-            li.style.alignItems = "center";
+            store.getAll().onsuccess = (e) => {
+                e.target.result.forEach(song => {
+                    const li = document.createElement('li');
 
-            // 曲名表示部分
-            const nameSpan = document.createElement('span');
-            nameSpan.textContent = song.name;
-            nameSpan.style.flexGrow = "1";
-            nameSpan.onclick = () => playSong(song.data);
-            
-            // 削除ボタン
-            const deleteBtn = document.createElement('button');
-            deleteBtn.textContent = "削除";
-            deleteBtn.style.marginLeft = "10px";
-            deleteBtn.style.background = "#ff4444";
-            deleteBtn.style.color = "white";
-            deleteBtn.style.border = "none";
-            deleteBtn.style.padding = "5px 10px";
-            deleteBtn.style.borderRadius = "3px";
-            deleteBtn.style.cursor = "pointer";
-            
-            deleteBtn.onclick = (event) => {
-                event.stopPropagation(); // 親要素のクリックイベント（再生）を防ぐ
-                deleteSong(song.name);
+                    // 曲名表示部分
+                    const nameSpan = document.createElement('span');
+                    nameSpan.textContent = song.name;
+                    nameSpan.className = 'song-name';
+                    nameSpan.onclick = () => playSong(song.data);
+                    
+                    // 削除ボタン
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.innerHTML = "×"; // ✕マークにする
+                    deleteBtn.className = 'delete-btn';
+                    
+                    deleteBtn.onclick = (event) => {
+                        event.stopPropagation();
+                        deleteSong(song.name);
+                    };
+
+                    li.appendChild(nameSpan);
+                    li.appendChild(deleteBtn);
+                    list.appendChild(li);
+                });
             };
+        }
 
-            li.appendChild(nameSpan);
-            li.appendChild(deleteBtn);
-            list.appendChild(li);
-        });
-    };
-}
+        function playSong(blob) {
+            const url = URL.createObjectURL(blob);
+            const player = document.getElementById('audioPlayer');
+            player.src = url;
+            player.play();
+        }
 
-// 4. データを削除する関数
-function deleteSong(name) {
-    if (!confirm(`${name} を削除しますか？`)) return;
+        function deleteSong(name) {
+            // ダイアログも少し優しく
+            if (!confirm(`Are you sure to delete "${name}" from your Wish List? ｡.:*`)) return;
 
-    const transaction = db.transaction(["songs"], "readwrite");
-    const store = transaction.objectStore("songs");
-    const request = store.delete(name);
+            const transaction = db.transaction(["songs"], "readwrite");
+            const store = transaction.objectStore("songs");
+            const request = store.delete(name);
 
-    request.onsuccess = () => {
-        console.log("削除成功");
-        displayPlaylist(); // リストを再描画
-    };
-}
+            request.onsuccess = () => {
+                displayPlaylist();
+            };
+        }
 
-
-        // Service Workerの登録
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js');
         }
