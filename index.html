@@ -189,38 +189,42 @@
             input.click();
         });
 
-        async function handleFiles(files) {
-    console.log("ファイル受け取り:", files.length, "個");
-    
-    for (const file of Array.from(files)) {
-        let common = null;
-        let coverUrl = "https://via.placeholder.com/150/333/fff?text=No+Image";
+             async function handleFiles(files) {
+            console.log("ファイル受け取り:", files.length, "個");
+            
+            for (const file of Array.from(files)) {
+                let common = null;
+                let coverUrl = "https://via.placeholder.com/150/333/fff?text=No+Image";
 
-        try {
-            // ライブラリが存在し、かつ解析が可能な場合のみ実行
-            if (typeof musicMetadata !== 'undefined') {
-                const metadata = await musicMetadata.parseBlob(file);
-                common = metadata.common;
-                
-                if (common?.picture?.[0]) {
-                    const pic = common.picture[0];
-                    coverUrl = URL.createObjectURL(new Blob([pic.data], { type: pic.format }));
+                try {
+                    if (typeof musicMetadata !== 'undefined') {
+                        const metadata = await musicMetadata.parseBlob(file);
+                        common = metadata.common;
+                        
+                        if (common?.picture?.[0]) {
+                            const pic = common.picture[0];
+                            coverUrl = URL.createObjectURL(new Blob([pic.data], { type: pic.format }));
+                        }
+                    }
+                } catch (err) {
+                    console.warn("メタデータ解析失敗:", file.name);
                 }
+
+                const track = {
+                    url: URL.createObjectURL(file),
+                    title: common?.title || file.name,
+                    artist: common?.artist || "不明なアーティスト",
+                    cover: coverUrl
+                };
+                
+                playlist.push(track);
             }
-        } catch (err) {
-            console.warn("メタデータ解析に失敗しましたが、再生用URLは作成します:", file.name);
+            renderPlaylist(playlist); // ループが終わってから描画
         }
 
-        // 解析に失敗しても、ファイル名と再生URLだけは確保する
-        const track = {
-            url: URL.createObjectURL(file), // これがあれば再生はできる
-            title: common?.title || file.name, // タイトルがなければファイル名
-            artist: common?.artist || "不明なアーティスト",
-            cover: coverUrl
-        };
-        
-        playlist.push(track);
-    }
+        // --- 2. 描画 ---
+        function renderPlaylist(tracksToRender) {
+
     renderPlaylist(playlist); // すべての処理が終わってから一気に描画
 }
 
