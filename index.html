@@ -156,7 +156,6 @@
     </div>
 
     <script>
-        // --- 要素の取得 (重複なし) ---
         const canvas = document.getElementById('color-canvas');
         const ctx = canvas.getContext('2d');
         const dropZone = document.getElementById('drop-zone');
@@ -177,7 +176,7 @@
         let isShuffle = false;
         let isRepeat = false;
 
-        // --- 1. ファイル追加 (iPad対応) ---
+        // 1. ファイル追加処理
         dropZone.addEventListener('click', () => {
             const input = document.createElement('input');
             input.type = 'file';
@@ -189,9 +188,7 @@
             input.click();
         });
 
-             async function handleFiles(files) {
-            console.log("ファイル受け取り:", files.length, "個");
-            
+        async function handleFiles(files) {
             for (const file of Array.from(files)) {
                 let common = null;
                 let coverUrl = "https://via.placeholder.com/150/333/fff?text=No+Image";
@@ -200,7 +197,6 @@
                     if (typeof musicMetadata !== 'undefined') {
                         const metadata = await musicMetadata.parseBlob(file);
                         common = metadata.common;
-                        
                         if (common?.picture?.[0]) {
                             const pic = common.picture[0];
                             coverUrl = URL.createObjectURL(new Blob([pic.data], { type: pic.format }));
@@ -216,25 +212,12 @@
                     artist: common?.artist || "不明なアーティスト",
                     cover: coverUrl
                 };
-                
                 playlist.push(track);
             }
-            renderPlaylist(playlist); // ループが終わってから描画
+            renderPlaylist(playlist);
         }
 
-        // --- 2. 描画 ---
-        function renderPlaylist(tracksToRender) {
-
-    renderPlaylist(playlist); // すべての処理が終わってから一気に描画
-}
-
-                
-                playlist.push(track);
-                renderPlaylist(playlist);
-            }
-        }
-
-        // --- 2. 描画 ---
+        // 2. 描画処理
         function renderPlaylist(tracksToRender) {
             trackList.innerHTML = '';
             tracksToRender.forEach((track) => {
@@ -255,7 +238,7 @@
             });
         }
 
-        // --- 3. 再生 & 色抽出 ---
+        // 3. 再生処理
         function playTrack(track) {
             if(!track) return;
             audio.src = track.url;
@@ -281,7 +264,7 @@
             };
         }
 
-        // --- 4. ボタン操作 ---
+        // 4. ボタン・検索・自動再生
         playBtn.onclick = () => {
             if (isPlaying) { audio.pause(); playBtn.innerText = '▶️'; }
             else { if(audio.src) audio.play(); playBtn.innerText = '⏸'; }
