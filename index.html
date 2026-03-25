@@ -257,201 +257,169 @@
         const ctx = canvas.getContext('2d');
         const dropZone = document.getElementById('drop-zone');
         const trackList = document.getElementById('track-list');
-        const searchBar = document.getElementById('search-bar');
-        
-        // プレイヤーの要素
-        const playBtn = document.getElementById('play-btn');
-        const shuffleBtn = document.getElementById('shuffle-btn');
-        const repeatBtn = document.getElementById('repeat-btn');
-        const playerTitle = document.getElementById('player-title');
-        const playerArtist = document.getElementById('player-artist');
-        const playerArt = document.getElementById('player-art');
-        const auroraSub = document.getElementById('aurora-sub');
+        // --- 必要な要素の取得 ---
+const canvas = document.getElementById('color-canvas');
+const ctx = canvas.getContext('2d');
+const dropZone = document.getElementById('drop-zone');
+const trackList = document.getElementById('track-list');
+const searchBar = document.getElementById('search-bar');
+const playBtn = document.getElementById('play-btn');
+const shuffleBtn = document.getElementById('shuffle-btn');
+const repeatBtn = document.getElementById('repeat-btn');
+const playerTitle = document.getElementById('player-title');
+const playerArtist = document.getElementById('player-artist');
+const playerArt = document.getElementById('player-art');
+const auroraSub = document.getElementById('aurora-sub');
 
-        let audio = new Audio();
-        let isPlaying = false;
-        let playlist = []; 
-        let currentIndex = -1; 
-        let isShuffle = false;
-        let isRepeat = false;
+let audio = new Audio();
+let isPlaying = false;
+let playlist = []; 
+let currentIndex = -1; 
+let isShuffle = false;
+let isRepeat = false;
 
-        // 1. ファイル追加 & メタデータ解析
-        dropZone.onclick = () => {
-            const input = document.createElement('input');
-            input.type = 'file'; input.accept = 'audio/*'; input.multiple = true;
-            input.onchange = (e) => handleFiles(e.target.files);
-            input.click();
-        };
+// --- 1. ファイル追加処理 (iPadでも確実に動くように修正) ---
+// ボタンのクリックイベントを1つに統合
+dropZone.addEventListener('click', () => {
+    console.log("追加ボタンがクリックされました"); // 診断用
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'audio/*'; // すべての音声形式を許可
+    input.multiple = true;
+    
+    input.onchange = (e) => {
+        const files = e.target.files;
+        if (files.length > 0) {
+            handleFiles(files);
+        }
+    };
+    input.click();
+});
 
-        async function handleFiles(files)
-        async function handleFiles(files) {
-    console.log("ファイルを受け取りました:", files.length, "個"); // ←追加
+async function handleFiles(files) {
     for (const file of Array.from(files)) {
-        console.log("解析開始:", file.name); // ←追加
+        console.log("解析中:", file.name);
         
-        const metadata = await musicMetadata.parseBlob(file).catch((err) => {
-            console.error("解析エラー:", err); // ←追加
-            return null;
-        });
-
-        if (!metadata) {
-            console.warn("メタデータが取得できませんでした。ファイル名で代用します。");
+        // メタデータ解析 (ライブラリが読み込めていない場合に備えてエラーハンドリング)
+        let common = null;
+        try {
+            if (typeof musicMetadata !== 'undefined') {
+                const metadata = await musicMetadata.parseBlob(file);
+                common = metadata.common;
+            }
+        } catch (err) {
+            console.error("メタデータ解析失敗:", err);
         }
         
-        // ...以下そのまま
-{
-            for (const file of Array.from(files)) {
-                // M4Aファイル解析開始
-                const metadata = await musicMetadata.parseBlob(file).catch(() => null);
-                const common = metadata?.common;
-                
-                // ジャケット写真の処理
-                let coverUrl = "https://via.placeholder.com/150/333/fff?text=No+Image";
-                if (common?.picture?.[0]) {
-                    const pic = common.picture[0];
-                    coverUrl = URL.createObjectURL(new Blob([pic.data], { type: pic.format }));
-                }
-
-                const track = {
-                    url: URL.createObjectURL(file),
-                    title: common?.title || file.name,
-                    artist: common?.artist || "不明なアーティスト",
-                    cover: coverUrl
-                };
-                
-                playlist.push(track);
-                renderPlaylist(playlist); // リスト全体を再描画（インデックスの整合性を保つため）
-            }
+        // ジャケット写真
+        let coverUrl = "https://via.placeholder.com/150/333/fff?text=No+Image";
+        if (common?.picture?.[0]) {
+            const pic = common.picture[0];
+            coverUrl = URL.createObjectURL(new Blob([pic.data], { type: pic.format }));
         }
 
-        // 2. プレイリスト全体の再描画（検索対応）
-        function renderPlaylist(tracksToRender) {
-            trackList.innerHTML = '';
-            tracksToRender.forEach((track, index) => {
-                // UI表示
-                const div = document.createElement('div');
-                div.className = 'track-item';
-                div.innerHTML = `
-                    <img src="${track.cover}">
-                    <div class="track-info-text">
-                        <span class="track-name">${track.title}</span>
-                        <span class="track-meta">${track.artist}</span>
-                    </div>
-                `;
-                div.onclick = () => {
-                    currentIndex = index; // プレイリスト全体におけるインデックス
-                    playTrack(track);
-                };
-                trackList.appendChild(div);
-            });
-        }
-
-        // 3. 再生 & ✨動的背景色（高度化）
-        function playTrack(track) {
-            if(!track) return;
-            audio.src = track.url;
-            audio.play();
-            isPlaying = true;
-            playBtn.innerText = '⏸';
-            
-            // ミニプレイヤーの情報を更新
-            playerTitle.innerText = track.title;
-            playerArtist.innerText = track.artist;
-            playerArt.src = track.cover;
-
-            // 🎨 ジャケット写真から色を抽出してオーロラ背景を更新
-            const img = new Image();
-            img.crossOrigin = "Anonymous";
-            img.src = track.cover;
-            img.onload = () => {
-                const color = getDominantColors(img);
-                updateAuroraBackground(color);
-            };
-        }
-
-        // 画像から2つのメインカラーを抽出（簡易版：中心と端）
-        function getDominantColors(img) {
-            canvas.width = 10; canvas.height = 10;
-            ctx.drawImage(img, 0, 0, 10, 10);
-            
-            // 2箇所のピクセルデータを取得
-            const dataCenter = ctx.getImageData(5, 5, 1, 1).data; // 中心
-            const dataEdge = ctx.getImageData(1, 1, 1, 1).data;   // 端
-            
-            return {
-                color1: `rgb(${dataCenter[0]}, ${dataCenter[1]}, ${dataCenter[2]})`,
-                color2: `rgb(${dataEdge[0]}, ${dataEdge[1]}, ${dataEdge[2]})`
-            };
-        }
-
-        // 🎨 オーロラ背景の更新
-        function updateAuroraBackground(colors) {
-            const { color1, color2 } = colors;
-            
-            // 2つのオーロラの色をゆっくり変化させる
-            // aurora-1（全体）はcolor1をほのかに、aurora-sub（右下）はcolor2を
-            document.querySelector('.aurora-1').style.background = `radial-gradient(circle at center, ${color1} 0%, transparent 80%)`;
-            auroraSub.style.background = color2;
-        }
-
-        // 🔍 検索機能の統合
-        searchBar.oninput = (e) => {
-            const searchTerm = e.target.value.toLowerCase();
-            
-            const filteredPlaylist = playlist.filter(track => {
-                return track.title.toLowerCase().includes(searchTerm) ||
-                       track.artist.toLowerCase().includes(searchTerm);
-            });
-            
-            renderPlaylist(filteredPlaylist);
-
-            if (playlist.length > 0 && filteredPlaylist.length === 0) {
-                trackList.innerHTML = '<p style="color: #666; text-align: center; margin-top: 30px;">一致する曲が見つかりません</p>';
-            }
+        const track = {
+            url: URL.createObjectURL(file),
+            title: common?.title || file.name,
+            artist: common?.artist || "不明なアーティスト",
+            cover: coverUrl
         };
+        
+        playlist.push(track);
+        renderPlaylist(playlist);
+    }
+}
 
-        // 4. 再生コントロール & シャッフル・リピート（デザイン対応）
-        playBtn.onclick = () => {
-            if (isPlaying) { audio.pause(); playBtn.innerText = '▶️'; }
-            else { if(audio.src) audio.play(); playBtn.innerText = '⏸'; }
-            isPlaying = !isPlaying;
+// --- 2. プレイリスト描画 ---
+function renderPlaylist(tracksToRender) {
+    trackList.innerHTML = '';
+    tracksToRender.forEach((track, index) => {
+        const div = document.createElement('div');
+        div.className = 'track-item';
+        div.innerHTML = `
+            <img src="${track.cover}">
+            <div class="track-info-text">
+                <span class="track-name">${track.title}</span>
+                <span class="track-meta">${track.artist}</span>
+            </div>
+        `;
+        div.onclick = () => {
+            // 全体プレイリスト内での位置を探す
+            currentIndex = playlist.indexOf(track);
+            playTrack(track);
         };
+        trackList.appendChild(div);
+    });
+}
 
-        shuffleBtn.onclick = () => {
-            isShuffle = !isShuffle;
-            if(isShuffle) { shuffleBtn.classList.add('active'); }
-            else { shuffleBtn.classList.remove('active'); }
-        };
+// --- 3. 再生 & 背景色更新 ---
+function playTrack(track) {
+    if(!track) return;
+    audio.src = track.url;
+    audio.play();
+    isPlaying = true;
+    playBtn.innerText = '⏸';
+    playerTitle.innerText = track.title;
+    playerArtist.innerText = track.artist;
+    playerArt.src = track.cover;
 
-        repeatBtn.onclick = () => {
-            isRepeat = !isRepeat;
-            if(isRepeat) { repeatBtn.classList.add('active'); }
-            else { repeatBtn.classList.remove('active'); }
-        };
+    const img = new Image();
+    img.crossOrigin = "Anonymous";
+    img.src = track.cover;
+    img.onload = () => {
+        // 色抽出
+        canvas.width = 10; canvas.height = 10;
+        ctx.drawImage(img, 0, 0, 10, 10);
+        const d1 = ctx.getImageData(5, 5, 1, 1).data;
+        const d2 = ctx.getImageData(1, 1, 1, 1).data;
+        
+        const c1 = `rgb(${d1[0]}, ${d1[1]}, ${d1[2]})`;
+        const c2 = `rgb(${d2[0]}, ${d2[1]}, ${d2[2]})`;
+        
+        document.querySelector('.aurora-1').style.background = `radial-gradient(circle at center, ${c1} 0%, transparent 80%)`;
+        auroraSub.style.background = c2;
+    };
+}
 
-        // 5. 自動次曲再生ロジック
-        audio.onended = () => {
-            if (isRepeat) {
-                playTrack(playlist[currentIndex]);
-                return;
-            }
+// --- 4. コントロール系 ---
+playBtn.onclick = () => {
+    if (isPlaying) { audio.pause(); playBtn.innerText = '▶️'; }
+    else { if(audio.src) audio.play(); playBtn.innerText = '⏸'; }
+    isPlaying = !isPlaying;
+};
 
-            let nextIndex;
-            if (isShuffle) {
-                nextIndex = Math.floor(Math.random() * playlist.length);
-            } else {
-                nextIndex = currentIndex + 1;
-            }
+shuffleBtn.onclick = () => {
+    isShuffle = !isShuffle;
+    shuffleBtn.classList.toggle('active', isShuffle);
+};
 
-            if (nextIndex < playlist.length) {
-                currentIndex = nextIndex;
-                playTrack(playlist[currentIndex]);
-            } else {
-                // 最後まで行ったら最初に戻る（Apple Music風）
-                currentIndex = 0;
-                playTrack(playlist[currentIndex]);
-            }
-        };
+repeatBtn.onclick = () => {
+    isRepeat = !isRepeat;
+    repeatBtn.classList.toggle('active', isRepeat);
+};
+
+// --- 5. 検索 & 自動再生 ---
+searchBar.oninput = (e) => {
+    const searchTerm = e.target.value.toLowerCase();
+    const filtered = playlist.filter(t => 
+        t.title.toLowerCase().includes(searchTerm) || 
+        t.artist.toLowerCase().includes(searchTerm)
+    );
+    renderPlaylist(filtered);
+};
+
+audio.onended = () => {
+    if (isRepeat) { playTrack(playlist[currentIndex]); return; }
+    let next = isShuffle ? Math.floor(Math.random() * playlist.length) : currentIndex + 1;
+    if (next < playlist.length) {
+        currentIndex = next;
+        playTrack(playlist[currentIndex]);
+    } else {
+        currentIndex = 0;
+        playTrack(playlist[currentIndex]);
+    }
+};
+
     </script>
 </body>
 </html>
