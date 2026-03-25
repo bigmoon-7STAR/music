@@ -12,121 +12,59 @@
             --key-color: #ff85a2;
             --sub-pink: #ffe4e9;
             --text-main: #5d5d7a;
-            --glass: rgba(255, 255, 255, 0.65);
+            --glass: rgba(255, 255, 255, 0.7);
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
         body {
-            font-family: -apple-system, "SF Pro Display", "Rounded Mplus 1c", sans-serif;
+            font-family: -apple-system, "SF Pro Display", sans-serif;
             background: #fff;
             background-image: 
                 radial-gradient(at 0% 100%, #fff0f5 0px, transparent 50%),
-                radial-gradient(at 100% 0%, #eef2ff 0px, transparent 50%),
-                radial-gradient(at 100% 100%, #fdf2f8 0px, transparent 50%);
+                radial-gradient(at 100% 0%, #eef2ff 0px, transparent 50%);
             margin: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column;
             color: var(--text-main);
         }
 
-        /* --- Header --- */
-        .header {
-            padding: calc(50px + env(safe-area-inset-top)) 25px 15px;
-            background: var(--glass);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            z-index: 1000;
-        }
+        /* --- UI Elements --- */
+        .header { padding: calc(50px + env(safe-area-inset-top)) 25px 15px; background: var(--glass); backdrop-filter: blur(20px); z-index: 1000; }
         .header-top { display: flex; justify-content: space-between; align-items: center; }
-        .header-top h2 { font-size: 20px; font-weight: 800; color: #333; margin: 0; letter-spacing: -0.5px; }
+        .header-top h2 { font-size: 20px; font-weight: 800; margin: 0; }
 
-        /* --- Search --- */
         .search-container { padding: 5px 20px 15px; }
-        #search-input { 
-            width: 100%; padding: 12px 18px; border-radius: 20px; border: 1.5px solid #fff;
-            background: rgba(255,255,255,0.4); font-size: 14px; outline: none; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-        }
+        #search-input { width: 100%; padding: 12px 18px; border-radius: 20px; border: 1.5px solid #fff; background: rgba(255,255,255,0.4); outline: none; }
 
-        #content { flex: 1; overflow-y: auto; padding-bottom: 200px; }
+        #content { flex: 1; overflow-y: auto; padding-bottom: 220px; }
 
-        /* --- Grid (Wishcore Style) --- */
         .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; padding: 20px; }
-        .card { position: relative; cursor: pointer; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .card { position: relative; cursor: pointer; transition: 0.3s; }
         .card:active { transform: scale(0.94); }
-
-        .card-img-wrapper { 
-            position: relative; width: 100%; aspect-ratio: 1/1; border-radius: 28px; 
-            overflow: hidden; box-shadow: 0 12px 24px rgba(255,133,162,0.15); 
-            border: 3px solid #fff; background: #fff;
-        }
+        .card-img-wrapper { width: 100%; aspect-ratio: 1/1; border-radius: 28px; overflow: hidden; border: 3px solid #fff; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
         .card-img { width: 100%; height: 100%; object-fit: cover; }
+        .card-title { margin-top: 10px; font-size: 13px; font-weight: 700; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-        .card-title { 
-            margin-top: 12px; font-size: 13px; font-weight: 700; color: #444; 
-            text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-        }
+        .list-section-title { padding: 20px 25px 10px; font-size: 16px; font-weight: 800; color: #333; }
+        .list-item { display: flex; align-items: center; padding: 12px 20px; margin: 0 15px 8px; background: rgba(255,255,255,0.4); border-radius: 18px; border: 1px solid #fff; }
+        .list-item img { width: 45px; height: 45px; border-radius: 12px; margin-right: 15px; }
 
-        /* --- Playlists --- */
-        .list-item { 
-            display: flex; align-items: center; padding: 15px; margin: 0 20px 12px; 
-            background: rgba(255,255,255,0.5); border-radius: 22px; border: 1px solid #fff;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.02);
-        }
-        .list-item img { width: 50px; height: 50px; border-radius: 15px; margin-right: 15px; border: 2px solid #fff; }
+        .mini-player { position: fixed; bottom: calc(95px + env(safe-area-inset-bottom)); left: 20px; right: 20px; height: 70px; background: var(--glass); backdrop-filter: blur(25px); border-radius: 25px; display: none; align-items: center; padding: 0 15px; box-shadow: 0 15px 40px rgba(0,0,0,0.08); z-index: 2000; border: 1px solid #fff; }
+        .m-play-btn { width: 45px; height: 45px; border-radius: 50%; background: #fff; border: none; color: var(--key-color); font-size: 20px; display: flex; align-items: center; justify-content: center; }
 
-        /* --- Mini Player --- */
-        .mini-player { 
-            position: fixed; bottom: calc(95px + env(safe-area-inset-bottom)); left: 20px; right: 20px; 
-            height: 70px; background: rgba(255,255,255,0.7); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            border-radius: 25px; display: none; align-items: center; padding: 0 10px 0 18px; 
-            box-shadow: 0 15px 40px rgba(0,0,0,0.08); z-index: 2000; border: 1px solid rgba(255,255,255,0.8);
-        }
-        .mini-player img { width: 48px; height: 48px; border-radius: 16px; margin-right: 15px; box-shadow: 0 5px 10px rgba(0,0,0,0.1); }
-        
-        .m-play-btn {
-            width: 48px; height: 48px; border-radius: 50%; background: #fff; border: none;
-            color: var(--key-color); font-size: 20px; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
-
-        /* --- Full Player Modal --- */
-        .modal { position: fixed; inset: 0; background: #fff; z-index: 9000; display: none; flex-direction: column; }
-        .full-player-bg {
-            position: absolute; inset: 0; 
-            background: linear-gradient(180deg, var(--sub-pink) 0%, #fff 100%);
-            z-index: -1;
-        }
-        
-        #f-img { 
-            width: 82vw; max-width: 320px; aspect-ratio: 1/1; border-radius: 40px; 
-            box-shadow: 0 40px 80px rgba(255,133,162,0.25); border: 6px solid #fff; 
-        }
-
-        /* --- Tab Bar --- */
-        .tab-bar { 
-            position: fixed; bottom: 0; width: 100%; height: calc(75px + env(safe-area-inset-bottom)); 
-            background: var(--glass); backdrop-filter: blur(25px); display: flex; justify-content: space-around; 
-            padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.5); z-index: 1000;
-        }
-        .tab-item { border:none; background:none; color: #b0b0c0; font-weight: 800; font-size: 11px; }
-        .tab-item i { font-size: 24px; margin-bottom: 5px; display: block; }
-        .tab-item.active { color: var(--key-color); }
-
-        /* --- Buttons --- */
-        #left-btn, #right-btn { color: var(--key-color); font-weight: 800; font-size: 15px; background: none; border: none; }
-        
-        /* --- Animation --- */
+        /* --- Full Player --- */
+        .modal { position: fixed; inset: 0; background: #fff; z-index: 9000; display: none; flex-direction: column; overflow: hidden; }
         .modal.active { display: flex; animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
-        input[type="range"] {
-            -webkit-appearance: none; width: 100%; background: transparent;
-        }
-        input[type="range"]::-webkit-slider-runnable-track {
-            width: 100%; height: 6px; background: rgba(0,0,0,0.05); border-radius: 3px;
-        }
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%;
-            background: var(--key-color); border: 3px solid #fff; margin-top: -6px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
+        .queue-container { flex: 1; overflow-y: auto; padding: 20px; background: rgba(255,255,255,0.6); border-radius: 30px 30px 0 0; }
+
+        .tab-bar { position: fixed; bottom: 0; width: 100%; height: calc(75px + env(safe-area-inset-bottom)); background: var(--glass); backdrop-filter: blur(25px); display: flex; justify-content: space-around; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.5); z-index: 1000; }
+        .tab-item { border:none; background:none; color: #b0b0c0; font-weight: 800; font-size: 11px; }
+        .tab-item.active { color: var(--key-color); }
+
+        #left-btn, #right-btn { color: var(--key-color); font-weight: 800; background: none; border: none; }
+        .del-badge { position: absolute; top: -5px; left: -5px; width: 24px; height: 24px; background: #ff3b30; color: white; border-radius: 50%; display: none; align-items: center; justify-content: center; z-index: 10; border: 2px solid #fff; }
+        .editing .del-badge { display: flex; }
     </style>
 </head>
 <body>
@@ -147,41 +85,41 @@
 
     <div class="mini-player" id="mini" onclick="openFull()">
         <img id="m-img" src="">
-        <div style="flex:1; overflow:hidden;">
-            <div id="m-title" style="font-weight:800; font-size:14px; white-space:nowrap; color:#333;"></div>
-        </div>
-        <button class="m-play-btn" onclick="event.stopPropagation(); togglePlay();">
-            <i id="m-pp" class="fa-solid fa-play"></i>
-        </button>
+        <div style="flex:1; overflow:hidden;"><div id="m-title" style="font-weight:800; font-size:14px; white-space:nowrap; color:#333;"></div></div>
+        <button class="m-play-btn" onclick="event.stopPropagation(); togglePlay();"><i id="m-pp" class="fa-solid fa-play"></i></button>
     </div>
 
     <div class="modal" id="full-modal">
-        <div class="full-player-bg"></div>
-        <div onclick="closeFull()" style="padding:25px; text-align:center;">
-            <div style="width:45px; height:5px; border-radius:5px; background:rgba(0,0,0,0.08); margin:0 auto;"></div>
-        </div>
-        <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:30px;">
-            <img id="f-img" src="">
-            <div style="width:100%; margin-top:50px; text-align:left; padding:0 10px;">
-                <div id="f-title" style="font-size:26px; font-weight:900; color:#1a1a1a; margin-bottom:8px;"></div>
-                <div id="f-artist" style="font-size:18px; color:var(--key-color); font-weight:700;"></div>
-            </div>
+        <div style="background: linear-gradient(180deg, var(--sub-pink) 0%, #fff 100%); position: absolute; inset:0; z-index:-1;"></div>
+        <div onclick="closeFull()" style="padding:25px; text-align:center;"><div style="width:45px; height:5px; border-radius:5px; background:rgba(0,0,0,0.08); margin:0 auto;"></div></div>
+        
+        <div id="player-main-view" style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:30px;">
+            <img id="f-img" style="width:80vw; max-width:320px; aspect-ratio:1/1; border-radius:40px; box-shadow:0 30px 60px rgba(255,133,162,0.2); border:5px solid #fff; object-fit:cover;">
             <div style="width:100%; margin-top:40px;">
-                <input type="range" id="seeker" value="0" step="0.1" oninput="audio.currentTime=this.value">
+                <div id="f-title" style="font-size:24px; font-weight:900; color:#1a1a1a;"></div>
+                <div id="f-artist" style="font-size:17px; color:var(--key-color); font-weight:700; margin-top:5px;"></div>
             </div>
-            <div style="display:flex; width:100%; justify-content:center; align-items:center; gap:50px; margin-top:50px;">
-                <i class="fa-solid fa-backward" style="font-size:30px; color:#b0b0c0;" onclick="prev()"></i>
-                <div onclick="togglePlay()" style="width:85px; height:85px; border-radius:50%; background:#fff; display:flex; align-items:center; justify-content:center; box-shadow:0 15px 30px rgba(255,133,162,0.2); color:var(--key-color); font-size:35px;">
-                    <i id="f-pp" class="fa-solid fa-play"></i>
-                </div>
-                <i class="fa-solid fa-forward" style="font-size:30px; color:#b0b0c0;" onclick="next()"></i>
+            <input type="range" id="seeker" style="width:100%; margin-top:30px; accent-color:var(--key-color);" value="0" step="0.1" oninput="audio.currentTime=this.value">
+            <div style="display:flex; width:100%; justify-content:center; align-items:center; gap:50px; margin-top:40px;">
+                <i class="fa-solid fa-backward" style="font-size:28px; color:#b0b0c0;" onclick="prev()"></i>
+                <div onclick="togglePlay()" style="width:80px; height:80px; border-radius:50%; background:#fff; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 20px rgba(0,0,0,0.05); color:var(--key-color); font-size:30px;"><i id="f-pp" class="fa-solid fa-play"></i></div>
+                <i class="fa-solid fa-forward" style="font-size:28px; color:#b0b0c0;" onclick="next()"></i>
             </div>
+            <button onclick="toggleQueueView()" style="margin-top:40px; background:none; border:none; color:var(--text-main); font-weight:700;"><i class="fa-solid fa-list-ul"></i> 次に再生</button>
+        </div>
+
+        <div id="player-queue-view" style="display:none; flex:1; flex-direction:column;">
+            <div style="padding:20px 25px; display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-weight:800; font-size:18px;">次に再生</span>
+                <button onclick="toggleQueueView()" style="background:none; border:none; color:var(--key-color); font-weight:700;">完了</button>
+            </div>
+            <div id="queue-list" class="queue-container"></div>
         </div>
     </div>
 
     <div id="add-song-modal" class="modal">
         <div class="header" style="background:#fff;"><div class="header-top"><div></div><h2>曲を選ぶ</h2><button id="right-btn" onclick="closeAddSongModal()">完了</button></div></div>
-        <div id="add-song-list" style="overflow-y:auto; flex:1; padding-top:20px;"></div>
+        <div id="add-song-list" style="overflow-y:auto; flex:1; padding-top:10px;"></div>
     </div>
 
     <div class="tab-bar">
@@ -193,9 +131,8 @@
     <audio id="audio-element"></audio>
 
     <script>
-        // --- 以前のロジックはそのまま維持 ---
-        const APP_VERSION = "1.3.0";
-        let db, tracks = [], playlists = [], isEditing = false, currentView = 'library', currentPlaylistId = null;
+        const APP_VERSION = "1.4.0";
+        let db, tracks = [], playlists = [], history = [], isEditing = false, currentView = 'library', currentPlaylistId = null;
         let playingTracks = [], currentTrackIdx = -1;
         const audio = document.getElementById('audio-element');
 
@@ -206,6 +143,8 @@
             const tx = db.transaction(["songs", "playlists"], "readonly");
             tx.objectStore("songs").getAll().onsuccess = (e) => { tracks = e.target.result; render(); };
             tx.objectStore("playlists").getAll().onsuccess = (e) => { playlists = e.target.result; render(); };
+            const savedHistory = localStorage.getItem('music_history');
+            if(savedHistory) history = JSON.parse(savedHistory);
         }
 
         function render() {
@@ -220,32 +159,78 @@
                 let filtered = tracks.filter(t => t.name.toLowerCase().includes(search));
                 display.innerHTML = filtered.map(t => `<div class="card ${isEditing?'editing':''}" onclick="isEditing?deleteSong(${t.id}):playSong(${t.id},'lib')"><div class="del-badge"><i class="fa-solid fa-minus"></i></div><div class="card-img-wrapper"><img src="${t.cover||''}" class="card-img"></div><div class="card-title">${t.name}</div></div>`).join('');
             } else if (currentPlaylistId === null) {
-                title.innerText = "Playlists"; display.className = "grid";
-                display.innerHTML = playlists.map(p => `<div class="card ${isEditing?'editing':''}" onclick="isEditing?deletePlaylist(${p.id}):openPlaylist(${p.id})"><div class="del-badge"><i class="fa-solid fa-minus"></i></div><div class="card-img-wrapper"><img src="${p.cover||''}" class="card-img"></div><div class="card-title">${p.name}</div></div>`).join('');
+                title.innerText = "Playlists"; display.className = "";
+                // 履歴セクション
+                let historyHtml = history.length > 0 ? `<div class="list-section-title">最近聴いた曲</div>` + history.slice(0, 5).map(id => {
+                    const t = tracks.find(x => x.id === id);
+                    return t ? `<div class="list-item" onclick="playSong(${t.id},'lib')"><img src="${t.cover||''}"><div><div style="font-weight:800; font-size:14px;">${t.name}</div></div></div>` : '';
+                }).join('') : '';
+                
+                // プレイリスト一覧
+                let playlistsHtml = `<div class="list-section-title">マイプレイリスト</div><div class="grid">` + playlists.map(p => `<div class="card ${isEditing?'editing':''}" onclick="isEditing?deletePlaylist(${p.id}):openPlaylist(${p.id})"><div class="del-badge"><i class="fa-solid fa-minus"></i></div><div class="card-img-wrapper"><img src="${p.cover||''}" class="card-img"></div><div class="card-title">${p.name}</div></div>`).join('') + `</div>`;
+                display.innerHTML = historyHtml + playlistsHtml;
             } else {
                 const pl = playlists.find(p => p.id === currentPlaylistId);
-                title.innerText = pl.name; display.className = "list-view";
+                title.innerText = pl.name; display.className = "";
                 let plSongs = pl.songIds.map(id => tracks.find(t => t.id === id)).filter(t => t);
-                display.innerHTML = plSongs.map(t => `<div class="list-item" onclick="playSong(${t.id},'pl')"><img src="${t.cover||''}"><div><div style="font-weight:800; font-size:15px; color:#333;">${t.name}</div><div style="font-size:12px;color:var(--key-color); font-weight:700;">${t.artist}</div></div></div>`).join('');
+                display.innerHTML = plSongs.map(t => `<div class="list-item" onclick="playSong(${t.id},'pl')"><img src="${t.cover||''}"><div><div style="font-weight:800; font-size:15px;">${t.name}</div><div style="font-size:12px;color:var(--key-color); font-weight:700;">${t.artist}</div></div></div>`).join('');
             }
             document.getElementById('left-btn').innerText = (currentPlaylistId !== null) ? "戻る" : (isEditing ? "完了" : "編集");
         }
 
+        function playSong(id, mode) {
+            const t = tracks.find(x => x.id === id); if(!t) return;
+            playingTracks = (mode === 'pl') ? playlists.find(p => p.id === currentPlaylistId).songIds.map(sid => tracks.find(tx => tx.id === sid)).filter(x=>x) : [...tracks];
+            currentTrackIdx = playingTracks.findIndex(x => x.id === id);
+            
+            if(audio.src) URL.revokeObjectURL(audio.src); 
+            audio.src = URL.createObjectURL(t.data);
+            
+            // 履歴に追加
+            history = [id, ...history.filter(x => x !== id)].slice(0, 20);
+            localStorage.setItem('music_history', JSON.stringify(history));
+
+            document.getElementById('m-img').src = t.cover || ''; document.getElementById('m-title').innerText = t.name;
+            document.getElementById('f-img').src = t.cover || ''; document.getElementById('f-title').innerText = t.name; document.getElementById('f-artist').innerText = t.artist;
+            document.getElementById('mini').style.display = 'flex';
+            audio.play();
+            updateQueueList();
+        }
+
+        function toggleQueueView() {
+            const main = document.getElementById('player-main-view');
+            const queue = document.getElementById('player-queue-view');
+            if(main.style.display === 'none') { main.style.display = 'flex'; queue.style.display = 'none'; }
+            else { main.style.display = 'none'; queue.style.display = 'flex'; updateQueueList(); }
+        }
+
+        function updateQueueList() {
+            const container = document.getElementById('queue-list');
+            const nextSongs = playingTracks.slice(currentTrackIdx + 1);
+            if(nextSongs.length === 0) { container.innerHTML = '<div style="text-align:center; padding:40px; color:#b0b0c0;">次に再生する曲はありません</div>'; return; }
+            container.innerHTML = nextSongs.map((t, i) => `<div class="list-item" onclick="playFromQueue(${currentTrackIdx + 1 + i})"><img src="${t.cover||''}"><div><div style="font-weight:800; font-size:14px;">${t.name}</div><div style="font-size:11px; color:var(--key-color);">${t.artist}</div></div></div>`).join('');
+        }
+
+        function playFromQueue(idx) {
+            currentTrackIdx = idx;
+            const t = playingTracks[currentTrackIdx];
+            playSong(t.id, playingTracks.length > tracks.length ? 'pl' : 'lib');
+        }
+
+        // --- 基本ロジック ---
         function handleHeaderRight() {
             if (currentPlaylistId !== null) openAddSongModal();
             else if (currentView === 'library') document.getElementById('audio-upload').click();
             else { const n = prompt("新しいリストの名前"); if(n) db.transaction("playlists","readwrite").objectStore("playlists").add({name:n, cover:null, songIds:[]}).oncomplete = loadAll; }
         }
-
         function handleHeaderLeft() { if(currentPlaylistId!==null) { currentPlaylistId=null; isEditing=false; render(); } else { isEditing=!isEditing; render(); } }
         function switchTab(v) { currentView = v; currentPlaylistId = null; isEditing = false; render(); }
         function openPlaylist(id) { currentPlaylistId = id; isEditing = false; render(); }
         function deletePlaylist(id) { if(confirm("削除する？")) db.transaction("playlists","readwrite").objectStore("playlists").delete(id).onsuccess = loadAll; }
-        function deleteSong(id) { if(confirm("消しちゃう？")) db.transaction("songs","readwrite").objectStore("songs").delete(id).onsuccess = loadAll; }
-
+        function deleteSong(id) { if(confirm("消去する？")) db.transaction("songs","readwrite").objectStore("songs").delete(id).onsuccess = loadAll; }
         function openAddSongModal() {
             const pl = playlists.find(p => p.id === currentPlaylistId);
-            document.getElementById('add-song-list').innerHTML = tracks.map(t => `<div class="list-item" onclick="toggleSongInPlaylist(${t.id})"><img src="${t.cover||''}"><div><div style="font-weight:800;color:#333;">${t.name}</div></div><i class="fa-solid ${pl.songIds.includes(t.id)?'fa-circle-check':'fa-circle'}" style="margin-left:auto; font-size:22px; color:var(--key-color);"></i></div>`).join('');
+            document.getElementById('add-song-list').innerHTML = tracks.map(t => `<div class="list-item" onclick="toggleSongInPlaylist(${t.id})"><img src="${t.cover||''}"><div><div style="font-weight:800;">${t.name}</div></div><i class="fa-solid ${pl.songIds.includes(t.id)?'fa-circle-check':'fa-circle'}" style="margin-left:auto; font-size:20px; color:var(--key-color);"></i></div>`).join('');
             document.getElementById('add-song-modal').classList.add('active');
         }
         function toggleSongInPlaylist(sid) {
@@ -255,27 +240,15 @@
             db.transaction("playlists","readwrite").objectStore("playlists").put(pl).onsuccess = openAddSongModal;
         }
         function closeAddSongModal() { document.getElementById('add-song-modal').classList.remove('active'); render(); }
-
-        function playSong(id, mode) {
-            const t = tracks.find(x => x.id === id); if(!t) return;
-            playingTracks = (mode === 'pl') ? playlists.find(p => p.id === currentPlaylistId).songIds.map(sid => tracks.find(tx => tx.id === sid)).filter(x=>x) : [...tracks];
-            currentTrackIdx = playingTracks.findIndex(x => x.id === id);
-            if(audio.src) URL.revokeObjectURL(audio.src); audio.src = URL.createObjectURL(t.data);
-            document.getElementById('m-img').src = t.cover || ''; document.getElementById('m-title').innerText = t.name;
-            document.getElementById('f-img').src = t.cover || ''; document.getElementById('f-title').innerText = t.name; document.getElementById('f-artist').innerText = t.artist;
-            document.getElementById('mini').style.display = 'flex'; audio.play();
-        }
-
         function togglePlay() { audio.paused ? audio.play() : audio.pause(); }
         audio.onplay = () => { document.getElementById('m-pp').className = 'fa-solid fa-pause'; document.getElementById('f-pp').className = 'fa-solid fa-pause'; };
         audio.onpause = () => { document.getElementById('m-pp').className = 'fa-solid fa-play'; document.getElementById('f-pp').className = 'fa-solid fa-play'; };
-        function next() { currentTrackIdx = (currentTrackIdx + 1) % playingTracks.length; playSong(playingTracks[currentTrackIdx].id, playingTracks.length > tracks.length ? 'pl' : 'lib'); }
-        function prev() { currentTrackIdx = (currentTrackIdx - 1 + playingTracks.length) % playingTracks.length; playSong(playingTracks[currentTrackIdx].id, 'lib'); }
+        function next() { if(playingTracks.length > 0) { currentTrackIdx = (currentTrackIdx + 1) % playingTracks.length; playSong(playingTracks[currentTrackIdx].id, playingTracks.length > tracks.length ? 'pl' : 'lib'); } }
+        function prev() { if(playingTracks.length > 0) { currentTrackIdx = (currentTrackIdx - 1 + playingTracks.length) % playingTracks.length; playSong(playingTracks[currentTrackIdx].id, 'lib'); } }
         audio.onended = next;
         audio.ontimeupdate = () => { if(!isNaN(audio.duration)) { const s = document.getElementById('seeker'); s.max = audio.duration; s.value = audio.currentTime; } };
-
         function openFull() { document.getElementById('full-modal').classList.add('active'); }
-        function closeFull() { document.getElementById('full-modal').classList.remove('active'); }
+        function closeFull() { document.getElementById('full-modal').classList.remove('active'); document.getElementById('player-main-view').style.display='flex'; document.getElementById('player-queue-view').style.display='none'; }
 
         document.getElementById('audio-upload').onchange = (e) => {
             for (let f of e.target.files) {
