@@ -1,29 +1,33 @@
-const CACHE_NAME = 'player-v1';
-const ASSETS = [
-  './',
-  './index.html'
-];
+<script>
+    // 1. ここにさっきのキャッシュバスターを貼る
+    if ('serviceWorker' in navigator) { ... }
+    (function() { ... })();
 
-self.addEventListener('install', (e) => {
-  e.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
-  );
-});
+    // 2. この下に、元からあるプレイヤーの動くコード（dbの接続など）を書く
+    let db, tracks = []; 
+    ...
+</script>
 
-self.addEventListener('fetch', (e) => {
-  e.respondWith(
-    caches.match(e.request).then((res) => res || fetch(e.request))
-  );
-});
-// --- キャッシュ自動回避ハック ---
+// 1. まず「過去の亡霊（Service Worker）」を完全に消し去る
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then(registrations => {
+        for (let registration of registrations) {
+            registration.unregister();
+        }
+    });
+}
+
+// 2. 究極のキャッシュ・バスター（これ1つでOK）
 (function() {
-    const currentVersion = "1.0.5"; // ← コードを書き換えたら、ここを 1.0.6 とかに変えるだけ！
-    const savedVersion = localStorage.getItem('app_version');
+    // 【重要】コードを書き換えたら、この数字を 1.01 -> 1.02 と変えるだけ！
+    const APP_VERSION = "1.0.5"; 
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentV = urlParams.get('v');
 
-    if (savedVersion !== currentVersion) {
-        localStorage.setItem('app_version', currentVersion);
-        // URLにランダムな数字を付けて、ブラウザのキャッシュを完全に破壊してリロード
-        const newURL = window.location.pathname + '?v=' + Date.now();
+    if (currentV !== APP_VERSION) {
+        // 以前のlocalStorage方式ではなく、URLパラメータ方式に一本化
+        const newURL = window.location.pathname + '?v=' + APP_VERSION;
         window.location.replace(newURL);
     }
 })();
