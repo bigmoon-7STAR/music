@@ -45,19 +45,12 @@
         .card-sub { font-size:11px; color: var(--sub-text); }
         .card-tag { display: inline-block; font-size: 9px; background: rgba(255,45,85,0.05); color: var(--key-color); padding: 1px 5px; border-radius: 4px; margin-top: 4px; font-weight: bold; }
 
-        /* Swipeable List Item */
-        .swipe-container { position: relative; overflow: hidden; background: #FF3B30; border-bottom: 0.5px solid rgba(0,0,0,0.03); }
-        .list-item { 
-            position: relative; display: flex; align-items: center; padding: 12px 20px; 
-            background: white; cursor: pointer; z-index: 2;
-            transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.15);
-        }
+        .list-item { position: relative; display: flex; align-items: center; padding: 12px 20px; border-bottom: 0.5px solid rgba(0,0,0,0.03); cursor: pointer; background: white; z-index: 2; transition: transform 0.3s ease-out; }
         .list-item img { width: 50px; height: 50px; border-radius: 10px; margin-right: 15px; object-fit: cover; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .swipe-delete-btn {
-            position: absolute; right: 0; top: 0; bottom: 0; width: 80px;
-            background: #FF3B30; color: white; display: flex; align-items: center;
-            justify-content: center; font-size: 14px; font-weight: bold; z-index: 1;
-        }
+
+        /* --- Swipe Delete Styles --- */
+        .swipe-container { position: relative; overflow: hidden; background: #FF3B30; }
+        .swipe-delete-btn { position: absolute; right: 0; top: 0; bottom: 0; width: 80px; background: #FF3B30; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; z-index: 1; }
 
         /* --- Full Player --- */
         .full-player { position: fixed; inset: 0; z-index: 5000; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1); visibility: hidden; background: linear-gradient(150deg, #fef2f2, #e0e7ff, #fae8ff); background-size: 300% 300%; animation: moveBG 15s ease infinite; }
@@ -89,6 +82,8 @@
 
         .del-badge { position: absolute; top: -8px; left: -8px; width: 24px; height: 24px; background: #FF3B30; color: white; border-radius: 50%; display: none; align-items: center; justify-content: center; border: 2px solid white; z-index: 10; font-size: 12px; }
         .editing .del-badge { display: flex; }
+        .pl-song-del { width: 22px; height: 22px; background: #FF3B30; color: white; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 10px; margin-right: 15px; flex-shrink: 0; }
+        .editing .pl-song-del { display: flex; }
     </style>
 </head>
 <body>
@@ -110,8 +105,6 @@
     </div>
 
     <div id="content"><div id="main-display"></div></div>
-
-    <datalist id="artist-list"></datalist>
 
     <div class="mini-player" id="mini" onclick="openFull()">
         <img id="m-img" src="">
@@ -154,11 +147,12 @@
                 <h3 style="margin:0; font-size:18px;">再生待ち</h3>
                 <button onclick="toggleQueue()" style="background:none; border:none; font-size:18px; color:var(--key-color); font-weight:bold;">完了</button>
             </div>
-            <div id="queue-list" style="flex:1; overflow-y:auto;"></div>
+            <div id="queue-list" style="flex:1; overflow-y:auto;">
+                </div>
         </div>
     </div>
 
-    <div id="edit-modal" class="modal"><div class="header"><div class="header-top"><button onclick="closeEdit()">閉じる</button><h2>編集</h2><button onclick="saveEdit()" style="color:var(--key-color); font-weight:bold;">保存</button></div></div><div class="modal-body" style="padding:25px;"><label style="font-size:12px; color:var(--sub-text);">曲名</label><input type="text" id="edit-name" class="edit-input"><label style="font-size:12px; color:var(--sub-text);">アーティスト</label><input type="text" id="edit-artist" class="edit-input" list="artist-list"><label style="font-size:12px; color:var(--sub-text);">発行日 (Year)</label><input type="number" id="edit-year" class="edit-input" placeholder="2026"><label style="font-size:12px; color:var(--sub-text);">歌詞</label><textarea id="edit-lyrics" class="edit-input" style="height:100px;"></textarea></div></div>
+    <div id="edit-modal" class="modal"><div class="header"><div class="header-top"><button onclick="closeEdit()">閉じる</button><h2>編集</h2><button onclick="saveEdit()" style="color:var(--key-color); font-weight:bold;">保存</button></div></div><div class="modal-body" style="padding:25px;"><label style="font-size:12px; color:var(--sub-text);">曲名</label><input type="text" id="edit-name" class="edit-input"><label style="font-size:12px; color:var(--sub-text);">アーティスト</label><input type="text" id="edit-artist" class="edit-input" list="artist-list"><datalist id="artist-list"></datalist><label style="font-size:12px; color:var(--sub-text);">発行日 (Year)</label><input type="number" id="edit-year" class="edit-input" placeholder="2026"><label style="font-size:12px; color:var(--sub-text);">歌詞</label><textarea id="edit-lyrics" class="edit-input" style="height:100px;"></textarea></div></div>
 
     <div id="pl-edit-modal" class="modal"><div class="header"><div class="header-top"><button onclick="closePlEdit()">閉じる</button><h2>リスト設定</h2><button onclick="savePlEdit()" style="color:var(--key-color); font-weight:bold;">保存</button></div></div><div class="modal-body" style="padding:25px; text-align:center;"><img id="pl-edit-img" style="width:150px; height:150px; border-radius:15px; object-fit:cover; background:#eee; margin-bottom:20px; border:1px solid #fff; cursor:pointer;" onclick="document.getElementById('pl-img-input').click()"><input type="file" id="pl-img-input" style="display:none" onchange="previewPlImg(event)"><input type="text" id="pl-edit-name" class="edit-input" placeholder="リスト名"><input type="text" id="pl-edit-tag" class="edit-input" placeholder="タグ (例: #Favorite)"></div></div>
 
@@ -174,7 +168,7 @@
     <script>
         let db, tracks = [], playlists = [], isEditing = false, currentView = 'artists', currentArtist = null, currentPlaylistId = null;
         let playingTracks = [], currentTrackIdx = -1, isShuffle = false, repeatMode = 0;
-        let historyTracks = [];
+        let historyTracks = []; // 再生履歴
         let editingId = null, editingPlId = null, tempPlImg = null;
         const audio = document.getElementById('audio-element');
 
@@ -188,18 +182,41 @@
 
         function loadAll() {
             const tx = db.transaction(["songs", "playlists"], "readonly");
-            tx.objectStore("songs").getAll().onsuccess = (e) => { 
-                tracks = e.target.result; 
-                updateArtistSuggest();
-                render(); 
-            };
+            tx.objectStore("songs").getAll().onsuccess = (e) => { tracks = e.target.result; updateArtistSuggest(); render(); };
             tx.objectStore("playlists").getAll().onsuccess = (e) => { playlists = e.target.result; render(); };
         }
 
+        // アーティスト名の補完リストを更新
         function updateArtistSuggest() {
             const list = document.getElementById('artist-list');
             const artists = [...new Set(tracks.map(t => t.artist))].sort();
             list.innerHTML = artists.map(a => `<option value="${a}">`).join('');
+        }
+
+        // スワイプ削除のロジック
+        let touchStartX = 0, currentSwipeId = null;
+        function handleTouchStart(e, id) { 
+            if(isEditing) return; 
+            touchStartX = e.touches[0].clientX; 
+            currentSwipeId = id; 
+        }
+        function handleTouchMove(e, id) {
+            if(isEditing) return;
+            let moveX = e.touches[0].clientX - touchStartX;
+            const el = document.querySelector(`#swipe-${id} .list-item`);
+            if (moveX < 0) { // 左スワイプ
+                let shift = Math.max(moveX, -80);
+                el.style.transform = `translateX(${shift}px)`;
+                el.style.transition = "none";
+            }
+        }
+        function handleTouchEnd(e, id) {
+            if(isEditing) return;
+            const el = document.querySelector(`#swipe-${id} .list-item`);
+            let moveX = e.changedTouches[0].clientX - touchStartX;
+            el.style.transition = "transform 0.3s ease-out";
+            if (moveX < -50) el.style.transform = `translateX(-80px)`;
+            else el.style.transform = `translateX(0)`;
         }
 
         function render() {
@@ -212,6 +229,10 @@
             const activeTabId = currentView === 'playlist' ? 'tab-play' : currentView === 'artists' ? 'tab-artist' : 'tab-lib';
             document.getElementById(activeTabId).classList.add('active');
 
+            if (search !== "" && (currentArtist || currentPlaylistId)) {
+                currentArtist = null; currentPlaylistId = null;
+            }
+
             if (currentView === 'library') {
                 title.innerText = "Library"; display.className = "grid";
                 let list = tracks.filter(t => t.name.toLowerCase().includes(search) || t.artist.toLowerCase().includes(search));
@@ -221,7 +242,7 @@
             } else if (currentView === 'artists') {
                 if (!currentArtist) {
                     title.innerText = "Artists"; display.className = "";
-                    let artists = [...new Set(tracks.map(t => t.artist))].sort();
+                    let artists = [...new Set(tracks.map(t => t.artist))].filter(a => a.toLowerCase().includes(search)).sort();
                     display.innerHTML = artists.map(a => `<div class="list-item" onclick="openArtist('${a}')"><div style="width:50px; height:50px; border-radius:50%; background:rgba(255,45,85,0.1); display:flex; align-items:center; justify-content:center; margin-right:15px; color:var(--key-color);"><i class="fa-solid fa-user"></i></div><div style="font-weight:700;">${a}</div></div>`).join('');
                 } else {
                     title.innerText = currentArtist; display.className = "grid";
@@ -232,7 +253,8 @@
             } else if (currentView === 'playlist') {
                 if (currentPlaylistId === null) {
                     title.innerText = "Playlists"; display.className = "grid";
-                    display.innerHTML = playlists.map(p => {
+                    let list = playlists.filter(p => p.name.toLowerCase().includes(search) || (p.tag && p.tag.toLowerCase().includes(search)));
+                    display.innerHTML = list.map(p => {
                         const firstSong = tracks.find(t => p.songIds.includes(t.id));
                         return `<div class="card ${isEditing?'editing':''}" onclick="isEditing?openPlEdit(${p.id}):openPlaylist(${p.id})"><div class="del-badge" onclick="event.stopPropagation(); deletePlaylist(${p.id})"><i class="fa-solid fa-minus"></i></div><img src="${p.cover || (firstSong?firstSong.cover:'')}" class="card-img" style="background:#fff;"><div class="card-title">${p.name}</div><div class="card-sub">${p.songIds.length} tracks</div>${p.tag?`<div class="card-tag">${p.tag}</div>`:''}</div>`;
                     }).join('');
@@ -240,7 +262,6 @@
                     const pl = playlists.find(p => p.id === currentPlaylistId);
                     title.innerText = pl.name; display.className = "";
                     let plSongs = pl.songIds.map(id => tracks.find(t => t.id === id)).filter(t => t);
-                    
                     display.innerHTML = plSongs.map(t => `
                         <div class="swipe-container" id="swipe-${t.id}">
                             <div class="swipe-delete-btn" onclick="removeTrackFromPlaylist(${t.id})">削除</div>
@@ -262,41 +283,12 @@
             document.getElementById('left-btn').innerText = (currentArtist || currentPlaylistId) ? "戻る" : (isEditing ? "完了" : "編集");
         }
 
-        // Swipe Logic
-        let touchStartX = 0, currentSwipeId = null;
-        function handleTouchStart(e, id) {
-            touchStartX = e.touches[0].clientX;
-            currentSwipeId = id;
-            const el = e.currentTarget;
-            el.style.transition = 'none';
-        }
-        function handleTouchMove(e, id) {
-            let x = e.touches[0].clientX - touchStartX;
-            if (x > 0) x = 0;
-            if (x < -100) x = -100 - (Math.abs(x+100) ** 0.7); // 抵抗感
-            e.currentTarget.style.transform = `translateX(${x}px)`;
-        }
-        function handleTouchEnd(e, id) {
-            const el = e.currentTarget;
-            const x = new WebKitCSSMatrix(getComputedStyle(el).transform).m41;
-            el.style.transition = 'transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.15)';
-            if (x < -70) {
-                el.style.transform = 'translateX(-80px)';
-            } else {
-                el.style.transform = 'translateX(0)';
-            }
-        }
-
-        function removeTrackFromPlaylist(sid) {
-            const pl = playlists.find(p => p.id === currentPlaylistId);
-            pl.songIds = pl.songIds.filter(id => id !== sid);
-            db.transaction("playlists","readwrite").objectStore("playlists").put(pl).onsuccess = loadAll;
-        }
-
-        // 他の基本機能
         function playSong(id, mode) {
             let original = [];
-            if(mode === 'pl') original = playlists.find(p => p.id === currentPlaylistId).songIds.map(sid => tracks.find(tx => tx.id === sid)).filter(x=>x);
+            if(mode === 'pl') {
+                const pl = playlists.find(p => p.id === currentPlaylistId);
+                original = pl.songIds.map(sid => tracks.find(tx => tx.id === sid)).filter(x=>x);
+            }
             else if(mode === 'art') original = tracks.filter(tx => tx.artist === currentArtist);
             else original = [...tracks];
             playingTracks = isShuffle ? [...original].sort(() => Math.random() - 0.5) : [...original];
@@ -320,6 +312,7 @@
         }
 
         function toggleQueue() { document.getElementById('queue-panel').classList.toggle('open'); renderQueue(); }
+
         function renderQueue() {
             const list = document.getElementById('queue-list');
             let html = "";
@@ -362,7 +355,7 @@
         function switchTab(v) { currentView=v; currentArtist=null; currentPlaylistId=null; isEditing=false; render(); }
         function openArtist(n) { currentArtist=n; render(); }
         function openPlaylist(id) { currentPlaylistId=id; render(); }
-        function handleHeaderLeft() { if(currentArtist) currentArtist=null; else if(currentPlaylistId) currentPlaylistId=null; else isEditing=!isEditing; render(); }
+        function handleHeaderLeft() { if(currentArtist) currentArtist=null; else if(currentPlaylistId) { if(isEditing) isEditing=false; else currentPlaylistId=null; } else isEditing=!isEditing; render(); }
         function handleHeaderRight() { if(currentPlaylistId) openAddModal(); else if(currentView==='library') document.getElementById('audio-upload').click(); else if(currentView==='playlist'){ const n=prompt("名前"); if(n) db.transaction("playlists","readwrite").objectStore("playlists").add({name:n, songIds:[], tag:"", cover:null}).oncomplete=loadAll; } }
 
         function openAddModal() {
@@ -372,6 +365,12 @@
             document.body.appendChild(div);
         }
         function toggleToPl(sid) { const pl = playlists.find(p => p.id === currentPlaylistId); if(!pl.songIds.includes(sid)) pl.songIds.push(sid); db.transaction("playlists","readwrite").objectStore("playlists").put(pl).onsuccess = () => { loadAll(); document.getElementById('add-modal').remove(); }; }
+
+        function removeTrackFromPlaylist(sid) {
+            const pl = playlists.find(p => p.id === currentPlaylistId);
+            pl.songIds = pl.songIds.filter(id => id !== sid);
+            db.transaction("playlists","readwrite").objectStore("playlists").put(pl).onsuccess = loadAll;
+        }
 
         function openFull() { document.getElementById('full').classList.add('active'); }
         function closeFull() { document.getElementById('full').classList.remove('active'); document.getElementById('queue-panel').classList.remove('open'); }
