@@ -190,27 +190,40 @@
         });
 
         async function handleFiles(files) {
-            for (const file of Array.from(files)) {
-                let common = null;
-                try {
-                    if (typeof musicMetadata !== 'undefined') {
-                        const metadata = await musicMetadata.parseBlob(file);
-                        common = metadata.common;
-                    }
-                } catch (err) { console.error(err); }
+    console.log("ファイル受け取り:", files.length, "個");
+    
+    for (const file of Array.from(files)) {
+        let common = null;
+        let coverUrl = "https://via.placeholder.com/150/333/fff?text=No+Image";
+
+        try {
+            // ライブラリが存在し、かつ解析が可能な場合のみ実行
+            if (typeof musicMetadata !== 'undefined') {
+                const metadata = await musicMetadata.parseBlob(file);
+                common = metadata.common;
                 
-                let coverUrl = "https://via.placeholder.com/150/333/fff?text=No+Image";
                 if (common?.picture?.[0]) {
                     const pic = common.picture[0];
                     coverUrl = URL.createObjectURL(new Blob([pic.data], { type: pic.format }));
                 }
+            }
+        } catch (err) {
+            console.warn("メタデータ解析に失敗しましたが、再生用URLは作成します:", file.name);
+        }
 
-                const track = {
-                    url: URL.createObjectURL(file),
-                    title: common?.title || file.name,
-                    artist: common?.artist || "不明なアーティスト",
-                    cover: coverUrl
-                };
+        // 解析に失敗しても、ファイル名と再生URLだけは確保する
+        const track = {
+            url: URL.createObjectURL(file), // これがあれば再生はできる
+            title: common?.title || file.name, // タイトルがなければファイル名
+            artist: common?.artist || "不明なアーティスト",
+            cover: coverUrl
+        };
+        
+        playlist.push(track);
+    }
+    renderPlaylist(playlist); // すべての処理が終わってから一気に描画
+}
+
                 
                 playlist.push(track);
                 renderPlaylist(playlist);
