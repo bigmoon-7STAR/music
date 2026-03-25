@@ -27,7 +27,7 @@
         /* --- Header & Search --- */
         .header { padding: calc(45px + env(safe-area-inset-top)) 20px 10px; background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 0.5px solid rgba(0,0,0,0.05); z-index: 100; }
         .header-top { display: flex; justify-content: space-between; align-items: center; }
-        .header-top h2 { font-size: 17px; font-weight: 600; color: #000; opacity: 0.8; margin: 0; }
+        .header-top h2 { font-size: 17px; font-weight: 600; color: #000; opacity: 0.8; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 60%; }
 
         .search-container { padding: 10px 20px; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); display: flex; gap: 10px; align-items: center; border-bottom: 0.5px solid rgba(0,0,0,0.03); }
         #search-input { flex: 1; padding: 8px 12px; border-radius: 10px; border: 1px solid rgba(0,0,0,0.05); background: rgba(255,255,255,0.4); font-size: 14px; outline: none; }
@@ -88,7 +88,6 @@
         .del-badge { position: absolute; top: -8px; left: -8px; width: 24px; height: 24px; background: #FF3B30; color: white; border-radius: 50%; display: none; align-items: center; justify-content: center; border: 2px solid white; z-index: 10; font-size: 12px; }
         .editing .del-badge { display: flex; }
 
-        /* 追加：一括選択用スタイル */
         .check-item { display: flex; align-items: center; padding: 10px 20px; border-bottom: 0.5px solid rgba(0,0,0,0.03); }
         .check-item input[type="checkbox"] { width: 20px; height: 20px; margin-right: 15px; accent-color: var(--key-color); }
     </style>
@@ -136,7 +135,10 @@
                     <div id="f-title" style="font-size:22px; font-weight:800; color:#000; opacity:0.9; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;"></div>
                     <div id="f-artist" style="font-size:18px; color:var(--key-color); margin-top:5px; font-weight:500;"></div>
                 </div>
-                <button onclick="toggleQueue()" style="background:none; border:none; color:rgba(0,0,0,0.4); font-size:20px; padding:10px;"><i class="fa-solid fa-list-ul"></i></button>
+                <div style="display:flex; gap:10px;">
+                    <button id="f-lyric-icon" onclick="toggleLyrics()" style="background:none; border:none; color:rgba(0,0,0,0.4); font-size:20px; padding:10px;"><i class="fa-solid fa-quote-right"></i></button>
+                    <button onclick="toggleQueue()" style="background:none; border:none; color:rgba(0,0,0,0.4); font-size:20px; padding:10px;"><i class="fa-solid fa-list-ul"></i></button>
+                </div>
             </div>
             
             <input type="range" class="seeker" id="seeker" value="0" step="0.1" oninput="audio.currentTime=this.value">
@@ -225,18 +227,26 @@
             if (type === 'name_asc') return list.sort((a,b) => (a.name||'').localeCompare(b.name||'','ja'));
             if (type === 'name_desc') return list.sort((a,b) => (b.name||'').localeCompare(a.name||'','ja'));
             if (type === 'year') return list.sort((a,b) => (b.year||0).toString().localeCompare((a.year||0).toString()));
-            return list; // added
+            return list;
         }
 
         function render() {
             const display = document.getElementById('main-display');
             const title = document.getElementById('view-title');
+            const rightBtn = document.getElementById('right-btn');
             const search = document.getElementById('search-input').value.toLowerCase();
             const sort = document.getElementById('sort-type').value;
 
             document.querySelectorAll('.tab-item').forEach(btn => btn.classList.remove('active'));
             const activeTabId = currentView === 'playlist' ? 'tab-play' : currentView === 'artists' ? 'tab-artist' : 'tab-lib';
             document.getElementById(activeTabId).classList.add('active');
+
+            // アーティスト詳細の時だけ右上のアイコンを変える
+            if (currentArtist) {
+                rightBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+            } else {
+                rightBtn.innerHTML = '<i class="fa-solid fa-circle-plus"></i>';
+            }
 
             if (currentView === 'library') {
                 title.innerText = "Library"; display.className = "grid";
@@ -330,8 +340,10 @@
         function toggleLyrics() {
             const view = document.getElementById('f-lyrics-view');
             const img = document.getElementById('f-img');
+            const icon = document.getElementById('f-lyric-icon');
             const isActive = view.classList.toggle('active');
             img.style.opacity = isActive ? "0.1" : "1";
+            icon.style.color = isActive ? "var(--key-color)" : "rgba(0,0,0,0.4)";
             if(isActive) {
                 const track = playingTracks[currentTrackIdx];
                 view.innerText = track?.lyrics || "歌詞が登録されていません";
@@ -397,6 +409,7 @@
             document.getElementById('mini').style.display = 'flex';
             document.getElementById('f-lyrics-view').classList.remove('active');
             document.getElementById('f-img').style.opacity = "1";
+            document.getElementById('f-lyric-icon').style.color = "rgba(0,0,0,0.4)";
             audio.play();
             renderQueue();
         }
@@ -444,7 +457,12 @@
         }
 
         function handleHeaderRight() { 
-            if(currentPlaylistId) openBulkAddModal();
+            // 変更：アーティスト画面ならそのアーティストの曲を再生
+            if(currentArtist) {
+                const artTracks = tracks.filter(t => t.artist === currentArtist);
+                if(artTracks.length > 0) playSong(artTracks[0].id, 'art');
+            }
+            else if(currentPlaylistId) openBulkAddModal();
             else if(currentView==='library') document.getElementById('audio-upload').click(); 
             else if(currentView==='playlist') {
                 const n = prompt("新しいプレイリスト名");
@@ -503,16 +521,35 @@
         audio.ontimeupdate = () => { if(!isNaN(audio.duration)){ const s = document.getElementById('seeker'); s.max = audio.duration; s.value = audio.currentTime; document.getElementById('cur-time').innerText = formatTime(audio.currentTime); document.getElementById('dur-time').innerText = formatTime(audio.duration); } };
         function formatTime(s) { let m=Math.floor(s/60), sec=Math.floor(s%60); return `${m}:${sec<10?'0':''}${sec}`; }
 
+        // 変更：ラグ解消のためトランザクション完了時に一括描画
         document.getElementById('audio-upload').onchange = (e) => {
-            for (let f of e.target.files) {
+            const files = e.target.files;
+            if (files.length === 0) return;
+            
+            const tx = db.transaction("songs", "readwrite");
+            const store = tx.objectStore("songs");
+            
+            let processedCount = 0;
+            for (let f of files) {
                 jsmediatags.read(f, { onSuccess: (tag) => {
                     let c = null; if(tag.tags.picture){
                         let d = tag.tags.picture.data, s = ""; for(let i=0; i<d.length; i++) s += String.fromCharCode(d[i]);
                         c = `data:${tag.tags.picture.format};base64,${btoa(s)}`;
                     }
-                    db.transaction("songs","readwrite").objectStore("songs").add({ name: tag.tags.title || f.name, artist: tag.tags.artist || "不明", year: tag.tags.year || "", cover: c, data: f, lyrics: "" }).oncomplete = loadAll;
+                    store.add({ 
+                        name: tag.tags.title || f.name, 
+                        artist: tag.tags.artist || "不明", 
+                        year: tag.tags.year || "", 
+                        cover: c, 
+                        data: f, 
+                        lyrics: "" 
+                    });
+                    processedCount++;
                 }});
             }
+            tx.oncomplete = () => {
+                loadAll(); // 全ファイル追加後に1回だけリロード
+            };
         };
     </script>
 </body>
