@@ -11,21 +11,16 @@
             margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: #000; color: white; height: 100vh; overflow: hidden;
         }
-        /* Apple Music風の動的背景 */
         #bg-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--bg-gradient); z-index: -1; transition: background 1.2s ease;
         }
         .container { padding: 20px; height: calc(100vh - 120px); overflow-y: auto; padding-top: 60px; }
         h1 { font-size: 28px; font-weight: bold; margin-bottom: 20px; }
-
-        /* ドロップエリア */
         #drop-zone {
             border: 2px dashed #444; padding: 30px; text-align: center;
             border-radius: 12px; margin-bottom: 20px; color: #aaa; background: rgba(255,255,255,0.05);
         }
-
-        /* 曲リストのアイテム */
         .track-item {
             display: flex; align-items: center; padding: 12px;
             border-bottom: 1px solid rgba(255,255,255,0.1); cursor: pointer;
@@ -34,8 +29,6 @@
         .track-info-text { flex: 1; }
         .track-name { font-weight: 600; display: block; }
         .track-meta { color: #888; font-size: 13px; }
-
-        /* ミニプレイヤー（常時表示） */
         .mini-player {
             position: fixed; bottom: 20px; left: 10px; right: 10px;
             height: 75px; background: rgba(40, 40, 40, 0.85);
@@ -52,13 +45,11 @@
 </head>
 <body>
     <div id="bg-overlay"></div>
-
     <div class="container">
         <h1>ライブラリ</h1>
         <div id="drop-zone">タップしてM4aファイルを追加</div>
         <div id="track-list"></div>
     </div>
-
     <div class="mini-player">
         <canvas id="color-canvas" style="display:none;"></canvas>
         <img src="https://via.placeholder.com/50" class="player-art" id="player-art">
@@ -66,12 +57,12 @@
             <span class="player-title" id="player-title">未選択</span>
             <span class="player-artist" id="player-artist">-</span>
         </div>
-        <div class="controls">
-            <span id="play-btn">▶️</span>
-        </div>
+        <div class="controls"><span id="play-btn" style="cursor:pointer;">▶️</span></div>
     </div>
 
     <script>
+        const canvas = document.getElementById('color-canvas');
+        const ctx = canvas.getContext('2d');
         const dropZone = document.getElementById('drop-zone');
         const trackList = document.getElementById('track-list');
         const playBtn = document.getElementById('play-btn');
@@ -83,7 +74,7 @@
         let audio = new Audio();
         let isPlaying = false;
 
-        // ファイル追加イベント
+        // 1. ファイル追加処理
         dropZone.onclick = () => {
             const input = document.createElement('input');
             input.type = 'file'; input.accept = 'audio/*'; input.multiple = true;
@@ -95,24 +86,22 @@
             for (const file of Array.from(files)) {
                 const metadata = await musicMetadata.parseBlob(file).catch(() => null);
                 const common = metadata?.common;
-                
                 let coverUrl = "https://via.placeholder.com/150/333/fff?text=No+Image";
                 if (common?.picture?.[0]) {
                     const pic = common.picture[0];
                     coverUrl = URL.createObjectURL(new Blob([pic.data], { type: pic.format }));
                 }
-
                 const track = {
                     url: URL.createObjectURL(file),
                     title: common?.title || file.name,
                     artist: common?.artist || "不明なアーティスト",
                     cover: coverUrl
                 };
-
                 addTrackToUI(track);
             }
         }
 
+        // 2. UI表示処理
         function addTrackToUI(track) {
             const div = document.createElement('div');
             div.className = 'track-item';
@@ -127,6 +116,7 @@
             trackList.appendChild(div);
         }
 
+        // 3. 再生 & 動的背景色
         function playTrack(track) {
             audio.src = track.url;
             audio.play();
@@ -136,14 +126,43 @@
             playerArtist.innerText = track.artist;
             playerArt.src = track.cover;
 
-            // 背景色を更新（簡易抽出：後ほどCanvasで高度化可能）
-            bgOverlay.style.background = `linear-gradient(135deg, rgba(255,255,255,0.15) 0%, #000 100%)`;
+            const img = new Image();
+            img.crossOrigin = "Anonymous";
+            img.src = track.cover;
+            img.onload = () => {
+                const color = getDominantColor(img);
+                updateBackground(color);
+            };
         }
 
+        function getDominantColor(img) {
+            canvas.width = 10; canvas.height = 10;
+            ctx.drawImage(img, 0, 0, 10, 10);
+            const data = ctx.getImageData(5, 5, 1, 1).data;
+            return { r: data[0], g: data[1], b: data[2] };
+        }
+
+        function updateBackground(color) {
+            const { r, g, b } = color;
+            const mainColor = `rgba(${r}, ${g}, ${b}, 0.5)`;
+            const subColor = `rgba(${r}, ${g}, ${b}, 0.1)`;
+            bgOverlay.style.background = `
+                radial-gradient(circle at 20% 30%, ${mainColor} 0%, transparent 70%),
+                radial-gradient(circle at 80% 70%, ${subColor} 0%, #000 100%)
+            `;
+        }
+
+        // 4. 再生コントロール
         playBtn.onclick = () => {
             if (isPlaying) { audio.pause(); playBtn.innerText = '▶️'; }
             else { audio.play(); playBtn.innerText = '⏸'; }
             isPlaying = !isPlaying;
+        };
+
+        audio.onended = () => {
+            console.log("曲が終了しました。");
+            playBtn.innerText = '▶️';
+            isPlaying = false;
         };
     </script>
 </body>
