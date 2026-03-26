@@ -19,17 +19,17 @@
             --sub-text: #8e94b3;
             --glass: rgba(255, 255, 255, 0.4);
             --star-clip: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            --circle-clip: circle(50% at 50% 50%);
             --card-shadow: 0 12px 30px rgba(180, 190, 220, 0.2);
             --grad-primary: linear-gradient(135deg, #a6cbe3 0%, #fbe0e6 100%);
             --bg-color: transparent;
             --card-bg: rgba(255, 255, 255, 0.6);
-            --modal-bg: transparent;
-            --border-color: rgba(255,255,255,0.4);
-            --tab-bg: rgba(255,255,255,0.4);
+            --modal-bg: rgba(255, 255, 255, 0.5);
+            --border-color: rgba(255, 255, 255, 0.4);
+            --tab-bg: rgba(255, 255, 255, 0.4);
             --input-bg: #fbfbfc;
-            --seeker-bg: rgba(166,203,227,0.25);
-            --list-hover: rgba(255,255,255,0.5);
-            --star-grad: linear-gradient(45deg, #ffff00, #9acd32, #add8e6);
+            --seeker-bg: rgba(166, 203, 227, 0.25);
+            --list-hover: rgba(255, 255, 255, 0.5);
             --player-bg: rgba(255, 255, 255, 0.4);
             --icon-color: #a6cbe3;
             --icon-active: #6a89cc;
@@ -49,15 +49,13 @@
             --glass: rgba(0, 15, 30, 0.4);
             --card-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
             --grad-primary: linear-gradient(135deg, #004060 0%, #002040 100%);
-            --bg-color: transparent;
             --card-bg: rgba(0, 21, 40, 0.6);
-            --modal-bg: transparent;
-            --border-color: rgba(255,255,255,0.1);
-            --tab-bg: rgba(0,10,20,0.4);
+            --modal-bg: rgba(0, 10, 20, 0.5);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --tab-bg: rgba(0, 10, 20, 0.4);
             --input-bg: #001a33;
-            --seeker-bg: rgba(0,100,150,0.3);
-            --list-hover: rgba(0,255,255,0.1);
-            --star-grad: linear-gradient(45deg, #ffff00, #9acd32, #add8e6);
+            --seeker-bg: rgba(0, 100, 150, 0.3);
+            --list-hover: rgba(0, 255, 255, 0.1);
             --player-bg: rgba(0, 10, 20, 0.7);
             --icon-color: #0088cc;
             --icon-active: #00ccff;
@@ -71,7 +69,7 @@
             scrollbar-width: none;
             -ms-overflow-style: none;
         }
-
+        
         *::-webkit-scrollbar {
             display: none;
         }
@@ -145,6 +143,7 @@
             position: relative;
             z-index: 1001;
             width: 100%;
+            height: 100%;
         }
 
         .header-top h2 {
@@ -156,8 +155,8 @@
             text-align: center;
             flex: 1;
         }
-        
-        #left-btn, #right-btn, .modal-close-btn {
+
+        #left-btn, #right-btn, .modal-close-btn, .header-icon-btn {
             background: none;
             border: none;
             color: var(--icon-color);
@@ -171,7 +170,7 @@
             transition: 0.2s;
         }
 
-        #left-btn:active {
+        #left-btn:active, .header-icon-btn:active {
             opacity: 0.5;
             transform: scale(0.9);
         }
@@ -196,6 +195,13 @@
             justify-content: center;
             border-radius: 50%;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .header-right-group {
+            display: flex;
+            align-items: center;
+            min-width: 50px;
+            justify-content: flex-end;
         }
 
         .search-container {
@@ -264,50 +270,41 @@
         .bulk-artist-icon-chip {
             flex-shrink: 0;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            gap: 4px;
+            gap: 8px;
             cursor: pointer;
             animation: fadeIn 0.3s ease;
+            background: var(--card-bg);
+            padding: 4px 12px 4px 4px;
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
         }
 
         .bulk-artist-icon-chip img, .bulk-artist-icon-chip .placeholder {
-            width: 42px;
-            height: 42px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
             object-fit: cover;
             background: var(--grad-primary);
             border: 2px solid var(--border-color);
             transition: 0.3s;
         }
 
-        .bulk-artist-icon-chip img.star, .bulk-artist-icon-chip .placeholder.star {
-            clip-path: var(--star-clip);
-        }
-        
-        .bulk-artist-icon-chip img.circle, .bulk-artist-icon-chip .placeholder.circle {
-            border-radius: 50%;
-        }
-
         .bulk-artist-icon-chip span {
-            font-size: 9px;
+            font-size: 10px;
             font-weight: 800;
             color: var(--icon-color);
-            max-width: 55px;
+            max-width: 80px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
 
-        .view-content {
+        #content {
             flex: 1;
             overflow-y: auto;
             padding-bottom: 160px;
             -webkit-overflow-scrolling: touch;
-            display: none;
-        }
-
-        .view-content.active {
-            display: block;
         }
 
         .grid {
@@ -434,20 +431,18 @@
             color: #fff;
         }
 
-        .artist-icon.parent {
+        .artist-icon.is-parent {
             clip-path: var(--star-clip);
         }
 
-        .artist-icon.child {
+        .artist-icon.is-child {
             border-radius: 50%;
-            width: 44px;
-            height: 44px;
         }
 
-        .artist-list-item.child-indent {
-            margin-left: 40px;
-            background: var(--tab-bg);
-            border-left: 2px solid var(--icon-color);
+        .artist-indent {
+            margin-left: 30px;
+            border-left: 2px solid var(--border-color);
+            padding-left: 10px;
         }
 
         .swipe-container {
@@ -535,12 +530,12 @@
         }
 
         [data-theme="dark"] .full-player::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: rgba(0,0,0,0.6);
+            content:'';
+            position:absolute;
+            inset:0;
+            background:rgba(0,0,0,0.6);
             backdrop-filter: blur(40px);
-            z-index: -1;
+            z-index:-1;
         }
 
         #bg-blur-overlay {
@@ -588,14 +583,15 @@
             object-fit: cover;
             box-shadow: 0 40px 80px rgba(150,150,180,0.25);
             border: 8px solid var(--border-color);
+            transition: all 0.5s ease;
         }
         
         #f-lyrics-view {
             position: absolute;
             inset: 0;
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
             border-radius: 42px;
             padding: 50px 20px;
             overflow-y: auto;
@@ -618,7 +614,7 @@
         #f-lyrics-view.active {
             display: flex;
         }
-        
+
         .fullscreen-lyrics {
             position: fixed !important;
             top: 0 !important;
@@ -629,15 +625,12 @@
             border-radius: 0 !important;
             background: var(--player-bg) !important;
             backdrop-filter: blur(80px) !important;
-            max-width: 100% !important;
-            padding: 80px 10px !important;
             -webkit-backdrop-filter: blur(80px) !important;
+            max-width: 100% !important;
+            padding: 80px 20px !important;
             height: 100vh !important;
             width: 100vw !important;
             margin: 0 !important;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         [data-theme="dark"] .fullscreen-lyrics {
@@ -645,38 +638,39 @@
         }
 
         [data-theme="dark"] .fullscreen-lyrics::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: rgba(0,0,0,0.7);
+            content:'';
+            position:absolute;
+            inset:0;
+            background:rgba(0,0,0,0.7);
             backdrop-filter: blur(60px);
-            z-index: -1;
+            z-index:-1;
         }
 
-        .lyric-line-display {
-            font-size: 22px;
-            line-height: 1.8;
+        .lyric-line {
+            font-size: clamp(16px, 5vw, 24px);
+            line-height: 2.2;
             font-weight: 800;
             width: 100%;
             word-wrap: break-word;
+            padding: 10px 0;
+            transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
             opacity: 0.4;
-            transform: scale(0.95);
-            filter: blur(1px);
-            transition: all 0.5s ease;
-            margin: 15px 0;
+            filter: blur(1.5px);
+            transform: scale(0.9);
+            transform-origin: center;
             cursor: pointer;
-            text-shadow: 0 0 10px rgba(0,0,0,0.2);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            color: var(--text-dark);
         }
 
-        .lyric-line-display.active {
+        [data-theme="dark"] .lyric-line {
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .lyric-line.active {
             opacity: 1;
-            transform: scale(1.05);
             filter: blur(0px);
-            text-shadow: 0 0 15px rgba(255,255,255,0.8);
-        }
-
-        [data-theme="dark"] .lyric-line-display.active {
-            text-shadow: 0 0 15px rgba(0,0,0,0.8);
+            transform: scale(1.1);
         }
 
         .seeker {
@@ -774,14 +768,10 @@
             margin-top: 6px;
         }
 
-        .tab-item span {
-            margin-top: 2px;
-        }
-
         .modal {
             position: fixed;
             inset: 0;
-            background: var(--player-bg);
+            background: var(--modal-bg);
             backdrop-filter: blur(40px);
             -webkit-backdrop-filter: blur(40px);
             z-index: 7000;
@@ -794,10 +784,6 @@
             right: 0;
         }
 
-        [data-theme="dark"] .modal {
-            background: rgba(0, 10, 20, 0.7);
-        }
-
         @keyframes modalSlide {
             from { transform: translateY(30px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
@@ -808,6 +794,10 @@
             min-height: 70px;
             height: 70px;
             padding: calc(5px + env(safe-area-inset-top)) 20px 5px !important;
+            background: transparent;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border-bottom: 1.5px solid var(--border-color);
         }
 
         .modal-body {
@@ -828,6 +818,7 @@
             background: var(--input-bg);
             color: var(--text-main);
             font-weight: 600;
+            transition: 0.3s;
         }
 
         .edit-input:focus {
@@ -847,8 +838,7 @@
         }
 
         .artist-chip {
-            display: inline-flex;
-            align-items: center;
+            display: inline-block;
             padding: 9px 18px;
             background: var(--card-bg);
             border: 2px solid var(--border-color);
@@ -861,17 +851,16 @@
             transition: 0.2s;
         }
 
-        .artist-chip img {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            margin-right: 8px;
-            object-fit: cover;
+        .artist-chip.active-main {
+            background: var(--icon-color);
+            color: #fff;
+            border-color: var(--icon-color);
         }
 
-        .artist-chip:active {
+        .artist-chip.active-sub {
             background: var(--accent-blue);
             color: var(--icon-active);
+            border-color: var(--icon-active);
         }
 
         .del-badge {
@@ -914,7 +903,7 @@
         .queue-panel {
             position: absolute;
             inset: 0;
-            background: var(--bg-color);
+            background: var(--modal-bg);
             backdrop-filter: blur(50px);
             z-index: 6000;
             transform: translateY(100%);
@@ -956,6 +945,15 @@
             .header, .tab-bar, .full-player, .modal, .queue-panel { max-width: 100%; }
         }
 
+        .star-icon { color: var(--icon-color); }
+        .star-icon.active {
+            background: var(--grad-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+            color: transparent;
+        }
+
         .artist-list-item {
             display: flex;
             align-items: center;
@@ -971,56 +969,101 @@
             margin-bottom: 5px;
         }
 
-        .color-preset-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 3px solid var(--border-color);
-            cursor: pointer;
-            margin-right: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
         .dragging {
             opacity: 0.5;
             background: var(--list-hover);
         }
 
-        .lyric-paint-line {
+        /* Lyric Sync Editor Styles */
+        .lyric-sync-row {
             display: flex;
-            flex-direction: column;
-            padding: 15px;
-            border-radius: 12px;
-            background: var(--input-bg);
-            margin-bottom: 10px;
-        }
-
-        .lyric-paint-controls {
-            display: flex;
+            align-items: center;
             gap: 10px;
             margin-bottom: 10px;
-            align-items: center;
+            background: var(--card-bg);
+            padding: 10px;
+            border-radius: 15px;
         }
 
-        .lyric-paint-members {
+        .lyric-sync-time {
+            width: 60px;
+            padding: 8px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            font-size: 12px;
+            text-align: center;
+            background: var(--input-bg);
+            color: var(--text-main);
+        }
+
+        .lyric-sync-text {
+            flex: 1;
+            padding: 8px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            font-size: 14px;
+            background: var(--input-bg);
+            color: var(--text-main);
+        }
+
+        .lyric-sync-btn {
+            background: var(--icon-color);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 8px 12px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .member-color-selector {
             display: flex;
             gap: 5px;
-            flex-wrap: wrap;
-            margin-top: 10px;
+            overflow-x: auto;
+            padding: 5px 0;
+            scrollbar-width: none;
         }
 
-        .member-circle {
+        .member-color-circle {
             width: 24px;
             height: 24px;
             border-radius: 50%;
+            border: 2px solid var(--border-color);
             cursor: pointer;
-            border: 2px solid transparent;
+            flex-shrink: 0;
             transition: transform 0.2s;
         }
 
-        .member-circle.selected {
+        .member-color-circle.selected {
             transform: scale(1.3);
             border-color: var(--icon-active);
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+
+        .toggle-btn-group {
+            display: flex;
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            font-weight: 800;
+            font-size: 12px;
+            cursor: pointer;
+            color: var(--sub-text);
+            transition: 0.3s;
+        }
+
+        .toggle-btn.active {
+            background: var(--icon-color);
+            color: #fff;
         }
     </style>
 </head>
@@ -1032,9 +1075,9 @@
         <div class="header-top">
             <button id="left-btn" onclick="handleHeaderLeft()"><i class="fa-solid fa-sliders"></i></button>
             <h2 id="view-title">Library</h2>
-            <div style="display:flex; align-items:center; min-width:50px; justify-content:flex-end;">
-                <button id="settings-header-btn" style="display:none; background:none; border:none; color:var(--icon-color); font-size:18px; padding:10px; cursor:pointer;" onclick="openSettings()"><i class="fa-solid fa-gear"></i></button>
-                <button id="artist-setup-header-btn" style="display:none; background:none; border:none; color:var(--icon-color); font-size:18px; padding:10px; cursor:pointer;" onclick="openArtistSetup(currentArtist)"><i class="fa-solid fa-users-gear"></i></button>
+            <div class="header-right-group">
+                <button id="settings-header-btn" class="header-icon-btn" style="display:none;" onclick="openSettings()"><i class="fa-solid fa-gear"></i></button>
+                <button id="artist-setup-header-btn" class="header-icon-btn" style="display:none;" onclick="openArtistSetup(currentArtist)"><i class="fa-solid fa-users-gear"></i></button>
                 <button id="right-btn" onclick="handleHeaderRight()"><i class="fa-solid fa-plus"></i></button>
             </div>
         </div>
@@ -1048,17 +1091,14 @@
                 <option value="name_asc">A-Z</option>
                 <option value="name_desc">Z-A</option>
                 <option value="year">Date</option>
-                <option value="custom" id="sort-custom-opt" style="display:none;">Custom</option>
+                <option value="custom">Custom</option>
             </select>
         </div>
         <div id="playlist-tag-suggestions" style="display: none;"></div>
         <div id="artist-filter-container" style="display: none;"></div>
     </div>
 
-    <div id="content-library" class="view-content active"><div class="grid" id="main-display-library"></div></div>
-    <div id="content-artists" class="view-content"><div id="main-display-artists"></div></div>
-    <div id="content-playlists" class="view-content"><div class="grid" id="main-display-playlists"></div></div>
-    <div id="content-detail" class="view-content"><div id="main-display-detail"></div></div>
+    <div id="content"><div id="main-display"></div></div>
 
     <div class="mini-player" id="mini" onclick="openFull()">
         <img id="m-img" src="">
@@ -1075,7 +1115,7 @@
         <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:0 35px; padding-bottom: 20px;">
             <div id="f-artwork-container">
                 <img id="f-img">
-                <div id="f-lyrics-view" onclick="toggleLyrics()"></div>
+                <div id="f-lyrics-view"></div>
             </div>
             
             <div style="width:100%; margin-top:45px; display:flex; justify-content:space-between; align-items:flex-end;">
@@ -1084,11 +1124,11 @@
                     <div id="f-artist" onclick="goToArtistFromPlayer()" style="font-size:16px; color:var(--icon-color); margin-top:6px; font-weight:700; cursor:pointer; text-decoration:underline;"></div>
                 </div>
                 <div style="display:flex; gap:10px; align-items:center;">
-                    <button id="f-fav-btn" onclick="toggleFavoriteCurrentSong()" style="background:none; border:none; color:var(--icon-color); font-size:24px; padding:10px; opacity:0.6;"><i class="fa-regular fa-star"></i></button>
+                    <button id="f-fav-btn" onclick="toggleFavoriteCurrentSong()" style="background:none; border:none; color:var(--icon-color); font-size:24px; padding:10px; opacity:0.6;"><i class="fa-regular fa-star star-icon"></i></button>
                 </div>
             </div>
             
-            <input type="range" class="seeker" id="seeker" value="0" step="0.1" oninput="seekAudio(this.value)">
+            <input type="range" class="seeker" id="seeker" value="0" step="0.1" oninput="seekTo(this.value)">
             <div style="width:100%; display:flex; justify-content:space-between; color:var(--icon-color); font-size:11px; font-weight:800;">
                 <span id="cur-time">0:00</span><span id="dur-time">0:00</span>
             </div>
@@ -1118,16 +1158,16 @@
         </div>
     </div>
 
-    <div id="custom-prompt-modal" class="modal" style="z-index: 9000;">
+    <div id="input-modal" class="modal">
         <div class="header">
             <div class="header-top">
-                <button class="modal-close-btn" onclick="closeCustomPrompt()"><i class="fa-solid fa-xmark"></i></button>
-                <h2 id="custom-prompt-title">Input</h2>
-                <button onclick="submitCustomPrompt()" style="color:var(--icon-color); font-weight:900;">OK</button>
+                <button class="modal-close-btn" onclick="closeInputModal()"><i class="fa-solid fa-xmark"></i></button>
+                <h2 id="input-modal-title">Enter Name</h2>
+                <button onclick="saveInputModal()" style="color:var(--icon-color); font-weight:900; background:none; border:none; font-size:16px; cursor:pointer;">Save</button>
             </div>
         </div>
-        <div class="modal-body" style="display:flex; flex-direction:column; justify-content:center;">
-            <input type="text" id="custom-prompt-input" class="edit-input" placeholder="Type here...">
+        <div class="modal-body" style="display:flex; flex-direction:column; align-items:center; justify-content:center;">
+            <input type="text" id="generic-input-field" class="edit-input" placeholder="Type here..." style="margin-top:20px;">
         </div>
     </div>
 
@@ -1136,31 +1176,36 @@
             <div class="header-top">
                 <button class="modal-close-btn" onclick="closeEdit()"><i class="fa-solid fa-xmark"></i></button>
                 <h2>Track Info</h2>
-                <button onclick="saveEdit()" style="color:var(--icon-color); font-weight:900;">Save</button>
+                <button onclick="saveEdit()" style="color:var(--icon-color); font-weight:900; background:none; border:none; font-size:16px; cursor:pointer;">Save</button>
             </div>
         </div>
         <div class="modal-body">
             <span class="field-label">Title</span>
             <input type="text" id="edit-name" class="edit-input">
             
-            <div style="display:flex; gap:10px; margin-bottom:10px;">
-                <button id="btn-tab-main" onclick="switchArtistTagTab('main')" style="flex:1; padding:10px; border-radius:15px; border:2px solid var(--icon-active); background:var(--icon-active); color:#fff; font-weight:bold;">Main Artist</button>
-                <button id="btn-tab-sub" onclick="switchArtistTagTab('sub')" style="flex:1; padding:10px; border-radius:15px; border:2px solid var(--border-color); background:transparent; color:var(--sub-text); font-weight:bold;">Sub Artist</button>
+            <span class="field-label">Artists</span>
+            <div class="toggle-btn-group">
+                <div class="toggle-btn active" id="toggle-main-artist" onclick="switchArtistTagMode('main')">Main Artist</div>
+                <div class="toggle-btn" id="toggle-sub-artist" onclick="switchArtistTagMode('sub')">Sub Artist</div>
             </div>
 
-            <span class="field-label" id="edit-artist-label">Add Main Artist</span>
             <div style="display:flex; flex-direction:column; margin-bottom:22px;">
                 <div style="display:flex; align-items:center; margin-bottom:10px;">
-                    <input type="text" id="edit-artist-input" class="edit-input" placeholder="Artist Name..." style="margin-bottom:0;" oninput="updateArtistSuggest(this.value)">
-                    <button onclick="addTrackArtist()" style="margin-left:10px; padding:15px; background:transparent; color:var(--icon-color); border:2px solid var(--border-color); border-radius:15px; font-weight:800; font-size:14px;"><i class="fa-solid fa-plus"></i></button>
+                    <input type="text" id="edit-artist-input" class="edit-input" placeholder="Add Artist..." style="margin-bottom:0;" oninput="updateArtistSuggest(this.value)">
+                    <button onclick="addTrackArtist()" style="margin-left:10px; padding:15px; background:transparent; color:var(--icon-color); border:2px solid var(--border-color); border-radius:15px; font-weight:800; font-size:14px; white-space:nowrap;"><i class="fa-solid fa-plus"></i></button>
                 </div>
-                <div id="track-active-main-artists" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px;"></div>
-                <div id="track-active-sub-artists" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
+                <div id="track-active-artists" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
             </div>
-            <div id="artist-quick-select" style="margin-bottom: 20px;"></div>
-
+            <div id="artist-quick-select" style="margin-bottom: 20px; display:flex; flex-wrap:wrap;"></div>
+            
             <span class="field-label">Year</span>
             <input type="text" id="edit-year" class="edit-input">
+            
+            <div style="margin-top: 20px; text-align: center;">
+                <button onclick="openLyricPaint()" style="background:var(--accent-blue); color:var(--icon-active); border:2px solid var(--border-color); border-radius:20px; padding:15px 30px; font-weight:900; width:100%; cursor:pointer;">
+                    <i class="fa-solid fa-microphone-lines"></i> Edit Synced Lyrics
+                </button>
+            </div>
         </div>
     </div>
 
@@ -1169,7 +1214,7 @@
             <div class="header-top">
                 <button class="modal-close-btn" onclick="closePlEdit()"><i class="fa-solid fa-xmark"></i></button>
                 <h2>Playlist</h2>
-                <button onclick="savePlEdit()" style="color:var(--icon-color); font-weight:900;">Done</button>
+                <button onclick="savePlEdit()" style="color:var(--icon-color); font-weight:900; background:none; border:none; font-size:16px; cursor:pointer;">Done</button>
             </div>
         </div>
         <div class="modal-body" style="text-align:center;">
@@ -1177,10 +1222,12 @@
                 <img id="pl-edit-img" style="width:200px; height:200px; border-radius:35px; object-fit:cover; border:5px solid var(--border-color); box-shadow:0 15px 40px rgba(0,0,0,0.08); cursor:pointer;" onclick="document.getElementById('pl-img-input').click()">
                 <div style="position:absolute; bottom:10px; right:10px; background:var(--grad-primary); width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; pointer-events:none;"><i class="fa-solid fa-camera" style="font-size:16px;"></i></div>
             </div>
+            <div style="margin-bottom:20px;">
+                <button onclick="togglePlFav()" id="pl-fav-btn" style="background:none; border:none; font-size:24px; color:var(--icon-color);"><i class="fa-regular fa-star star-icon"></i></button>
+            </div>
             <input type="file" id="pl-img-input" style="display:none" onchange="previewPlImg(event)">
-            <div style="text-align:left; margin-top:20px;">
-                <span class="field-label">Playlist Name</span>
-                <input type="text" id="pl-edit-name" class="edit-input">
+            <div style="text-align:left;">
+                <span class="field-label">Playlist Name</span><input type="text" id="pl-edit-name" class="edit-input">
                 <span class="field-label">Tag</span>
                 <div style="display:flex; flex-direction:column; margin-bottom:22px;">
                     <div style="display:flex; align-items:center; margin-bottom:10px;">
@@ -1189,7 +1236,7 @@
                     </div>
                     <div id="pl-active-tags" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
                 </div>
-                <div id="tag-quick-select"></div>
+                <div id="tag-quick-select" style="display:flex; flex-wrap:wrap;"></div>
             </div>
         </div>
     </div>
@@ -1199,7 +1246,7 @@
             <div class="header-top">
                 <button class="modal-close-btn" onclick="document.getElementById('artist-setup-modal').style.display='none'"><i class="fa-solid fa-xmark"></i></button>
                 <h2>Artist Setup</h2>
-                <button onclick="saveArtistSetup()" style="color:var(--icon-color); font-weight:900;">Save</button>
+                <button onclick="saveArtistSetup()" style="color:var(--icon-color); font-weight:900; background:none; border:none; font-size:16px; cursor:pointer;">Save</button>
             </div>
         </div>
         <div class="modal-body" id="artist-setup-body"></div>
@@ -1210,10 +1257,10 @@
             <div class="header-top">
                 <button class="modal-close-btn" onclick="document.getElementById('artist-sync-modal').style.display='none'"><i class="fa-solid fa-xmark"></i></button>
                 <h2>Link Artist</h2>
-                <div></div>
+                <div style="min-width:50px;"></div>
             </div>
         </div>
-        <div class="modal-body" id="artist-sync-body" style="padding:10px;"></div>
+        <div class="modal-body" id="artist-sync-body" style="padding:10px; display:flex; flex-wrap:wrap;"></div>
     </div>
 
     <div id="settings-modal" class="modal">
@@ -1221,13 +1268,13 @@
             <div class="header-top">
                 <button class="modal-close-btn" onclick="document.getElementById('settings-modal').style.display='none'"><i class="fa-solid fa-xmark"></i></button>
                 <h2>Settings</h2>
-                <div></div>
+                <div style="min-width:50px;"></div>
             </div>
         </div>
         <div class="modal-body">
             <span class="field-label">Theme Mode</span>
             <select id="theme-select" class="edit-input" onchange="applyTheme(this.value)">
-                <option value="system">System</option>
+                <option value="system">Auto</option>
                 <option value="light">Light</option>
                 <option value="dark">Dark</option>
             </select>
@@ -1248,16 +1295,15 @@
         <div class="header">
             <div class="header-top">
                 <button class="modal-close-btn" onclick="document.getElementById('lyric-paint-modal').style.display='none'"><i class="fa-solid fa-xmark"></i></button>
-                <h2>Edit Lyrics & Timing</h2>
-                <button onclick="saveLyricPaint()" style="color:var(--icon-color); font-weight:900;">Save</button>
+                <h2>Sync Lyrics</h2>
+                <button onclick="saveLyricPaint()" style="color:var(--icon-color); font-weight:900; background:none; border:none; font-size:16px; cursor:pointer;">Save</button>
             </div>
         </div>
         <div class="modal-body" style="padding:10px;">
-            <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
-                <button onclick="addLyricLine()" style="padding:10px 20px; border-radius:15px; border:none; background:var(--icon-color); color:#fff; font-weight:bold;">+ Add Line</button>
-                <button onclick="autoSetTimes()" style="padding:10px 20px; border-radius:15px; border:2px solid var(--border-color); background:transparent; color:var(--text-main); font-weight:bold;">Auto Spread</button>
+            <div style="display:flex; justify-content:space-between; margin-bottom: 10px;">
+                <button onclick="addLyricRow()" style="background:var(--card-bg); color:var(--icon-color); border:2px solid var(--border-color); border-radius:10px; padding:10px; font-weight:bold; flex:1; margin-right:5px;">+ Add Line</button>
+                <button onclick="importRawLyrics()" style="background:var(--card-bg); color:var(--icon-active); border:2px solid var(--border-color); border-radius:10px; padding:10px; font-weight:bold; flex:1; margin-left:5px;">Import Text</button>
             </div>
-            <div id="paint-palette" style="display:flex; gap:10px; overflow-x:auto; margin-bottom:15px; padding:10px; border-bottom:1px solid var(--border-color); position:sticky; top:0; background:var(--modal-bg); z-index:10; backdrop-filter:blur(20px);"></div>
             <div id="paint-lyrics-container" style="display:flex; flex-direction:column; gap:8px; padding-bottom:40px;"></div>
         </div>
     </div>
@@ -1273,35 +1319,59 @@
     <audio id="audio-element"></audio>
 
     <script>
-        let db, tracks = [], playlists = [], artistMeta = {};
-        let isEditing = false, currentView = 'library', currentArtist = null, currentPlaylistId = null;
-        let playingTracks = [], currentTrackIdx = -1, isShuffle = false, repeatMode = 0; 
-        let editingId = null, editingPlId = null, tempPlImg = null, editingArtistName = null;
+        let db;
+        let tracks = [];
+        let playlists = [];
+        let artistMeta = {};
+        
+        let isEditing = false;
+        let currentView = 'library';
+        let currentArtist = null;
+        let currentPlaylistId = null;
+        
+        let playingTracks = [];
+        let currentTrackIdx = -1;
+        let isShuffle = false;
+        let repeatMode = 0; 
+        
+        let editingId = null;
+        let editingPlId = null;
+        let tempPlImg = null;
+        let editingArtistName = null;
         let currentPlTags = [];
-        let currentTrackArtistsMain = [], currentTrackArtistsSub = [];
-        let activeArtistTagTab = 'main';
+        let tempPlFav = false;
+        
+        let trackEditMainArtists = [];
+        let trackEditSubArtists = [];
+        let currentArtistTagMode = 'main';
+
         let editingArtistSetupName = null;
         let currentMembersEdit = [];
-        let currentLyricData = [];
         
-        let sleepTimerId = null, sleepTimerInterval = null, sleepEndTime = 0;
-        let blobCache = {};
+        let currentSyncLyrics = [];
+        let availableMembersCache = [];
+        
+        let sleepTimerId = null;
+        let sleepTimerInterval = null;
+        let sleepEndTime = 0;
+        
+        let scrollPositions = { library: 0, artists: 0, playlist: 0, playlistDetail: 0 };
         
         const audio = document.getElementById('audio-element');
 
-        let sortStates = { artists: 'added', library: 'added', playlist: 'added', detail: 'year' };
-        let searchQueries = { artists: '', library: '', playlist: '', detail: '', bulkAdd: '' };
+        let sortStates = { artists: 'added', library: 'added', playlist: 'added', playlistDetail: 'year' };
+        let searchQueries = { artists: '', library: '', playlist: '', playlistDetail: '', bulkAdd: '' };
         let activeArtistFilter = null; 
         let currentSyncIndex = -1;
-
-        let promptCallback = null;
+        
+        let inputModalCallback = null;
 
         function applyTheme(mode) {
             if(mode === 'system') {
-                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                    document.documentElement.setAttribute('data-theme', 'dark');
-                } else {
-                    document.documentElement.removeAttribute('data-theme');
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) { 
+                    document.documentElement.setAttribute('data-theme', 'dark'); 
+                } else { 
+                    document.documentElement.removeAttribute('data-theme'); 
                 }
             } else if(mode === 'dark') {
                 document.documentElement.setAttribute('data-theme', 'dark');
@@ -1323,13 +1393,9 @@
         initTheme();
 
         function loadHomeIcon() {
-            let saved = localStorage.getItem('homeIcon');
+            let saved = localStorage.getItem('homeIcon') || 'IMG_8755.jpeg';
             let link = document.getElementById('apple-touch-icon');
-            if(saved) {
-                if(link) link.href = saved;
-            } else {
-                if(link) link.href = 'IMG_8755.jpeg';
-            }
+            if(link) link.href = saved;
         }
         loadHomeIcon();
 
@@ -1337,16 +1403,16 @@
             const f = e.target.files[0];
             if(f) {
                 const r = new FileReader();
-                r.onload = ev => {
-                    localStorage.setItem('homeIcon', ev.target.result);
-                    loadHomeIcon();
+                r.onload = ev => { 
+                    localStorage.setItem('homeIcon', ev.target.result); 
+                    loadHomeIcon(); 
                 }
                 r.readAsDataURL(f);
             }
         }
 
-        function openSettings() {
-            document.getElementById('settings-modal').style.display = 'flex';
+        function openSettings() { 
+            document.getElementById('settings-modal').style.display = 'flex'; 
         }
         
         function startTimer() {
@@ -1379,7 +1445,7 @@
             }, 1000);
 
             sleepTimerId = setTimeout(() => {
-                audio.pause();
+                fadeVolumeOutAndPause();
                 document.getElementById('timer-display').innerText = "Timer finished.";
                 document.getElementById('timer-btn').innerText = "Start";
                 document.getElementById('timer-btn').style.background = "var(--icon-color)";
@@ -1388,37 +1454,101 @@
             }, min * 60000);
         }
 
-        const req = indexedDB.open("MusicStudioWishcore_V7", 1);
+        function fadeVolumeOutAndPause() {
+            let vol = 1.0;
+            let fadeInterval = setInterval(() => {
+                vol -= 0.1;
+                if(vol <= 0) {
+                    audio.volume = 0;
+                    audio.pause();
+                    clearInterval(fadeInterval);
+                    audio.volume = 1.0;
+                } else {
+                    audio.volume = vol;
+                }
+            }, 100);
+        }
+
+        const req = indexedDB.open("MusicStudioWishcore_V6", 1);
         req.onupgradeneeded = (e) => {
             let d = e.target.result;
             if(!d.objectStoreNames.contains("songs")) d.createObjectStore("songs", {keyPath:"id", autoIncrement:true});
             if(!d.objectStoreNames.contains("playlists")) d.createObjectStore("playlists", {keyPath:"id", autoIncrement:true});
             if(!d.objectStoreNames.contains("artistMeta")) d.createObjectStore("artistMeta", {keyPath:"name"});
         };
-        req.onsuccess = (e) => {
-            db = e.target.result;
-            loadAll();
+        req.onsuccess = (e) => { 
+            db = e.target.result; 
+            loadAll(); 
         };
+
+        function migrateTrackArtists(t) {
+            if (t.artist && (!t.mainArtists && !t.subArtists)) {
+                let parts = t.artist.split('/');
+                t.mainArtists = parts[0] ? parts[0].split(',').map(x=>x.trim()).filter(x=>x) : [];
+                t.subArtists = parts[1] ? parts[1].split(',').map(x=>x.trim()).filter(x=>x) : [];
+            } else {
+                if(!t.mainArtists) t.mainArtists = [];
+                if(!t.subArtists) t.subArtists = [];
+            }
+        }
+
+        function buildArtistDisplayString(t) {
+            let m = t.mainArtists || [];
+            let s = t.subArtists || [];
+            let mainStr = m.join(', ');
+            let subStr = s.join(', ');
+            if (m.length > 0 && s.length > 0) return `${mainStr} / ${subStr}`;
+            if (m.length > 0) return mainStr;
+            if (s.length > 0) return subStr;
+            return "Unknown";
+        }
 
         function loadAll() {
             const tx = db.transaction(["songs", "playlists", "artistMeta"], "readonly");
-            tx.objectStore("songs").getAll().onsuccess = (e) => {
-                tracks = e.target.result;
-                tx.objectStore("playlists").getAll().onsuccess = (e) => {
-                    playlists = e.target.result;
-                    tx.objectStore("artistMeta").getAll().onsuccess = (e) => { 
-                        artistMeta = {}; 
-                        e.target.result.forEach(m => artistMeta[m.name] = m);
-                        render();
-                    };
-                };
+            
+            tx.objectStore("songs").getAll().onsuccess = (e) => { 
+                tracks = e.target.result; 
+                tracks.forEach(t => {
+                    migrateTrackArtists(t);
+                    t.artistDisplay = buildArtistDisplayString(t);
+                    if(!t.syncedLyrics) {
+                        t.syncedLyrics = [];
+                        if (t.lyrics) {
+                            let lines = t.lyrics.split('\n');
+                            lines.forEach((l, i) => {
+                                t.syncedLyrics.push({time: i * 5, text: l, members: []});
+                            });
+                        }
+                    }
+                });
+                checkRender();
             };
+            
+            tx.objectStore("playlists").getAll().onsuccess = (e) => { 
+                playlists = e.target.result; 
+                checkRender();
+            };
+            
+            tx.objectStore("artistMeta").getAll().onsuccess = (e) => { 
+                artistMeta = {}; 
+                e.target.result.forEach(m => artistMeta[m.name] = m);
+                checkRender();
+            };
+        }
+
+        let loadChecks = 0;
+        function checkRender() {
+            loadChecks++;
+            if(loadChecks >= 3) {
+                loadChecks = 0;
+                render();
+            }
         }
 
         function handleSearchInput() {
             const val = document.getElementById('search-input').value;
-            if (currentArtist !== null || currentPlaylistId !== null) {
-                searchQueries.detail = val;
+            if (currentView === 'playlist' && currentPlaylistId !== null) {
+                searchQueries.playlistDetail = val;
             } else {
                 searchQueries[currentView] = val;
             }
@@ -1427,39 +1557,43 @@
 
         function handleSortChange() {
             const val = document.getElementById('sort-type').value;
-            const key = (currentArtist !== null || currentPlaylistId !== null) ? 'detail' : currentView;
+            const key = (currentView === 'playlist' && currentPlaylistId !== null) ? 'playlistDetail' : currentView;
             sortStates[key] = val;
             render();
-        }
-
-        function getArtistFormat(track) {
-            let parts = track.artist ? track.artist.split('/') : [];
-            let mainStr = parts[0] ? parts[0].trim() : "";
-            let subStr = parts[1] ? parts[1].trim() : "";
-            if(subStr) {
-                return `${mainStr} / ${subStr}`;
-            }
-            return mainStr || "Unknown";
-        }
-
-        function parseArtists(trackArtistStr) {
-            let parts = trackArtistStr ? trackArtistStr.split('/') : [];
-            let main = parts[0] ? parts[0].split(',').map(x=>x.trim()).filter(x=>x) : [];
-            let sub = parts[1] ? parts[1].split(',').map(x=>x.trim()).filter(x=>x) : [];
-            return { main, sub, all: [...main, ...sub] };
         }
 
         function getAllArtists() {
             let allArts = new Set();
             Object.keys(artistMeta).forEach(k => allArts.add(k));
-            tracks.forEach(t => {
-                let parsed = parseArtists(t.artist);
-                parsed.all.forEach(a => allArts.add(a));
+            tracks.forEach(t => { 
+                if(t.mainArtists) t.mainArtists.forEach(a => { if(a) allArts.add(a); });
+                if(t.subArtists) t.subArtists.forEach(a => { if(a) allArts.add(a); });
             });
             return [...allArts].sort((a,b) => a.localeCompare(b, 'ja'));
         }
 
+        function openInputModal(title, callback) {
+            document.getElementById('input-modal-title').innerText = title;
+            document.getElementById('generic-input-field').value = '';
+            inputModalCallback = callback;
+            document.getElementById('input-modal').style.display = 'flex';
+        }
+
+        function closeInputModal() {
+            document.getElementById('input-modal').style.display = 'none';
+            inputModalCallback = null;
+        }
+
+        function saveInputModal() {
+            let val = document.getElementById('generic-input-field').value.trim();
+            if(val && inputModalCallback) {
+                inputModalCallback(val);
+            }
+            closeInputModal();
+        }
+
         function render() {
+            const display = document.getElementById('main-display');
             const title = document.getElementById('view-title');
             const rightBtn = document.getElementById('right-btn');
             const leftBtn = document.getElementById('left-btn');
@@ -1473,15 +1607,13 @@
             tagSuggest.style.display = 'none';
             artistFilter.style.display = 'none';
             
-            if (artistSetupBtn) artistSetupBtn.style.display = currentArtist ? 'inline-block' : 'none';
-            if (settingsBtn) settingsBtn.style.display = (currentView === 'artists' && !currentArtist) ? 'inline-block' : 'none';
+            if (artistSetupBtn) artistSetupBtn.style.display = currentArtist ? 'flex' : 'none';
+            if (settingsBtn) settingsBtn.style.display = (currentView === 'artists' && !currentArtist) ? 'flex' : 'none';
             
             rightBtn.style.display = (currentView === 'artists' && !currentArtist && !isEditing) ? 'none' : 'flex';
 
-            const isDetail = (currentArtist !== null || currentPlaylistId !== null);
-            const viewKey = isDetail ? 'detail' : currentView;
+            const viewKey = (currentView === 'playlist' && currentPlaylistId !== null) ? 'playlistDetail' : currentView;
             let currentSearch = searchQueries[viewKey];
-            
             if (searchInputEl && searchInputEl.value !== currentSearch) searchInputEl.value = currentSearch;
             
             let currentSort = sortStates[viewKey];
@@ -1501,31 +1633,134 @@
             }
 
             const search = currentSearch.toLowerCase();
-            let searchTerms = search.split(/[\s,]+/).filter(x => x);
+            let searchTerms = search.split(/[\s,、]+/).filter(x => x);
 
             document.querySelectorAll('.tab-item').forEach(btn => btn.classList.remove('active'));
             const activeTabId = currentView === 'playlist' ? 'tab-play' : currentView === 'artists' ? 'tab-artist' : 'tab-lib';
             const tabEl = document.getElementById(activeTabId);
             if(tabEl) tabEl.classList.add('active');
 
-            document.querySelectorAll('.view-content').forEach(el => el.classList.remove('active'));
+            if (currentView === 'library') {
+                title.innerText = "Library"; 
+                display.className = "grid";
+                let list = tracks.filter(t => searchTerms.every(term => t.name.toLowerCase().includes(term) || t.artistDisplay.toLowerCase().includes(term)));
+                renderCards(list, display, currentSort);
+            
+            } else if (currentView === 'artists') {
+                if (!currentArtist) {
+                    title.innerText = "Artists"; 
+                    display.className = "";
+                    let artists = getAllArtists().filter(a => searchTerms.every(term => a.toLowerCase().includes(term)));
+                    
+                    if (search.length > 0 && artists.length > 0) {
+                        artistFilter.style.display = 'flex';
+                        artistFilter.innerHTML = artists.map(a => {
+                            const firstSong = tracks.find(t => (t.mainArtists||[]).includes(a) || (t.subArtists||[]).includes(a));
+                            const icon = (artistMeta[a] && artistMeta[a].icon) ? `<img src="${artistMeta[a].icon}">` : (firstSong && firstSong.cover ? `<img src="${firstSong.cover}">` : `<div class="placeholder" style="width:100%; height:100%; border-radius:50%; background:var(--icon-color);"></div>`);
+                            return `<div class="bulk-artist-icon-chip" onclick="openArtist('${a}')">${icon}<span>${a}</span></div>`;
+                        }).join('');
+                    }
 
-            if (currentArtist !== null) {
-                document.getElementById('content-detail').classList.add('active');
-                renderArtistDetailView(searchTerms, currentSort);
-            } else if (currentPlaylistId !== null) {
-                document.getElementById('content-detail').classList.add('active');
-                renderPlaylistDetailView(searchTerms, currentSort);
-            } else {
-                if (currentView === 'library') {
-                    document.getElementById('content-library').classList.add('active');
-                    renderLibraryView(searchTerms, currentSort);
-                } else if (currentView === 'artists') {
-                    document.getElementById('content-artists').classList.add('active');
-                    renderArtistsView(searchTerms);
-                } else if (currentView === 'playlist') {
-                    document.getElementById('content-playlists').classList.add('active');
-                    renderPlaylistsView(searchTerms);
+                    // Build Hierarchy
+                    let parents = artists.filter(a => !(artistMeta[a] && artistMeta[a].parentArtist));
+                    let htmlStr = '';
+
+                    parents.forEach(p => {
+                        htmlStr += buildArtistRowHtml(p, true, 0);
+                        let children = artists.filter(a => artistMeta[a] && artistMeta[a].parentArtist === p);
+                        children.forEach(c => {
+                            htmlStr += buildArtistRowHtml(c, false, 30);
+                        });
+                    });
+
+                    display.innerHTML = htmlStr;
+
+                } else {
+                    title.innerText = currentArtist; 
+                    display.className = "grid";
+                    let list = tracks.filter(t => (t.mainArtists||[]).includes(currentArtist) || (t.subArtists||[]).includes(currentArtist));
+                    list = list.filter(t => searchTerms.every(term => t.name.toLowerCase().includes(term)));
+                    renderCards(list, display, currentSort);
+                }
+
+            } else if (currentView === 'playlist') {
+                if (currentPlaylistId === null) {
+                    title.innerText = "Playlists"; 
+                    display.className = "grid";
+                    const allTags = [];
+                    playlists.forEach(p => {
+                        if (p.tag) p.tag.split(/[,、]/).forEach(tg => {
+                            const tr = tg.trim(); if(tr && !allTags.includes(tr)) allTags.push(tr);
+                        });
+                    });
+                    
+                    if (search.length > 0) {
+                        const matchedTags = allTags.filter(t => searchTerms.every(term => t.toLowerCase().includes(term)));
+                        if (matchedTags.length > 0) {
+                            tagSuggest.style.display = 'flex';
+                            tagSuggest.innerHTML = matchedTags.map(t => `<div class="tag-chip" onclick="applyTagFilter('${t}')">#${t}</div>`).join('');
+                        }
+                    }
+                    let list = playlists.filter(p => searchTerms.every(term => p.name.toLowerCase().includes(term) || (p.tag && p.tag.toLowerCase().includes(term))));
+
+                    display.innerHTML = list.map(p => {
+                        const firstSong = tracks.find(t => p.songIds.includes(t.id));
+                        const tagsHtml = p.tag ? p.tag.split(/[,、]/).map(tg => `<div class="card-tag">${tg.trim()}</div>`).join(' ') : '';
+                        return `<div class="card ${isEditing?'editing':''}" onclick="isEditing?openPlEdit(${p.id}):openPlaylist(${p.id})">
+                            <div class="del-badge" onclick="event.stopPropagation(); deletePlaylist(${p.id})"><i class="fa-solid fa-x"></i></div>
+                            <img src="${p.cover || (firstSong?firstSong.cover:'')}" class="card-img">
+                            ${p.favorite ? '<i class="fa-solid fa-star star-icon active" style="position:absolute; top:15px; right:15px; font-size:18px; filter:drop-shadow(0 2px 5px rgba(0,0,0,0.4)); z-index:10;"></i>' : ''}
+                            <div class="card-info">
+                                <div class="card-title">${p.name}</div>
+                                <div class="card-sub">${p.songIds.length} tracks</div>
+                                <div style="margin-top:5px;">${tagsHtml}</div>
+                            </div>
+                        </div>`;
+                    }).join('');
+                } else {
+                    const pl = playlists.find(p => p.id === currentPlaylistId);
+                    title.innerText = pl.name; 
+                    display.className = "";
+                    let plSongs = pl.songIds.map(id => tracks.find(t => t.id === id)).filter(t => t);
+                    
+                    let artistsInPlRaw = [];
+                    plSongs.forEach(s => { 
+                        if(s.mainArtists) artistsInPlRaw.push(...s.mainArtists);
+                        if(s.subArtists) artistsInPlRaw.push(...s.subArtists);
+                    });
+                    const artistsInPl = [...new Set(artistsInPlRaw)];
+
+                    if (artistsInPl.length > 0 && search.length > 0) {
+                        const matchedArts = artistsInPl.filter(a => searchTerms.every(term => a.toLowerCase().includes(term)));
+                        if (matchedArts.length > 0) {
+                            artistFilter.style.display = 'flex';
+                            artistFilter.innerHTML = matchedArts.map(a => {
+                                const firstSong = tracks.find(t => (t.mainArtists||[]).includes(a) || (t.subArtists||[]).includes(a));
+                                const icon = (artistMeta[a] && artistMeta[a].icon) ? `<img src="${artistMeta[a].icon}" style="${activeArtistFilter===a?'border-color:var(--icon-color); opacity:1;':'opacity:0.6;'}">` : (firstSong && firstSong.cover ? `<img src="${firstSong.cover}" style="${activeArtistFilter===a?'border-color:var(--icon-color); opacity:1;':'opacity:0.6;'}">` : `<div class="placeholder" style="width:100%;height:100%;border-radius:50%;background:var(--icon-color);"></div>`);
+                                return `<div class="bulk-artist-icon-chip" onclick="toggleArtistFilter('${a}')">${icon}<span>${a}</span></div>`;
+                            }).join('');
+                        }
+                    }
+
+                    let filtered = plSongs.filter(t => searchTerms.every(term => t.name.toLowerCase().includes(term) || t.artistDisplay.toLowerCase().includes(term)));
+                    if (activeArtistFilter) filtered = filtered.filter(t => (t.mainArtists||[]).includes(activeArtistFilter) || (t.subArtists||[]).includes(activeArtistFilter));
+
+                    if (currentSort === 'name_asc') filtered.sort((a,b) => a.name.localeCompare(b.name,'ja'));
+                    else if (currentSort === 'name_desc') filtered.sort((a,b) => b.name.localeCompare(a.name,'ja'));
+                    else if (currentSort === 'year') filtered.sort((a,b) => (b.year||'').toString().localeCompare((a.year||'').toString()));
+
+                    display.innerHTML = filtered.map((t, idx) => `
+                        <div class="swipe-container" id="swipe-${t.id}">
+                            <div class="swipe-delete-btn" onclick="removeTrackFromPlaylist(${t.id})">Remove</div>
+                            <div class="list-item" onclick="playSong(${t.id},'pl')" ontouchstart="handleTouchStart(event, '${t.id}')" ontouchmove="handleTouchMove(event, '${t.id}')" ontouchend="handleTouchEnd(event, '${t.id}')">
+                                <div style="position:relative; margin-right:16px;">
+                                    ${t.favorite ? '<i class="fa-solid fa-star star-icon active" style="position:absolute; top:-5px; left:-5px; font-size:12px; z-index:5;"></i>' : ''}
+                                    <img src="${t.cover||''}" style="margin-right:0;">
+                                </div>
+                                <div style="flex:1;"><div style="font-weight:800; font-size:14px; display:flex; align-items:center; gap:5px;">${t.name}</div><div style="font-size:11px; color:var(--icon-color); margin-top:3px; font-weight:700;">${t.artistDisplay}</div></div>
+                                ${currentSort==='custom'? `<div class="reorder-btns" onclick="event.stopPropagation()"><i class="fa-solid fa-chevron-up" onclick="moveTrack(${idx}, -1)"></i><i class="fa-solid fa-chevron-down" onclick="moveTrack(${idx}, 1)"></i></div>` : ''}
+                            </div>
+                        </div>`).join('') + `<div style="padding:40px; text-align:center;"><button onclick="openBulkAddModal()" style="background:var(--card-bg); color:var(--icon-active); border:2px solid var(--accent-blue); padding:15px 30px; border-radius:30px; font-weight:900; font-size:12px;">+ Add Tracks</button></div>`;
                 }
             }
 
@@ -1534,7 +1769,6 @@
             } else {
                 leftBtn.innerHTML = isEditing ? '<i class="fa-solid fa-check"></i>' : '<i class="fa-solid fa-sliders"></i>';
             }
-            
             if (currentArtist) {
                 rightBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
             } else if (currentView === 'artists' && isEditing && !currentArtist) {
@@ -1544,199 +1778,21 @@
             }
         }
 
-        function getArtistIconHtml(a, isChild) {
-            let iconClass = isChild ? "artist-icon child" : "artist-icon parent";
-            let imgClass = isChild ? "circle" : "star";
-            const firstSong = tracks.find(t => parseArtists(t.artist).all.includes(a));
-            if (artistMeta[a] && artistMeta[a].icon) {
-                return `<img src="${artistMeta[a].icon}" class="${iconClass}">`;
-            } else if (firstSong && firstSong.cover) {
-                return `<img src="${firstSong.cover}" class="${iconClass}">`;
-            } else {
-                return `<div class="${iconClass}"><i class="fa-solid fa-user" style="font-size:${isChild?'16px':'24px'};"></i></div>`;
-            }
-        }
-
-        function getArtistIconHtmlSmall(a, isChild) {
-            let imgClass = isChild ? "circle" : "star";
-            const firstSong = tracks.find(t => parseArtists(t.artist).all.includes(a));
-            if (artistMeta[a] && artistMeta[a].icon) {
-                return `<img src="${artistMeta[a].icon}" class="${imgClass}">`;
-            } else if (firstSong && firstSong.cover) {
-                return `<img src="${firstSong.cover}" class="${imgClass}">`;
-            } else {
-                return `<div class="placeholder ${imgClass}"><i class="fa-solid fa-user" style="margin-top:10px;"></i></div>`;
-            }
-        }
-
-        function renderArtistsView(searchTerms) {
-            const display = document.getElementById('main-display-artists');
-            document.getElementById('view-title').innerText = "Artists";
+        function buildArtistRowHtml(a, isParent, indent) {
+            const firstSong = tracks.find(t => (t.mainArtists||[]).includes(a) || (t.subArtists||[]).includes(a));
+            const iconImg = (artistMeta[a] && artistMeta[a].icon) ? `<img src="${artistMeta[a].icon}" class="artist-icon ${isParent ? 'is-parent' : 'is-child'}">` : (firstSong && firstSong.cover ? `<img src="${firstSong.cover}" class="artist-icon ${isParent ? 'is-parent' : 'is-child'}">` : `<div class="artist-icon ${isParent ? 'is-parent' : 'is-child'}"><i class="fa-solid fa-user" style="font-size:24px;"></i></div>`);
             
-            let allArts = getAllArtists();
-            
-            let childrenSet = new Set();
-            Object.values(artistMeta).forEach(meta => {
-                if(meta.members) {
-                    meta.members.forEach(m => {
-                        if(m.linked) childrenSet.add(m.linked);
-                    });
-                }
-            });
+            let extraStyle = indent > 0 ? `margin-left: ${indent}px; border-left: 2px solid var(--border-color); padding-left: 10px; width: calc(100% - ${indent}px);` : '';
 
-            let displayList = [];
-            
-            let parents = allArts.filter(a => !childrenSet.has(a));
-            parents.forEach(p => {
-                displayList.push({ name: p, isChild: false });
-                if(artistMeta[p] && artistMeta[p].members) {
-                    artistMeta[p].members.forEach(m => {
-                        if(m.linked && allArts.includes(m.linked)) {
-                            displayList.push({ name: m.linked, isChild: true });
-                        }
-                    });
-                }
-            });
-
-            if (searchTerms.length > 0) {
-                displayList = displayList.filter(item => searchTerms.every(term => item.name.toLowerCase().includes(term)));
-            }
-
-            display.innerHTML = displayList.map(item => {
-                let a = item.name;
-                let indentClass = item.isChild ? "child-indent" : "";
-                let iconHtml = getArtistIconHtml(a, item.isChild);
-                
-                return `
-                <div class="swipe-container" id="swipe-art-${CSS.escape(a)}">
-                    <div class="swipe-delete-btn" onclick="deleteCustomArtist('${a}')">Delete</div>
-                    <div class="artist-list-item ${indentClass}" onclick="isEditing ? selectArtistIcon('${a}') : openArtist('${a}')" ontouchstart="handleTouchStart(event, 'art-${a}')" ontouchmove="handleTouchMove(event, 'art-${a}')" ontouchend="handleTouchEnd(event, 'art-${a}')">
-                        <div class="artist-icon-container" style="${item.isChild?'width:44px; height:44px; margin-right:10px;':''}">${iconHtml}</div>
-                        <div style="font-weight:800; font-size:16px; flex:1;">${a}</div>
-                        <i class="fa-solid fa-chevron-right" style="font-size:12px; color:var(--icon-color);"></i>
-                    </div>
-                </div>`;
-            }).join('');
-        }
-
-        function renderArtistDetailView(searchTerms, sort) {
-            const display = document.getElementById('main-display-detail');
-            document.getElementById('view-title').innerText = currentArtist;
-            display.className = "grid";
-            
-            let list = tracks.filter(t => parseArtists(t.artist).all.includes(currentArtist));
-            
-            if (searchTerms.length > 0) {
-                list = list.filter(t => searchTerms.every(term => t.name.toLowerCase().includes(term)));
-            }
-            
-            renderCards(list, display, sort);
-        }
-
-        function renderLibraryView(searchTerms, sort) {
-            const display = document.getElementById('main-display-library');
-            document.getElementById('view-title').innerText = "Library";
-            
-            let list = tracks;
-            if (searchTerms.length > 0) {
-                list = list.filter(t => searchTerms.every(term => t.name.toLowerCase().includes(term) || t.artist.toLowerCase().includes(term)));
-            }
-            renderCards(list, display, sort);
-        }
-
-        function renderPlaylistsView(searchTerms) {
-            const display = document.getElementById('main-display-playlists');
-            document.getElementById('view-title').innerText = "Playlists";
-            
-            const tagSuggest = document.getElementById('playlist-tag-suggestions');
-            const allTags = [];
-            playlists.forEach(p => {
-                if (p.tag) p.tag.split(/[,、]/).forEach(tg => {
-                    const tr = tg.trim(); if(tr && !allTags.includes(tr)) allTags.push(tr);
-                });
-            });
-            
-            let search = document.getElementById('search-input').value.toLowerCase();
-            if (search.length > 0) {
-                const matchedTags = allTags.filter(t => searchTerms.every(term => t.toLowerCase().includes(term)));
-                if (matchedTags.length > 0) {
-                    tagSuggest.style.display = 'flex';
-                    tagSuggest.innerHTML = matchedTags.map(t => `<div class="tag-chip" onclick="applyTagFilter('${t}')">#${t}</div>`).join('');
-                }
-            }
-
-            let list = playlists.filter(p => searchTerms.every(term => p.name.toLowerCase().includes(term) || (p.tag && p.tag.toLowerCase().includes(term))));
-
-            display.innerHTML = list.map(p => {
-                const firstSong = tracks.find(t => p.songIds.includes(t.id));
-                const tagsHtml = p.tag ? p.tag.split(/[,、]/).map(tg => `<div class="card-tag">${tg.trim()}</div>`).join(' ') : '';
-                return `<div class="card ${isEditing?'editing':''}" onclick="isEditing?openPlEdit(${p.id}):openPlaylist(${p.id})">
-                    <div class="del-badge" onclick="event.stopPropagation(); deletePlaylist(${p.id})"><i class="fa-solid fa-x"></i></div>
-                    <img src="${p.cover || (firstSong?firstSong.cover:'')}" class="card-img">
-                    <div class="card-info">
-                        <div class="card-title">${p.name}</div>
-                        <div class="card-sub">${p.songIds.length} tracks</div>
-                        <div style="margin-top:5px;">${tagsHtml}</div>
-                    </div>
-                </div>`;
-            }).join('');
-        }
-
-        function renderPlaylistDetailView(searchTerms, sort) {
-            const display = document.getElementById('main-display-detail');
-            const pl = playlists.find(p => p.id === currentPlaylistId);
-            document.getElementById('view-title').innerText = pl.name;
-            display.className = "";
-            
-            const artistFilter = document.getElementById('artist-filter-container');
-            
-            let plSongs = pl.songIds.map(id => tracks.find(t => t.id === id)).filter(t => t);
-            
-            let artistsInPlRaw = [];
-            plSongs.forEach(s => { 
-                let parsed = parseArtists(s.artist);
-                artistsInPlRaw.push(...parsed.all);
-            });
-            const artistsInPl = [...new Set(artistsInPlRaw)];
-
-            let search = document.getElementById('search-input').value.toLowerCase();
-            if (artistsInPl.length > 0 && search.length > 0) {
-                const matchedArts = artistsInPl.filter(a => searchTerms.every(term => a.toLowerCase().includes(term)));
-                if (matchedArts.length > 0) {
-                    artistFilter.style.display = 'flex';
-                    artistFilter.innerHTML = matchedArts.map(a => {
-                        let isChild = false;
-                        const iconHtml = getArtistIconHtmlSmall(a, isChild);
-                        let style = activeArtistFilter===a ? 'border-color:var(--icon-color); opacity:1;' : 'opacity:0.6;';
-                        return `<div class="bulk-artist-icon-chip" onclick="toggleArtistFilter('${a}')" style="${style}">${iconHtml}<span>${a}</span></div>`;
-                    }).join('');
-                }
-            }
-
-            let filtered = plSongs;
-            if (searchTerms.length > 0) {
-                filtered = filtered.filter(t => searchTerms.every(term => t.name.toLowerCase().includes(term) || t.artist.toLowerCase().includes(term)));
-            }
-            if (activeArtistFilter) {
-                filtered = filtered.filter(t => parseArtists(t.artist).all.includes(activeArtistFilter));
-            }
-
-            if (sort === 'name_asc') filtered.sort((a,b) => a.name.localeCompare(b.name,'ja'));
-            else if (sort === 'name_desc') filtered.sort((a,b) => b.name.localeCompare(a.name,'ja'));
-            else if (sort === 'year') filtered.sort((a,b) => (b.year||'').toString().localeCompare((a.year||'').toString()));
-
-            display.innerHTML = filtered.map((t, idx) => `
-                <div class="swipe-container" id="swipe-${t.id}">
-                    <div class="swipe-delete-btn" onclick="removeTrackFromPlaylist(${t.id})">Remove</div>
-                    <div class="list-item" onclick="playSong(${t.id},'pl')" ontouchstart="handleTouchStart(event, '${t.id}')" ontouchmove="handleTouchMove(event, '${t.id}')" ontouchend="handleTouchEnd(event, '${t.id}')">
-                        <img src="${t.cover||''}">
-                        <div style="flex:1;">
-                            <div style="font-weight:800; font-size:14px;">${t.name}</div>
-                            <div style="font-size:11px; color:var(--icon-color); margin-top:3px; font-weight:700;">${getArtistFormat(t)}</div>
-                        </div>
-                        ${sort==='custom'? `<div class="reorder-btns" onclick="event.stopPropagation()"><i class="fa-solid fa-chevron-up" onclick="moveTrack(${idx}, -1)"></i><i class="fa-solid fa-chevron-down" onclick="moveTrack(${idx}, 1)"></i></div>` : ''}
-                    </div>
-                </div>`).join('') + `<div style="padding:40px; text-align:center;"><button onclick="openBulkAddModal()" style="background:var(--card-bg); color:var(--icon-active); border:2px solid var(--accent-blue); padding:15px 30px; border-radius:30px; font-weight:900; font-size:12px;">+ Add Tracks</button></div>`;
+            return `
+            <div class="swipe-container" id="swipe-art-${CSS.escape(a)}" style="${extraStyle}">
+                <div class="swipe-delete-btn" onclick="deleteCustomArtist('${a}')">Delete</div>
+                <div class="artist-list-item" onclick="isEditing ? selectArtistIcon('${a}') : openArtist('${a}')" ontouchstart="handleTouchStart(event, 'art-${a}')" ontouchmove="handleTouchMove(event, 'art-${a}')" ontouchend="handleTouchEnd(event, 'art-${a}')">
+                    <div class="artist-icon-container">${iconImg}</div>
+                    <div style="font-weight:800; font-size:16px; flex:1;">${a}</div>
+                    <i class="fa-solid fa-chevron-right" style="font-size:12px; color:var(--icon-color);"></i>
+                </div>
+            </div>`;
         }
 
         function renderCards(list, container, sort) {
@@ -1748,32 +1804,12 @@
                 <div class="card ${isEditing?'editing':''}" onclick="isEditing?openEdit(${t.id}):playSong(${t.id},'lib')">
                     <div class="del-badge" onclick="event.stopPropagation(); deleteSong(${t.id})"><i class="fa-solid fa-trash-can"></i></div>
                     <img src="${t.cover||''}" class="card-img">
-                    ${t.favorite ? '<i class="fa-solid fa-star" style="position:absolute; top:15px; right:15px; font-size:18px; filter:drop-shadow(0 2px 5px rgba(0,0,0,0.4)); z-index:10; color: #ffcc00;"></i>' : ''}
+                    ${t.favorite ? '<i class="fa-solid fa-star star-icon active" style="position:absolute; top:15px; right:15px; font-size:18px; filter:drop-shadow(0 2px 5px rgba(0,0,0,0.4)); z-index:10;"></i>' : ''}
                     <div class="card-info">
                         <div class="card-title">${t.name}</div>
-                        <div class="card-sub">${getArtistFormat(t)} ${t.year ? `<span class="card-year">${t.year}</span>`:''}</div>
+                        <div class="card-sub">${t.artistDisplay} ${t.year ? `<span class="card-year">${t.year}</span>`:''}</div>
                     </div>
                 </div>`).join('');
-        }
-
-        function openCustomPrompt(title, callback) {
-            document.getElementById('custom-prompt-title').innerText = title;
-            document.getElementById('custom-prompt-input').value = '';
-            promptCallback = callback;
-            document.getElementById('custom-prompt-modal').style.display = 'flex';
-        }
-
-        function closeCustomPrompt() {
-            document.getElementById('custom-prompt-modal').style.display = 'none';
-            promptCallback = null;
-        }
-
-        function submitCustomPrompt() {
-            let val = document.getElementById('custom-prompt-input').value.trim();
-            if(val && promptCallback) {
-                promptCallback(val);
-            }
-            closeCustomPrompt();
         }
 
         function moveTrack(idx, dir) {
@@ -1798,7 +1834,7 @@
             activeArtistFilter = (activeArtistFilter === a) ? null : a;
             render();
         }
-        
+
         function deleteCustomArtist(a) {
             if(confirm(`Delete artist '${a}'?`)) {
                 db.transaction("artistMeta", "readwrite").objectStore("artistMeta").delete(a).onsuccess = loadAll;
@@ -1820,11 +1856,9 @@
             if(btn) {
                 const icon = btn.querySelector('i');
                 if(isFav) {
-                    icon.className = 'fa-solid fa-star';
-                    icon.style.color = '#ffcc00';
+                    icon.className = 'fa-solid fa-star star-icon active';
                 } else {
-                    icon.className = 'fa-regular fa-star';
-                    icon.style.color = 'inherit';
+                    icon.className = 'fa-regular fa-star star-icon';
                 }
             }
         }
@@ -1834,12 +1868,15 @@
         
         fPlayer.addEventListener('touchstart', (e) => {
             if (e.target.closest('#f-lyrics-view')) { startY = 0; return; }
+            if (e.target.closest('input[type="range"]')) return;
             startY = e.touches[0].clientY;
             fPlayer.style.transition = 'none';
         }, { passive: true });
 
         fPlayer.addEventListener('touchmove', (e) => {
             if (e.target.closest('#f-lyrics-view')) return;
+            if (e.target.closest('input[type="range"]')) return;
+            if (startY === 0) return;
             currentY = e.touches[0].clientY;
             let diff = currentY - startY;
             if (diff > 0) {
@@ -1849,6 +1886,8 @@
 
         fPlayer.addEventListener('touchend', (e) => {
             if (e.target.closest('#f-lyrics-view')) return;
+            if (e.target.closest('input[type="range"]')) return;
+            if (startY === 0) return;
             let diff = currentY - startY;
             fPlayer.style.transition = 'transform 0.5s cubic-bezier(0.19, 1, 0.22, 1)';
             if (diff > 120) closeFull();
@@ -1863,11 +1902,7 @@
             if(isActive) {
                 document.getElementById('f-img').style.opacity = "0.08";
                 document.getElementById('f-artwork-container').style.transform = "scale(1.05)";
-                renderLyricsLines();
-                
-                if(view.classList.contains('fullscreen-lyrics')) {
-                    document.getElementById('fs-lyric-btn').innerHTML = '<i class="fa-solid fa-compress"></i>';
-                }
+                renderActiveLyricsView();
             } else {
                 document.getElementById('f-img').style.opacity = "1";
                 document.getElementById('f-artwork-container').style.transform = "scale(1)";
@@ -1876,51 +1911,85 @@
             }
         }
 
-        function renderLyricsLines() {
-            const view = document.getElementById('f-lyrics-view');
-            let track = playingTracks[currentTrackIdx];
-            let lData = track?.lyricData || [];
-            
-            const fsToggleBtn = `<button id="fs-lyric-btn" onclick="event.stopPropagation(); toggleFullscreenLyrics()" style="position:absolute; top:25px; right:25px; background:rgba(0,0,0,0.1); border:none; color:var(--icon-color); padding:12px; border-radius:12px; z-index:50;"><i class="fa-solid fa-expand"></i></button>`;
-            const paintBtn = `<button onclick="event.stopPropagation(); openLyricPaint()" style="position:absolute; top:25px; left:25px; background:rgba(0,0,0,0.1); border:none; color:var(--icon-color); padding:12px; border-radius:12px; z-index:50;"><i class="fa-solid fa-palette"></i></button>`;
-            
-            let linesHtml = "";
-            if(lData.length === 0) {
-                linesHtml = `<div style="opacity:0.5;">No lyrics available.<br>Tap palette icon to add.</div>`;
-            } else {
-                linesHtml = lData.map((l, i) => {
-                    let gradStyle = getLyricGradientStyle(l.members);
-                    return `<div class="lyric-line-display" id="lyric-line-${i}" onclick="jumpToLyric(${l.time})" style="${gradStyle}">${l.text}</div>`;
-                }).join('');
-            }
-            
-            view.innerHTML = fsToggleBtn + paintBtn + `<div id="lyrics-content-scroll" style="width:100%; height:100%; overflow-y:auto; padding-top:40px; scroll-behavior:smooth;">` + linesHtml + `<div style="height:50vh;"></div></div>`;
-            
-            updateActiveLyricLine();
-        }
-
-        function getLyricGradientStyle(memberColors) {
-            if(!memberColors || memberColors.length === 0) return 'color: inherit;';
-            if(memberColors.length === 1) return `color: ${memberColors[0]};`;
-            let colorsStr = memberColors.join(', ');
-            return `background: linear-gradient(to right, ${colorsStr}); -webkit-background-clip: text; color: transparent;`;
-        }
-
-        function jumpToLyric(time) {
-            audio.currentTime = parseFloat(time);
-            updateActiveLyricLine();
-        }
-
         function toggleFullscreenLyrics() {
             const view = document.getElementById('f-lyrics-view');
             view.classList.toggle('fullscreen-lyrics');
-            const btn = document.getElementById('fs-lyric-btn');
-            if(view.classList.contains('fullscreen-lyrics')) {
-                btn.innerHTML = '<i class="fa-solid fa-compress"></i>';
-                document.getElementById('f-artwork-container').style.position = 'static';
-            } else {
-                btn.innerHTML = '<i class="fa-solid fa-expand"></i>';
-                document.getElementById('f-artwork-container').style.position = 'relative';
+            renderActiveLyricsView();
+        }
+
+        function getGradientForMembers(membersList) {
+            if (!membersList || membersList.length === 0) return 'inherit';
+            let validColors = membersList.map(m => m.color).filter(c => c);
+            if (validColors.length === 0) return 'inherit';
+            if (validColors.length === 1) return validColors[0];
+            return `linear-gradient(90deg, ${validColors.join(', ')})`;
+        }
+
+        function renderActiveLyricsView() {
+            const view = document.getElementById('f-lyrics-view');
+            if(!view.classList.contains('active')) return;
+
+            let track = playingTracks[currentTrackIdx];
+            let lyricsData = track?.syncedLyrics || [];
+            
+            const isFS = view.classList.contains('fullscreen-lyrics');
+            const fsIcon = isFS ? 'fa-compress' : 'fa-expand';
+            
+            const fsToggleBtn = `<button id="fs-lyric-btn" onclick="event.stopPropagation(); toggleFullscreenLyrics()" style="position:absolute; top:25px; right:25px; background:rgba(0,0,0,0.1); border:none; color:var(--icon-color); padding:12px; border-radius:12px; z-index:50;"><i class="fa-solid ${fsIcon}"></i></button>`;
+
+            let html = fsToggleBtn + `<div id="lyrics-content-scroll" style="width:100%; padding-top:40vh; padding-bottom:40vh; display:flex; flex-direction:column; gap:20px;">`;
+            
+            lyricsData.forEach((line, i) => {
+                let grad = getGradientForMembers(line.members);
+                let textFill = grad.includes('gradient') ? '-webkit-text-fill-color: transparent; -webkit-background-clip: text; background-image: ' + grad + ';' : `color: ${grad};`;
+                
+                html += `<div class="lyric-line" id="lyr-line-${i}" data-time="${line.time}" onclick="seekTo(${line.time})" style="${textFill}">${line.text || '...'}</div>`;
+            });
+
+            html += `</div>`;
+            view.innerHTML = html;
+            updateLyricFocus(audio.currentTime);
+        }
+
+        function seekTo(val) {
+            audio.currentTime = val;
+            const view = document.getElementById('f-lyrics-view');
+            if(view.classList.contains('active')) {
+                // Do not close
+                updateLyricFocus(val);
+            }
+        }
+
+        function updateLyricFocus(currentTime) {
+            const view = document.getElementById('f-lyrics-view');
+            if(!view.classList.contains('active')) return;
+
+            let track = playingTracks[currentTrackIdx];
+            let lyricsData = track?.syncedLyrics || [];
+            
+            let activeIdx = -1;
+            for(let i=0; i<lyricsData.length; i++) {
+                if(currentTime >= lyricsData[i].time) {
+                    activeIdx = i;
+                } else {
+                    break;
+                }
+            }
+
+            const lines = view.querySelectorAll('.lyric-line');
+            lines.forEach((el, i) => {
+                if(i === activeIdx) {
+                    el.classList.add('active');
+                } else {
+                    el.classList.remove('active');
+                }
+            });
+
+            if(activeIdx !== -1) {
+                const activeEl = document.getElementById(`lyr-line-${activeIdx}`);
+                if(activeEl) {
+                    activeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
             }
         }
 
@@ -1929,25 +1998,39 @@
             closeFull();
             setTimeout(() => {
                 switchTab('artists');
-                let parsed = parseArtists(playingTracks[currentTrackIdx].artist);
-                if(parsed.main.length > 0) {
-                    openArtist(parsed.main[0]);
-                }
+                let track = playingTracks[currentTrackIdx];
+                let firstArt = (track.mainArtists && track.mainArtists.length > 0) ? track.mainArtists[0] : null;
+                if(!firstArt && track.subArtists && track.subArtists.length > 0) firstArt = track.subArtists[0];
+                if(firstArt) openArtist(firstArt);
             }, 800); 
         }
 
         function openBulkAddModal() {
             const pl = playlists.find(p => p.id === currentPlaylistId);
-            const div = document.createElement('div'); div.id="bulk-modal"; div.className="modal"; div.style.display = "flex";
+            const div = document.createElement('div'); 
+            div.id="bulk-modal"; 
+            div.className="modal"; 
+            div.style.display = "flex";
             div.innerHTML = `
-                <div class="header"><div class="header-top"><button class="modal-close-btn" onclick="this.closest('.modal').remove()"><i class="fa-solid fa-xmark"></i></button><h2>Select Songs</h2><button onclick="saveBulkAdd()" style="font-weight:900; color:var(--icon-color);">Done</button></div></div>
-                <div class="search-container"><div class="search-bar-row"><input type="text" id="bulk-search-box" class="bulk-search-input" placeholder="Search track or artist..." oninput="filterBulk(this.value)"></div><div id="bulk-artist-suggestions"></div></div>
+                <div class="header">
+                    <div class="header-top">
+                        <button class="modal-close-btn" onclick="this.closest('.modal').remove()"><i class="fa-solid fa-xmark"></i></button>
+                        <h2>Select Songs</h2>
+                        <button onclick="saveBulkAdd()" style="color:var(--icon-color); font-weight:900; background:none; border:none; font-size:16px; cursor:pointer;">Done</button>
+                    </div>
+                </div>
+                <div class="search-container">
+                    <div class="search-bar-row">
+                        <input type="text" id="bulk-search-box" class="bulk-search-input" placeholder="Search track or artist..." oninput="filterBulk(this.value)">
+                    </div>
+                    <div id="bulk-artist-suggestions"></div>
+                </div>
                 <div id="bulk-list" style="flex:1; overflow-y:auto; padding-bottom:50px;">
                     ${tracks.map(t => `
-                    <label class="check-item" data-search="${t.name.toLowerCase()} ${t.artist.toLowerCase()}">
+                    <label class="check-item" data-search="${t.name.toLowerCase()} ${t.artistDisplay.toLowerCase()}">
                         <input type="checkbox" value="${t.id}" ${pl.songIds.includes(t.id)?'checked':''}>
-                        <img src="${t.cover||''}" style="width:48px; height:48px; border-radius:12px; margin-right:15px; object-fit:cover;">
-                        <div style="flex:1;"><b style="font-size:14px;">${t.name}</b><br><span style="font-size:11px; color:var(--icon-color);">${getArtistFormat(t)}</span></div>
+                        <img src="${t.cover||''}" style="width:48px; height:48px; border-radius:12px; margin-right:15px;">
+                        <div style="flex:1;"><b style="font-size:14px;">${t.name}</b><br><span style="font-size:11px; color:var(--icon-color);">${t.artistDisplay}</span></div>
                     </label>`).join('')}
                 </div>`;
             document.body.appendChild(div);
@@ -1962,28 +2045,40 @@
             if (v.length > 0 && matchedArtists.length > 0) {
                 suggest.style.display = 'flex';
                 suggest.innerHTML = matchedArtists.map(a => {
-                    const iconHtml = getArtistIconHtmlSmall(a, false);
-                    return `<div class="bulk-artist-icon-chip" onclick="document.getElementById('bulk-search-box').value='${a}'; filterBulk('${a}')">${iconHtml}<span>${a}</span></div>`;
+                    const firstSong = tracks.find(t => (t.mainArtists||[]).includes(a) || (t.subArtists||[]).includes(a));
+                    const icon = (artistMeta[a] && artistMeta[a].icon) ? `<img src="${artistMeta[a].icon}">` : (firstSong && firstSong.cover ? `<img src="${firstSong.cover}">` : `<div class="placeholder" style="width:100%;height:100%;border-radius:50%;background:var(--icon-color);"></div>`);
+                    return `<div class="bulk-artist-icon-chip" onclick="document.getElementById('bulk-search-box').value='${a}'; filterBulk('${a}')">${icon}<span>${a}</span></div>`;
                 }).join('');
-            } else { suggest.style.display = 'none'; }
+            } else { 
+                suggest.style.display = 'none'; 
+            }
         }
 
         function switchTab(v) { 
-            currentView=v; currentArtist=null; currentPlaylistId=null; isEditing=false; activeArtistFilter=null;
+            scrollPositions[currentView] = document.getElementById('content').scrollTop;
+            currentView = v; 
+            currentArtist = null; 
+            currentPlaylistId = null; 
+            isEditing = false; 
+            activeArtistFilter = null;
             render(); 
+            document.getElementById('content').scrollTop = scrollPositions[currentView] || 0;
         }
 
         function openPlaylist(id) { 
-            currentPlaylistId=id; 
-            activeArtistFilter=null; 
-            sortStates.detail = 'year'; 
+            scrollPositions[currentView] = document.getElementById('content').scrollTop;
+            currentPlaylistId = id; 
+            activeArtistFilter = null; 
+            sortStates.playlistDetail = 'year'; 
             render(); 
+            document.getElementById('content').scrollTop = 0;
         }
 
         function openArtist(n) { 
-            currentArtist=n; 
-            sortStates.detail = 'added';
+            scrollPositions[currentView] = document.getElementById('content').scrollTop;
+            currentArtist = n; 
             render(); 
+            document.getElementById('content').scrollTop = 0;
         }
 
         function openFull() { 
@@ -1997,50 +2092,78 @@
         }
 
         function handleHeaderLeft() { 
-            if(currentArtist) currentArtist=null; 
-            else if(currentPlaylistId) currentPlaylistId=null; 
-            else isEditing=!isEditing; 
+            if(currentArtist) {
+                currentArtist = null; 
+            } else if(currentPlaylistId) {
+                currentPlaylistId = null; 
+            } else {
+                isEditing = !isEditing; 
+            }
             render(); 
         }
 
         function handleHeaderRight() { 
             if(currentArtist) { 
-                const artTracks = tracks.filter(t => parseArtists(t.artist).all.includes(currentArtist)); 
+                const artTracks = tracks.filter(t => (t.mainArtists||[]).includes(currentArtist) || (t.subArtists||[]).includes(currentArtist)); 
                 if(artTracks.length > 0) playSong(artTracks[0].id, 'art'); 
-            }
-            else if(currentPlaylistId) {
+            } else if(currentPlaylistId) {
                 openBulkAddModal();
-            }
-            else if(currentView==='library') {
+            } else if(currentView === 'library') {
                 document.getElementById('audio-upload').click(); 
-            }
-            else if(currentView==='playlist') { 
-                openCustomPrompt("Playlist Name:", (n) => {
+            } else if(currentView === 'playlist') { 
+                openInputModal("New Playlist Name", (n) => {
                     db.transaction("playlists","readwrite").objectStore("playlists").add({ name: n, songIds: [], tag: "", cover: null, favorite: false }).onsuccess = loadAll;
                 });
-            } 
-            else if(currentView==='artists') { 
-                openCustomPrompt("Artist Name:", (n) => {
-                    db.transaction("artistMeta","readwrite").objectStore("artistMeta").put({ name: n, icon: null, favorite: false, members: [] }).onsuccess = loadAll;
+            } else if(currentView === 'artists') { 
+                openInputModal("New Artist Name", (n) => {
+                    db.transaction("artistMeta","readwrite").objectStore("artistMeta").put({ name: n, icon: null, members: [], parentArtist: null }).onsuccess = loadAll;
                 });
             }
         }
 
         function togglePlay() { 
-            audio.paused ? audio.play() : audio.pause(); 
+            if(audio.paused) {
+                audio.volume = 0;
+                audio.play();
+                fadeInVolume();
+            } else {
+                audio.pause();
+            }
+        }
+
+        function fadeInVolume() {
+            let vol = 0;
+            audio.volume = vol;
+            let fadeInterval = setInterval(() => {
+                vol += 0.1;
+                if(vol >= 1.0) {
+                    audio.volume = 1.0;
+                    clearInterval(fadeInterval);
+                } else {
+                    audio.volume = vol;
+                }
+            }, 50);
         }
 
         function next() { 
             if (playingTracks.length === 0) return;
             if (repeatMode === 2) { loadTrack(playingTracks[currentTrackIdx]); return; }
-            if (currentTrackIdx === playingTracks.length - 1 && repeatMode === 0) { audio.pause(); audio.currentTime = 0; return; }
+            if (currentTrackIdx === playingTracks.length - 1 && repeatMode === 0) { 
+                audio.pause(); 
+                audio.currentTime = 0; 
+                return; 
+            }
             currentTrackIdx = (currentTrackIdx + 1) % playingTracks.length;
             loadTrack(playingTracks[currentTrackIdx]);
         }
 
         function prev() { 
-            if (audio.currentTime > 3) audio.currentTime = 0;
-            else { currentTrackIdx = (currentTrackIdx - 1 + playingTracks.length) % playingTracks.length; loadTrack(playingTracks[currentTrackIdx]); }
+            if (audio.currentTime > 3) {
+                audio.currentTime = 0;
+            } else { 
+                currentTrackIdx = (currentTrackIdx - 1 + playingTracks.length) % playingTracks.length; 
+                loadTrack(playingTracks[currentTrackIdx]); 
+            }
         }
 
         function playSong(id, mode) {
@@ -2049,7 +2172,7 @@
                 const pl = playlists.find(p => p.id === currentPlaylistId);
                 original = pl.songIds.map(sid => tracks.find(tx => tx.id === sid)).filter(x=>x);
             } else if(mode === 'art') {
-                original = tracks.filter(tx => parseArtists(tx.artist).all.includes(currentArtist));
+                original = tracks.filter(tx => (tx.mainArtists||[]).includes(currentArtist) || (tx.subArtists||[]).includes(currentArtist));
             } else {
                 original = [...tracks];
             }
@@ -2071,27 +2194,34 @@
         
         function loadTrack(t) {
             if(!t) return;
-            if(!blobCache[t.id]) {
-                blobCache[t.id] = URL.createObjectURL(t.data);
-            }
-            if(audio.src !== blobCache[t.id]) {
-                audio.src = blobCache[t.id];
-            }
+            if(audio.src) URL.revokeObjectURL(audio.src);
+            audio.src = URL.createObjectURL(t.data);
+            audio.load();
             
-            document.getElementById('m-img').src = t.cover || ''; checkMarquee('m-title', t.name);
-            document.getElementById('f-img').src = t.cover || ''; checkMarquee('f-title', t.name); document.getElementById('f-artist').innerText = getArtistFormat(t);
+            document.getElementById('m-img').src = t.cover || ''; 
+            checkMarquee('m-title', t.name);
+            
+            document.getElementById('f-img').src = t.cover || ''; 
+            checkMarquee('f-title', t.name); 
+            document.getElementById('f-artist').innerText = t.artistDisplay;
+            
             document.getElementById('mini').style.display = 'flex';
-            document.getElementById('f-lyrics-view').classList.remove('active');
-            document.getElementById('f-img').style.opacity = "1";
+            
             updateFavBtn(t.favorite);
             updatePlayerBlurBg();
-            audio.play();
-        }
+            
+            audio.volume = 0;
+            let playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    fadeInVolume();
+                }).catch(error => {
+                    console.error("Autoplay prevented or load error", error);
+                });
+            }
 
-        function seekAudio(val) {
-            audio.currentTime = val;
             if(document.getElementById('f-lyrics-view').classList.contains('active')) {
-                updateActiveLyricLine();
+                renderActiveLyricsView();
             }
         }
 
@@ -2115,100 +2245,58 @@
                 document.getElementById('dur-time').innerText = formatTime(audio.duration); 
                 const percent = (audio.currentTime / audio.duration) * 100;
                 s.style.background = `linear-gradient(to right, var(--accent-blue) 0%, var(--key-color) ${percent}%, var(--seeker-bg) ${percent}%, var(--seeker-bg) 100%)`;
-            }
-            if(document.getElementById('f-lyrics-view').classList.contains('active')) {
-                updateActiveLyricLine();
-            }
+                
+                updateLyricFocus(audio.currentTime);
+            } 
         };
 
-        function updateActiveLyricLine() {
-            let track = playingTracks[currentTrackIdx];
-            let lData = track?.lyricData || [];
-            if(lData.length === 0) return;
-            
-            let cTime = audio.currentTime;
-            let activeIdx = -1;
-            for(let i=0; i<lData.length; i++) {
-                if(cTime >= lData[i].time) {
-                    activeIdx = i;
-                } else {
-                    break;
-                }
-            }
-            
-            let lines = document.querySelectorAll('.lyric-line-display');
-            lines.forEach((l, i) => {
-                if(i === activeIdx) {
-                    if(!l.classList.contains('active')) {
-                        l.classList.add('active');
-                        l.scrollIntoView({ behavior: "smooth", block: "center" });
-                    }
-                } else {
-                    l.classList.remove('active');
-                }
-            });
-        }
+        audio.onplay = () => { 
+            document.getElementById('m-pp').className = 'fa-solid fa-pause'; 
+            document.getElementById('f-pp').className = 'fa-solid fa-pause'; 
+        };
+        
+        audio.onpause = () => { 
+            document.getElementById('m-pp').className = 'fa-solid fa-play'; 
+            document.getElementById('f-pp').className = 'fa-solid fa-play'; 
+        };
+        
+        audio.onended = () => { 
+            next(); 
+        };
 
-        audio.onplay = () => { document.getElementById('m-pp').className = 'fa-solid fa-pause'; document.getElementById('f-pp').className = 'fa-solid fa-pause'; };
-        audio.onpause = () => { document.getElementById('m-pp').className = 'fa-solid fa-play'; document.getElementById('f-pp').className = 'fa-solid fa-play'; };
-        audio.onended = () => { next(); };
+        function switchArtistTagMode(mode) {
+            currentArtistTagMode = mode;
+            document.getElementById('toggle-main-artist').classList.toggle('active', mode === 'main');
+            document.getElementById('toggle-sub-artist').classList.toggle('active', mode === 'sub');
+            renderTrackArtists();
+        }
 
         function renderTrackArtists() {
-            document.getElementById('track-active-main-artists').innerHTML = currentTrackArtistsMain.map(a => `<div class="card-tag" style="display:inline-flex; align-items:center; gap:6px; background:var(--icon-active); color:#fff; border:none;">${a} <i class="fa-solid fa-xmark" onclick="removeTrackArtist('${a}', 'main')" style="cursor:pointer; font-size:12px;"></i></div>`).join('');
-            document.getElementById('track-active-sub-artists').innerHTML = currentTrackArtistsSub.map(a => `<div class="card-tag" style="display:inline-flex; align-items:center; gap:6px;">${a} <i class="fa-solid fa-xmark" onclick="removeTrackArtist('${a}', 'sub')" style="cursor:pointer; font-size:12px; opacity:0.7;"></i></div>`).join('');
-        }
-
-        function switchArtistTagTab(tab) {
-            activeArtistTagTab = tab;
-            if(tab === 'main') {
-                document.getElementById('btn-tab-main').style.background = 'var(--icon-active)';
-                document.getElementById('btn-tab-main').style.color = '#fff';
-                document.getElementById('btn-tab-main').style.borderColor = 'var(--icon-active)';
-                document.getElementById('btn-tab-sub').style.background = 'transparent';
-                document.getElementById('btn-tab-sub').style.color = 'var(--sub-text)';
-                document.getElementById('btn-tab-sub').style.borderColor = 'var(--border-color)';
-                document.getElementById('edit-artist-label').innerText = "Add Main Artist";
-            } else {
-                document.getElementById('btn-tab-sub').style.background = 'var(--icon-active)';
-                document.getElementById('btn-tab-sub').style.color = '#fff';
-                document.getElementById('btn-tab-sub').style.borderColor = 'var(--icon-active)';
-                document.getElementById('btn-tab-main').style.background = 'transparent';
-                document.getElementById('btn-tab-main').style.color = 'var(--sub-text)';
-                document.getElementById('btn-tab-main').style.borderColor = 'var(--border-color)';
-                document.getElementById('edit-artist-label').innerText = "Add Sub Artist";
-            }
+            let activeArray = currentArtistTagMode === 'main' ? trackEditMainArtists : trackEditSubArtists;
+            let activeClass = currentArtistTagMode === 'main' ? 'active-main' : 'active-sub';
+            document.getElementById('track-active-artists').innerHTML = activeArray.map(a => `<div class="artist-chip ${activeClass}" style="margin:0; display:inline-flex; align-items:center; gap:6px;">${a} <i class="fa-solid fa-xmark" onclick="removeTrackArtist('${a}')" style="cursor:pointer; font-size:12px; opacity:0.7;"></i></div>`).join('');
         }
 
         function addTrackArtist() {
             const el = document.getElementById('edit-artist-input');
             const val = el.value.trim();
             if(val) {
-                if(activeArtistTagTab === 'main') {
-                    if(!currentTrackArtistsMain.includes(val)) currentTrackArtistsMain.push(val);
-                } else {
-                    if(!currentTrackArtistsSub.includes(val)) currentTrackArtistsSub.push(val);
+                let targetArray = currentArtistTagMode === 'main' ? trackEditMainArtists : trackEditSubArtists;
+                if(!targetArray.includes(val)) {
+                    targetArray.push(val);
+                    el.value = '';
+                    renderTrackArtists();
                 }
-                el.value = '';
-                renderTrackArtists();
             }
         }
 
-        function removeTrackArtist(a, type) {
-            if(type === 'main') {
-                currentTrackArtistsMain = currentTrackArtistsMain.filter(x => x !== a);
+        function removeTrackArtist(a) {
+            if (currentArtistTagMode === 'main') {
+                trackEditMainArtists = trackEditMainArtists.filter(x => x !== a);
             } else {
-                currentTrackArtistsSub = currentTrackArtistsSub.filter(x => x !== a);
+                trackEditSubArtists = trackEditSubArtists.filter(x => x !== a);
             }
             renderTrackArtists();
-        }
-
-        function updateArtistSuggest(v) { 
-            const container = document.getElementById('artist-quick-select'); 
-            const artists = getAllArtists(); 
-            container.innerHTML = artists.map(a => {
-                let img = getArtistIconHtmlSmall(a, false);
-                return `<div class="artist-chip" onclick="document.getElementById('edit-artist-input').value='${a}'; addTrackArtist();">${img}${a}</div>`;
-            }).join(''); 
         }
 
         function openEdit(id) { 
@@ -2216,13 +2304,14 @@
             const t = tracks.find(x => x.id === id); 
             document.getElementById('edit-name').value = t.name; 
             
-            let parsed = parseArtists(t.artist);
-            currentTrackArtistsMain = [...parsed.main];
-            currentTrackArtistsSub = [...parsed.sub];
+            trackEditMainArtists = [...(t.mainArtists || [])];
+            trackEditSubArtists = [...(t.subArtists || [])];
             
             document.getElementById('edit-artist-input').value = "";
-            renderTrackArtists();
+            switchArtistTagMode('main');
+            
             document.getElementById('edit-year').value = t.year || ""; 
+            
             updateArtistSuggest(""); 
             document.getElementById('edit-modal').style.display = 'flex'; 
         }
@@ -2234,22 +2323,51 @@
         function saveEdit() { 
             const t = tracks.find(x => x.id === editingId); 
             t.name = document.getElementById('edit-name').value; 
-            
-            let mainStr = currentTrackArtistsMain.join(', ');
-            let subStr = currentTrackArtistsSub.join(', ');
-            t.artist = mainStr;
-            if(subStr) t.artist += ' / ' + subStr;
-
+            t.mainArtists = [...trackEditMainArtists];
+            t.subArtists = [...trackEditSubArtists];
+            t.artistDisplay = buildArtistDisplayString(t);
             t.year = document.getElementById('edit-year').value; 
-            db.transaction("songs","readwrite").objectStore("songs").put(t).onsuccess = () => { closeEdit(); loadAll(); }; 
+            
+            db.transaction("songs","readwrite").objectStore("songs").put(t).onsuccess = () => { 
+                closeEdit(); 
+                loadAll(); 
+            }; 
         }
 
-        function toggleShuffle() { isShuffle = !isShuffle; document.getElementById('btn-shuffle').style.opacity = isShuffle ? "1" : "0.4"; }
-        function toggleRepeat() { repeatMode = (repeatMode + 1) % 3; document.getElementById('btn-repeat').style.opacity = repeatMode > 0 ? "1" : "0.4"; document.getElementById('repeat-badge').style.display = repeatMode === 2 ? "block" : "none"; }
-        function deleteSong(id) { if(confirm("Delete this track?")) db.transaction("songs","readwrite").objectStore("songs").delete(id).onsuccess=loadAll; }
-        function deletePlaylist(id) { if(confirm("Delete this playlist?")) db.transaction("playlists","readwrite").objectStore("playlists").delete(id).onsuccess=loadAll; }
-        function removeTrackFromPlaylist(sid) { const pl = playlists.find(p => p.id === currentPlaylistId); pl.songIds = pl.songIds.filter(id => id !== sid); db.transaction("playlists","readwrite").objectStore("playlists").put(pl).onsuccess = loadAll; }
-        function saveBulkAdd() { const pl = playlists.find(p => p.id === currentPlaylistId); const newIds = Array.from(document.querySelectorAll('#bulk-list input:checked')).map(i => parseInt(i.value)); pl.songIds = newIds; db.transaction("playlists","readwrite").objectStore("playlists").put(pl).onsuccess = () => { loadAll(); document.getElementById('bulk-modal').remove(); }; }
+        function toggleShuffle() { 
+            isShuffle = !isShuffle; 
+            document.getElementById('btn-shuffle').style.opacity = isShuffle ? "1" : "0.4"; 
+        }
+        
+        function toggleRepeat() { 
+            repeatMode = (repeatMode + 1) % 3; 
+            document.getElementById('btn-repeat').style.opacity = repeatMode > 0 ? "1" : "0.4"; 
+            document.getElementById('repeat-badge').style.display = repeatMode === 2 ? "block" : "none"; 
+        }
+
+        function deleteSong(id) { 
+            if(confirm("Delete this track?")) db.transaction("songs","readwrite").objectStore("songs").delete(id).onsuccess=loadAll; 
+        }
+
+        function deletePlaylist(id) { 
+            if(confirm("Delete this playlist?")) db.transaction("playlists","readwrite").objectStore("playlists").delete(id).onsuccess=loadAll; 
+        }
+
+        function removeTrackFromPlaylist(sid) { 
+            const pl = playlists.find(p => p.id === currentPlaylistId); 
+            pl.songIds = pl.songIds.filter(id => id !== sid); 
+            db.transaction("playlists","readwrite").objectStore("playlists").put(pl).onsuccess = loadAll; 
+        }
+
+        function saveBulkAdd() { 
+            const pl = playlists.find(p => p.id === currentPlaylistId); 
+            const newIds = Array.from(document.querySelectorAll('#bulk-list input:checked')).map(i => parseInt(i.value)); 
+            pl.songIds = newIds; 
+            db.transaction("playlists","readwrite").objectStore("playlists").put(pl).onsuccess = () => { 
+                loadAll(); 
+                document.getElementById('bulk-modal').remove(); 
+            }; 
+        }
         
         function renderPlTags() {
             document.getElementById('pl-active-tags').innerHTML = currentPlTags.map(t => `<div class="card-tag" style="display:inline-flex; align-items:center; gap:6px;">${t} <i class="fa-solid fa-xmark" onclick="removePlTag('${t}')" style="cursor:pointer; font-size:12px; opacity:0.7;"></i></div>`).join('');
@@ -2270,26 +2388,48 @@
             renderPlTags();
         }
 
+        function togglePlFav() {
+            tempPlFav = !tempPlFav;
+            const icon = document.getElementById('pl-fav-btn').querySelector('i');
+            if(tempPlFav) {
+                icon.className = 'fa-solid fa-star star-icon active';
+            } else {
+                icon.className = 'fa-regular fa-star star-icon';
+            }
+        }
+
         function openPlEdit(id) { 
-            editingPlId = id; const pl = playlists.find(p => p.id === id); 
+            editingPlId = id; 
+            const pl = playlists.find(p => p.id === id); 
             document.getElementById('pl-edit-name').value = pl.name; 
             currentPlTags = pl.tag ? pl.tag.split(/[,、]/).map(t=>t.trim()).filter(t=>t) : [];
+            tempPlFav = pl.favorite || false;
+            
+            const icon = document.getElementById('pl-fav-btn').querySelector('i');
+            icon.className = tempPlFav ? 'fa-solid fa-star star-icon active' : 'fa-regular fa-star star-icon';
             
             document.getElementById('pl-edit-tag').value = '';
             renderPlTags();
-            tempPlImg = pl.cover; document.getElementById('pl-edit-img').src = tempPlImg || ""; 
+            tempPlImg = pl.cover; 
+            document.getElementById('pl-edit-img').src = tempPlImg || ""; 
             updateTagSuggest(""); 
             document.getElementById('pl-edit-modal').style.display = 'flex'; 
         }
 
-        function closePlEdit() { document.getElementById('pl-edit-modal').style.display = 'none'; }
+        function closePlEdit() { 
+            document.getElementById('pl-edit-modal').style.display = 'none'; 
+        }
 
         function savePlEdit() { 
             const pl = playlists.find(p => p.id === editingPlId); 
             pl.name = document.getElementById('pl-edit-name').value; 
             pl.tag = currentPlTags.join(',');
             pl.cover = tempPlImg; 
-            db.transaction("playlists","readwrite").objectStore("playlists").put(pl).onsuccess = () => { closePlEdit(); loadAll(); }; 
+            pl.favorite = tempPlFav;
+            db.transaction("playlists","readwrite").objectStore("playlists").put(pl).onsuccess = () => { 
+                closePlEdit(); 
+                loadAll(); 
+            }; 
         }
         
         function previewPlImg(e) { 
@@ -2304,6 +2444,12 @@
             } 
         }
         
+        function updateArtistSuggest(v) { 
+            const container = document.getElementById('artist-quick-select'); 
+            const artists = getAllArtists(); 
+            container.innerHTML = artists.map(a => `<div class="artist-chip" onclick="document.getElementById('edit-artist-input').value='${a}'; addTrackArtist();">${a}</div>`).join(''); 
+        }
+
         function updateTagSuggest(v) { 
             const container = document.getElementById('tag-quick-select'); 
             const allTags = [];
@@ -2325,7 +2471,7 @@
             if(f && editingArtistName) { 
                 const r = new FileReader(); 
                 r.onload = (ev) => { 
-                    let meta = artistMeta[editingArtistName] || { name: editingArtistName, favorite: false, members: [] };
+                    let meta = artistMeta[editingArtistName] || { name: editingArtistName, members: [], parentArtist: null };
                     meta.icon = ev.target.result;
                     db.transaction("artistMeta", "readwrite").objectStore("artistMeta").put(meta).onsuccess = loadAll; 
                 }; 
@@ -2334,19 +2480,23 @@
         }
 
         function openArtistSetup(a) {
-            const meta = artistMeta[a] || { name: a, favorite: false, members: [] };
+            const meta = artistMeta[a] || { name: a, members: [], parentArtist: null };
             if(!meta.members) meta.members = [];
             editingArtistSetupName = a;
             currentMembersEdit = JSON.parse(JSON.stringify(meta.members));
-            renderArtistSetup();
+            renderArtistSetup(meta.parentArtist);
             document.getElementById('artist-setup-modal').style.display = 'flex';
         }
 
-        function renderArtistSetup() {
+        function renderArtistSetup(parentArtistVal = null) {
             const body = document.getElementById('artist-setup-body');
             body.innerHTML = `
                 <span class="field-label">Artist Name</span>
                 <input type="text" id="setup-artist-name" class="edit-input" value="${editingArtistSetupName}">
+                
+                <span class="field-label">Belongs To Group (Parent Artist)</span>
+                <input type="text" id="setup-parent-artist" class="edit-input" value="${parentArtistVal || ''}" placeholder="Parent Group Name">
+
                 <div style="margin-bottom:20px; display:flex; gap:10px; align-items:center;">
                     <button onclick="addArtistMember()" style="padding:10px 20px; background:var(--icon-color); color:#fff; border:none; border-radius:15px; font-weight:800;">+ Add Member</button>
                 </div>
@@ -2367,13 +2517,13 @@
         }
 
         function addArtistMember() { 
-            currentMembersEdit.push({name:'', color:'var(--icon-color)', linked: null}); 
-            renderArtistSetup(); 
+            currentMembersEdit.push({name:'', color:'#a6cbe3', linked: null}); 
+            renderArtistSetup(document.getElementById('setup-parent-artist').value); 
         }
 
         function removeArtistMember(i) { 
             currentMembersEdit.splice(i, 1); 
-            renderArtistSetup(); 
+            renderArtistSetup(document.getElementById('setup-parent-artist').value); 
         }
         
         let draggedMemIndex = -1;
@@ -2382,24 +2532,33 @@
             e.dataTransfer.effectAllowed = 'move';
             e.target.classList.add('dragging');
         }
-        function handleDragOver(e, i) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; }
+
+        function handleDragOver(e, i) { 
+            e.preventDefault(); 
+            e.dataTransfer.dropEffect = 'move'; 
+        }
+
         function handleDrop(e, i) {
             e.stopPropagation();
             if (draggedMemIndex !== i && draggedMemIndex !== -1) {
                 let temp = currentMembersEdit[draggedMemIndex];
                 currentMembersEdit.splice(draggedMemIndex, 1);
                 currentMembersEdit.splice(i, 0, temp);
-                renderArtistSetup();
+                renderArtistSetup(document.getElementById('setup-parent-artist').value);
             }
         }
-        function handleDragEnd(e) { e.target.classList.remove('dragging'); draggedMemIndex = -1; }
+
+        function handleDragEnd(e) { 
+            e.target.classList.remove('dragging'); 
+            draggedMemIndex = -1; 
+        }
 
         function openSyncModal(i) {
             currentSyncIndex = i;
             let artists = getAllArtists();
             const body = document.getElementById('artist-sync-body');
             body.innerHTML = artists.map(a => {
-                let imgHtml = getArtistIconHtmlSmall(a, false);
+                let imgHtml = artistMeta[a] && artistMeta[a].icon ? `<img src="${artistMeta[a].icon}" style="width:20px;height:20px;border-radius:50%;margin-right:5px;vertical-align:middle;object-fit:cover;">` : `<div style="display:inline-block;width:20px;height:20px;border-radius:50%;margin-right:5px;vertical-align:middle;background:var(--icon-color);"></div>`;
                 return `<div class="artist-chip" onclick="linkArtistMember('${a}')">${imgHtml}${a}</div>`;
             }).join('') + `<div class="artist-chip" onclick="linkArtistMember('')" style="color:var(--del-color);">Unlink</div>`;
             document.getElementById('artist-sync-modal').style.display = 'flex';
@@ -2410,42 +2569,49 @@
                 currentMembersEdit[currentSyncIndex].linked = a || null;
                 if(a) {
                     currentMembersEdit[currentSyncIndex].name = a;
-                    if(artistMeta[a]) {
-                        if(artistMeta[a].members && artistMeta[a].members.length > 0) {
-                            currentMembersEdit[currentSyncIndex].color = artistMeta[a].members[0].color;
-                        }
+                    // Auto color apply
+                    if (artistMeta[a] && artistMeta[a].members && artistMeta[a].members.length > 0) {
+                        currentMembersEdit[currentSyncIndex].color = artistMeta[a].members[0].color || '#a6cbe3';
                     }
                 }
-                renderArtistSetup();
+                renderArtistSetup(document.getElementById('setup-parent-artist').value);
             }
             document.getElementById('artist-sync-modal').style.display = 'none';
         }
 
         function saveArtistSetup() {
             let newName = document.getElementById('setup-artist-name').value.trim();
+            let parentVal = document.getElementById('setup-parent-artist').value.trim();
             let oldName = editingArtistSetupName;
             
             if(newName && newName !== oldName) {
-                let meta = artistMeta[oldName] || { name: oldName, favorite: false, members: [] };
+                let meta = artistMeta[oldName] || { name: oldName, members: [] };
                 meta.name = newName;
                 meta.members = currentMembersEdit;
+                meta.parentArtist = parentVal || null;
+                
                 delete artistMeta[oldName];
                 artistMeta[newName] = meta;
+                
                 db.transaction("artistMeta", "readwrite").objectStore("artistMeta").delete(oldName);
                 db.transaction("artistMeta", "readwrite").objectStore("artistMeta").put(meta);
 
                 let tx = db.transaction("songs", "readwrite");
                 let store = tx.objectStore("songs");
                 let tracksChanged = false;
+                
                 tracks.forEach(t => {
-                    let parsed = parseArtists(t.artist);
                     let changed = false;
-                    for(let i=0; i<parsed.main.length; i++) { if(parsed.main[i] === oldName) { parsed.main[i] = newName; changed = true; } }
-                    for(let i=0; i<parsed.sub.length; i++) { if(parsed.sub[i] === oldName) { parsed.sub[i] = newName; changed = true; } }
+                    if(t.mainArtists) {
+                        let mIdx = t.mainArtists.indexOf(oldName);
+                        if(mIdx !== -1) { t.mainArtists[mIdx] = newName; changed = true; }
+                    }
+                    if(t.subArtists) {
+                        let sIdx = t.subArtists.indexOf(oldName);
+                        if(sIdx !== -1) { t.subArtists[sIdx] = newName; changed = true; }
+                    }
                     if(changed) { 
-                        let mainStr = parsed.main.join(', ');
-                        let subStr = parsed.sub.join(', ');
-                        t.artist = mainStr + (subStr ? ' / ' + subStr : '');
+                        t.artistDisplay = buildArtistDisplayString(t);
                         store.put(t); 
                         tracksChanged = true; 
                     }
@@ -2456,9 +2622,11 @@
                 if(tracksChanged) tx.oncomplete = loadAll; else loadAll();
 
             } else {
-                let meta = artistMeta[oldName] || { name: oldName, favorite: false };
+                let meta = artistMeta[oldName] || { name: oldName };
                 meta.members = currentMembersEdit;
+                meta.parentArtist = parentVal || null;
                 artistMeta[oldName] = meta;
+                
                 db.transaction("artistMeta", "readwrite").objectStore("artistMeta").put(meta).onsuccess = () => {
                     document.getElementById('artist-setup-modal').style.display = 'none';
                     loadAll();
@@ -2467,123 +2635,160 @@
         }
 
         function openLyricPaint() {
-            const t = playingTracks[currentTrackIdx];
+            closeEdit();
+            const t = tracks.find(x => x.id === editingId);
             if(!t) return;
+
+            currentSyncLyrics = JSON.parse(JSON.stringify(t.syncedLyrics || []));
             
-            let allMembers = [];
-            let parsed = parseArtists(t.artist);
-            parsed.main.forEach(a => {
-                if(artistMeta[a] && artistMeta[a].members) {
-                    allMembers = allMembers.concat(artistMeta[a].members);
+            availableMembersCache = [];
+            let mainArts = t.mainArtists || [];
+            mainArts.forEach(a => {
+                if (artistMeta[a] && artistMeta[a].members) {
+                    availableMembersCache = availableMembersCache.concat(artistMeta[a].members);
                 }
             });
 
-            currentLyricData = t.lyricData ? JSON.parse(JSON.stringify(t.lyricData)) : [];
-            
-            const pal = document.getElementById('paint-palette');
-            pal.innerHTML = allMembers.map(m => `
-                <div style="display:flex; flex-direction:column; align-items:center; min-width:45px;">
-                    <div style="width:30px; height:30px; border-radius:50%; background:${m.color || '#ccc'}; border:2px solid ${m.color?m.color:'var(--border-color)'}; box-shadow:0 2px 5px rgba(0,0,0,0.2);"></div>
-                    <span style="font-size:10px; margin-top:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%; text-align:center;">${m.name}</span>
-                </div>
-            `).join('');
-
-            renderPaintLyricsList(allMembers);
+            renderPaintLyrics();
             document.getElementById('lyric-paint-modal').style.display = 'flex';
         }
 
-        function renderPaintLyricsList(membersList) {
-            const container = document.getElementById('paint-lyrics-container');
-            container.innerHTML = currentLyricData.map((l, i) => {
-                let memHtml = membersList.map(m => {
-                    let isSel = l.members.includes(m.color);
-                    return `<div class="member-circle ${isSel?'selected':''}" style="background:${m.color};" onclick="toggleLyricMember(${i}, '${m.color}')"></div>`;
-                }).join('');
-                
-                return `
-                <div class="lyric-paint-line">
-                    <div class="lyric-paint-controls">
-                        <input type="number" id="lyr-time-${i}" value="${l.time}" step="0.1" class="edit-input" style="width:80px; margin:0; padding:10px;" onchange="currentLyricData[${i}].time=parseFloat(this.value)">
-                        <button onclick="setCurrentTimeToLyric(${i})" style="padding:10px; background:var(--icon-color); color:#fff; border:none; border-radius:10px;"><i class="fa-solid fa-clock"></i></button>
-                    </div>
-                    <input type="text" id="lyr-text-${i}" value="${l.text}" class="edit-input" style="margin:0; padding:10px;" oninput="currentLyricData[${i}].text=this.value" onkeydown="handleLyricEnter(event, ${i})">
-                    <div class="lyric-paint-members">${memHtml}</div>
-                </div>
-                `;
-            }).join('');
+        function importRawLyrics() {
+            let t = tracks.find(x => x.id === editingId);
+            let raw = prompt("Paste lyrics here (this will overwrite current lines):", t ? t.lyrics : "");
+            if (raw !== null) {
+                currentSyncLyrics = raw.split('\n').map((l, i) => ({ time: i * 3, text: l, members: [] }));
+                renderPaintLyrics();
+            }
         }
 
-        function addLyricLine() {
-            currentLyricData.push({time: 0, text: "", members: []});
-            openLyricPaint(); 
+        function addLyricRow() {
+            currentSyncLyrics.push({ time: 0, text: "", members: [] });
+            renderPaintLyrics();
         }
 
-        function autoSetTimes() {
-            if(currentLyricData.length === 0) return;
-            let total = audio.duration;
-            let step = total / currentLyricData.length;
-            currentLyricData.forEach((l, i) => {
-                l.time = parseFloat((step * i).toFixed(2));
-            });
-            openLyricPaint();
+        function removeLyricRow(idx) {
+            currentSyncLyrics.splice(idx, 1);
+            renderPaintLyrics();
         }
 
-        function setCurrentTimeToLyric(i) {
-            currentLyricData[i].time = parseFloat(audio.currentTime.toFixed(2));
-            document.getElementById(`lyr-time-${i}`).value = currentLyricData[i].time;
+        function toggleMemberForLyric(lyricIdx, memColor) {
+            let arr = currentSyncLyrics[lyricIdx].members;
+            let exist = arr.findIndex(m => m.color === memColor);
+            if (exist !== -1) {
+                arr.splice(exist, 1);
+            } else {
+                let mem = availableMembersCache.find(x => x.color === memColor);
+                if(mem) arr.push(mem);
+            }
+            renderPaintLyrics();
         }
 
-        function handleLyricEnter(e, i) {
-            if(e.key === 'Enter') {
+        function syncTimeToCurrent(idx) {
+            currentSyncLyrics[idx].time = audio.currentTime;
+            renderPaintLyrics();
+        }
+
+        function handleLyricTimeKey(e, idx) {
+            if (e.key === 'Enter') {
                 e.preventDefault();
-                let nextInput = document.getElementById(`lyr-time-${i+1}`);
-                if(nextInput) {
-                    nextInput.focus();
-                } else {
-                    addLyricLine();
+                let next = document.getElementById(`lyric-time-${idx+1}`);
+                if(next) {
+                    next.focus();
+                    next.select();
                 }
             }
         }
 
-        function toggleLyricMember(lineIdx, colorCode) {
-            let arr = currentLyricData[lineIdx].members;
-            if(arr.includes(colorCode)) {
-                currentLyricData[lineIdx].members = arr.filter(c => c !== colorCode);
+        function renderPaintLyrics() {
+            const container = document.getElementById('paint-lyrics-container');
+            
+            let colorPaletteHtml = ``;
+            if (availableMembersCache.length > 0) {
+                colorPaletteHtml = availableMembersCache.map(m => `
+                    <div style="display:flex; flex-direction:column; align-items:center;">
+                        <div class="member-color-circle" style="background:${m.color};"></div>
+                        <span style="font-size:8px;">${m.name.substring(0,4)}</span>
+                    </div>
+                `).join('');
             } else {
-                currentLyricData[lineIdx].members.push(colorCode);
+                colorPaletteHtml = `<span style="font-size:10px; color:#ccc;">No members found in Main Artist.</span>`;
             }
-            openLyricPaint();
+
+            container.innerHTML = currentSyncLyrics.map((l, i) => `
+                <div class="lyric-sync-row">
+                    <button class="lyric-sync-btn" onclick="syncTimeToCurrent(${i})"><i class="fa-solid fa-clock"></i></button>
+                    <input type="number" id="lyric-time-${i}" class="lyric-sync-time" step="0.1" value="${parseFloat(l.time).toFixed(1)}" oninput="currentSyncLyrics[${i}].time = parseFloat(this.value)" onkeydown="handleLyricTimeKey(event, ${i})">
+                    <input type="text" class="lyric-sync-text" value="${l.text}" oninput="currentSyncLyrics[${i}].text = this.value">
+                    <i class="fa-solid fa-trash" style="color:var(--del-color); cursor:pointer; padding:5px;" onclick="removeLyricRow(${i})"></i>
+                </div>
+                <div class="member-color-selector" style="margin-bottom:15px; border-bottom:1px solid var(--border-color); padding-bottom:10px;">
+                    ${availableMembersCache.map(m => {
+                        let sel = l.members.some(x => x.color === m.color) ? 'selected' : '';
+                        return `<div class="member-color-circle ${sel}" style="background:${m.color};" onclick="toggleMemberForLyric(${i}, '${m.color}')"></div>`;
+                    }).join('')}
+                </div>
+            `).join('');
         }
 
         function saveLyricPaint() {
-            currentLyricData.sort((a,b) => a.time - b.time);
-            const t = playingTracks[currentTrackIdx];
-            t.lyricData = currentLyricData;
-            db.transaction("songs", "readwrite").objectStore("songs").put(t).onsuccess = () => {
-                document.getElementById('lyric-paint-modal').style.display = 'none';
-                loadAll();
-                if(document.getElementById('f-lyrics-view').classList.contains('active')) {
-                    renderLyricsLines();
-                }
-            };
+            const t = tracks.find(x => x.id === editingId);
+            if(t) {
+                currentSyncLyrics.sort((a,b) => a.time - b.time);
+                t.syncedLyrics = currentSyncLyrics;
+                t.lyrics = currentSyncLyrics.map(x => x.text).join('\n');
+                db.transaction("songs", "readwrite").objectStore("songs").put(t).onsuccess = () => {
+                    document.getElementById('lyric-paint-modal').style.display = 'none';
+                    loadAll();
+                    if (playingTracks[currentTrackIdx] && playingTracks[currentTrackIdx].id === editingId) {
+                        playingTracks[currentTrackIdx].syncedLyrics = currentSyncLyrics;
+                        if(document.getElementById('f-lyrics-view').classList.contains('active')) {
+                            renderActiveLyricsView();
+                        }
+                    }
+                };
+            }
         }
 
         document.getElementById('audio-upload').onchange = (e) => {
-            const files = e.target.files; if (files.length === 0) return;
+            const files = e.target.files; 
+            if (files.length === 0) return;
             for (let f of files) {
                 jsmediatags.read(f, { 
                     onSuccess: (tag) => {
-                        let c = null; if(tag.tags.picture){
-                            let d = tag.tags.picture.data, s = ""; for(let i=0; i<d.length; i++) s += String.fromCharCode(d[i]);
+                        let c = null; 
+                        if(tag.tags.picture){
+                            let d = tag.tags.picture.data, s = ""; 
+                            for(let i=0; i<d.length; i++) s += String.fromCharCode(d[i]);
                             c = `data:${tag.tags.picture.format};base64,${btoa(s)}`;
                         }
                         const tx = db.transaction("songs", "readwrite");
-                        tx.objectStore("songs").add({ name: tag.tags.title || f.name, artist: tag.tags.artist || "Unknown", year: tag.tags.year || "", cover: c, data: f, lyricData: [], favorite: false });
+                        tx.objectStore("songs").add({ 
+                            name: tag.tags.title || f.name, 
+                            mainArtists: tag.tags.artist ? tag.tags.artist.split(',').map(x=>x.trim()) : [], 
+                            subArtists: [],
+                            year: tag.tags.year || "", 
+                            cover: c, 
+                            data: f, 
+                            lyrics: "", 
+                            syncedLyrics: [],
+                            favorite: false 
+                        });
                         tx.oncomplete = () => loadAll();
                     },
                     onError: () => {
                         const tx = db.transaction("songs", "readwrite");
-                        tx.objectStore("songs").add({ name: f.name, artist: "Unknown", year: "", cover: null, data: f, lyricData: [], favorite: false });
+                        tx.objectStore("songs").add({ 
+                            name: f.name, 
+                            mainArtists: [], 
+                            subArtists: [], 
+                            year: "", 
+                            cover: null, 
+                            data: f, 
+                            lyrics: "", 
+                            syncedLyrics: [],
+                            favorite: false 
+                        });
                         tx.oncomplete = () => loadAll();
                     }
                 });
@@ -2591,19 +2796,23 @@
         };
 
         let touchStartX = 0;
-        function handleTouchStart(e, id) { if(isEditing) return; touchStartX = e.touches[0].clientX; }
-        
+        function handleTouchStart(e, id) { 
+            if(isEditing) return; 
+            touchStartX = e.touches[0].clientX; 
+        }
+
         function handleTouchMove(e, id) {
             if(isEditing) return;
             let moveX = e.touches[0].clientX - touchStartX;
             const el = document.querySelector(`#swipe-${id} .list-item`) || document.querySelector(`#swipe-${id} .artist-list-item`);
             const btn = document.querySelector(`#swipe-${id} .swipe-delete-btn`);
             if (el && moveX < 0) { 
-                el.style.transform = `translateX(${Math.max(moveX, -85)}px)`; el.style.transition = "none";
+                el.style.transform = `translateX(${Math.max(moveX, -85)}px)`; 
+                el.style.transition = "none";
                 if(btn) btn.style.opacity = Math.min(Math.abs(moveX) / 85, 1);
             }
         }
-        
+
         function handleTouchEnd(e, id) {
             if(isEditing) return;
             const el = document.querySelector(`#swipe-${id} .list-item`) || document.querySelector(`#swipe-${id} .artist-list-item`);
@@ -2628,7 +2837,7 @@
         function renderQueue() {
             const list = document.getElementById('queue-list');
             const nextTracks = playingTracks.slice(currentTrackIdx + 1);
-            list.innerHTML = nextTracks.map((t, i) => `<div class="list-item" onclick="currentTrackIdx=${currentTrackIdx+1+i}; loadTrack(playingTracks[currentTrackIdx])"><img src="${t.cover||''}" style="width:40px; height:40px;"><div><div style="font-weight:800;">${t.name}</div><div style="font-size:11px; color:var(--icon-color);">${getArtistFormat(t)}</div></div></div>`).join('') || '<div style="padding:50px; text-align:center; color:#ccc;">Queue is empty</div>';
+            list.innerHTML = nextTracks.map((t, i) => `<div class="list-item" onclick="currentTrackIdx=${currentTrackIdx+1+i}; loadTrack(playingTracks[currentTrackIdx])"><img src="${t.cover||''}" style="width:40px; height:40px;"><div><div style="font-weight:800;">${t.name}</div><div style="font-size:11px; color:var(--icon-color);">${t.artistDisplay}</div></div></div>`).join('') || '<div style="padding:50px; text-align:center; color:#ccc;">Queue is empty</div>';
         }
     </script>
 </body>
