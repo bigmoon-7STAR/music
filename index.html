@@ -21,6 +21,39 @@
             --star-clip: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
             --card-shadow: 0 12px 30px rgba(180, 190, 220, 0.2);
             --grad-primary: linear-gradient(135deg, #a6cbe3 0%, #fbe0e6 100%);
+            --bg-color: #ffffff;
+            --card-bg: #ffffff;
+            --modal-bg: #ffffff;
+            --border-color: rgba(255,255,255,0.9);
+            --tab-bg: rgba(255,255,255,0.92);
+            --input-bg: #fbfbfc;
+            --seeker-bg: rgba(166,203,227,0.25);
+            --list-hover: rgba(255,255,255,0.5);
+            --star-grad: linear-gradient(45deg, #ffff00, #9acd32, #add8e6);
+            --player-bg: rgba(255, 255, 255, 0.4);
+        }
+
+        [data-theme="dark"] {
+            --key-color: #4a0000;
+            --accent-blue: #00004a;
+            --accent-green: #004a00;
+            --accent-purple: #2a004a;
+            --text-main: #e0e0e0;
+            --text-dark: #ffffff;
+            --sub-text: #aaaaaa;
+            --glass: rgba(30, 30, 30, 0.82);
+            --card-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+            --grad-primary: linear-gradient(135deg, #8b0000 0%, #00008b 50%, #006400 100%);
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --modal-bg: #1a1a1a;
+            --border-color: #333333;
+            --tab-bg: rgba(20,20,20,0.95);
+            --input-bg: #2a2a2a;
+            --seeker-bg: rgba(255,255,255,0.2);
+            --list-hover: rgba(255,255,255,0.1);
+            --star-grad: red;
+            --player-bg: rgba(20, 20, 20, 0.6);
         }
 
         * { 
@@ -33,11 +66,11 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Hiragino Sans", sans-serif;
-            background: #ffffff;
+            background: var(--bg-color);
             background-image: 
                 radial-gradient(circle at 10% 20%, var(--accent-blue) 0%, transparent 40%),
                 radial-gradient(circle at 90% 80%, var(--key-color) 0%, transparent 40%),
-                linear-gradient(135deg, #fff 0%, #f9f9ff 100%);
+                linear-gradient(135deg, var(--bg-color) 0%, var(--bg-color) 100%);
             margin: 0 auto; 
             height: 100vh; 
             height: -webkit-fill-available; 
@@ -65,7 +98,7 @@
             background: var(--glass); 
             backdrop-filter: blur(40px); 
             -webkit-backdrop-filter: blur(40px); 
-            border-bottom: 1.5px solid rgba(255,255,255,0.9); 
+            border-bottom: 1.5px solid var(--border-color); 
             z-index: 1000;
             box-shadow: 0 2px 15px rgba(0,0,0,0.02); 
             width: 100%;
@@ -96,18 +129,18 @@
         #right-btn { justify-content: flex-end; }
         #right-btn i { font-size: 18px; color: #fff; background: var(--grad-primary); width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; box-shadow: 0 4px 12px rgba(166,203,227,0.3); }
 
-        .search-container { position: relative; z-index: 90; padding: 10px 20px; background: rgba(255,255,255,0.4); backdrop-filter: blur(10px); display: flex; flex-direction: column; gap: 8px; border-bottom: 0.5px solid rgba(255,255,255,0.5); }
+        .search-container { position: relative; z-index: 90; padding: 10px 20px; background: var(--glass); backdrop-filter: blur(10px); display: flex; flex-direction: column; gap: 8px; border-bottom: 0.5px solid var(--border-color); }
         .search-bar-row { display: flex; gap: 10px; align-items: center; width: 100%; }
-        #search-input, .bulk-search-input { flex: 1; padding: 10px 18px; border-radius: 20px; border: 2px solid #fff; background: rgba(255,255,255,0.9); font-size: 13px; outline: none; box-shadow: 0 4px 12px rgba(0,0,0,0.03); color: var(--text-main); }
-        .sort-select { background: #fff; border: 1.5px solid #fff; border-radius: 12px; font-size: 11px; color: #7d8bb1; padding: 6px 10px; outline: none; font-weight: 600; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+        #search-input, .bulk-search-input { flex: 1; padding: 10px 18px; border-radius: 20px; border: 2px solid var(--border-color); background: var(--card-bg); font-size: 13px; outline: none; box-shadow: 0 4px 12px rgba(0,0,0,0.03); color: var(--text-main); }
+        .sort-select { background: var(--card-bg); border: 1.5px solid var(--border-color); border-radius: 12px; font-size: 11px; color: var(--text-main); padding: 6px 10px; outline: none; font-weight: 600; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
 
         #playlist-tag-suggestions, #artist-filter-container, #bulk-artist-suggestions { 
             display: flex; gap: 10px; overflow-x: auto; padding: 4px 0; scrollbar-width: none; 
         }
-        .tag-chip { flex-shrink: 0; padding: 6px 14px; background: #fff; border: 1.5px solid #e1f1fa; border-radius: 15px; font-size: 11px; font-weight: 800; color: #6a89cc; cursor: pointer; }
+        .tag-chip { flex-shrink: 0; padding: 6px 14px; background: var(--card-bg); border: 1.5px solid var(--accent-blue); border-radius: 15px; font-size: 11px; font-weight: 800; color: #6a89cc; cursor: pointer; }
 
         .bulk-artist-icon-chip { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; animation: fadeIn 0.3s ease; }
-        .bulk-artist-icon-chip img, .bulk-artist-icon-chip .placeholder { width: 42px; height: 42px; clip-path: var(--star-clip); object-fit: cover; background: var(--grad-primary); border: 2px solid #fff; transition: 0.3s; }
+        .bulk-artist-icon-chip img, .bulk-artist-icon-chip .placeholder { width: 42px; height: 42px; clip-path: var(--star-clip); object-fit: cover; background: var(--grad-primary); border: 2px solid var(--border-color); transition: 0.3s; }
         .bulk-artist-icon-chip span { font-size: 9px; font-weight: 800; color: #a6cbe3; max-width: 55px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
         #content { flex: 1; overflow-y: auto; padding-bottom: 160px; -webkit-overflow-scrolling: touch; }
@@ -115,23 +148,23 @@
         
         .card { position: relative; cursor: pointer; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .card:active { transform: scale(0.96); }
-        .card-img { width: 100%; aspect-ratio: 1/1; border-radius: 28px; object-fit: cover; box-shadow: var(--card-shadow); border: 4px solid #fff; display: block; background: #fff; }
+        .card-img { width: 100%; aspect-ratio: 1/1; border-radius: 28px; object-fit: cover; box-shadow: var(--card-shadow); border: 4px solid var(--border-color); display: block; background: var(--card-bg); }
         .card-info { padding: 8px 2px; }
         .card-title { font-size: 13px; font-weight: 800; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .card-sub { font-size: 10px; color: var(--sub-text); margin-top: 3px; display: flex; align-items: center; justify-content: space-between; }
         .card-year { font-size: 9px; color: #a6cbe3; font-weight: 700; background: rgba(166,203,227,0.1); padding: 1px 6px; border-radius: 10px; }
         
-        .card-tag { display: inline-block; font-size: 9px; background: linear-gradient(135deg, #e1f1fa, #fff); color: #5a9abf; padding: 3px 10px; border-radius: 20px; margin-top: 5px; font-weight: 800; border: 1px solid rgba(166,203,227,0.3); }
+        .card-tag { display: inline-block; font-size: 9px; background: linear-gradient(135deg, var(--accent-blue), var(--card-bg)); color: #5a9abf; padding: 3px 10px; border-radius: 20px; margin-top: 5px; font-weight: 800; border: 1px solid rgba(166,203,227,0.3); }
 
-        .list-item { display: flex; align-items: center; padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,0.4); cursor: pointer; transition: 0.3s; position: relative; background: transparent; }
-        .list-item:active { background: rgba(255,255,255,0.5); }
-        .list-item img:not(.artist-icon) { width: 54px; height: 54px; border-radius: 16px; margin-right: 16px; object-fit: cover; border: 3px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .list-item { display: flex; align-items: center; padding: 14px 20px; border-bottom: 1px solid var(--border-color); cursor: pointer; transition: 0.3s; position: relative; background: transparent; }
+        .list-item:active { background: var(--list-hover); }
+        .list-item img:not(.artist-icon) { width: 54px; height: 54px; border-radius: 16px; margin-right: 16px; object-fit: cover; border: 3px solid var(--border-color); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
 
         .artist-icon-container { width: 68px; height: 68px; margin-right: 18px; flex-shrink: 0; filter: drop-shadow(0 8px 12px rgba(180,180,210,0.3)); position: relative; }
         .artist-icon { width: 100%; height: 100%; object-fit: cover; background: var(--grad-primary); display: flex; align-items: center; justify-content: center; color: #fff; clip-path: var(--star-clip); }
 
-        .swipe-container { position: relative; overflow: hidden; background: #fdfdff; }
-        .swipe-container .list-item { background: #ffffff; z-index: 2; position: relative; }
+        .swipe-container { position: relative; overflow: hidden; background: var(--bg-color); }
+        .swipe-container .list-item { background: var(--card-bg); z-index: 2; position: relative; }
         .swipe-delete-btn { position: absolute; right: 0; top: 0; bottom: 0; width: 85px; background: #ffebee; color: #ff8a80; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; z-index: 1; }
 
         .reorder-btns { display: flex; flex-direction: column; gap: 8px; margin-left: auto; z-index: 5; padding-left: 10px; }
@@ -144,20 +177,22 @@
             transform: translateY(100%); 
             transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1); 
             visibility: hidden; 
-            background: rgba(255, 255, 255, 0.4); 
+            background: var(--player-bg); 
             backdrop-filter: blur(50px) saturate(180%); 
             -webkit-backdrop-filter: blur(50px) saturate(180%); 
             max-width: 390px; margin: 0 auto; left: 0; right: 0; 
             touch-action: none; 
         }
         .full-player.active { transform: translateY(0); visibility: visible; }
+        [data-theme="dark"] .full-player { background-image: var(--blur-bg, none); background-size: cover; background-position: center; }
 
         #bg-blur-overlay { position: absolute; inset: 0; z-index: -2; background: rgba(255,255,255,0.2); overflow: hidden; }
+        [data-theme="dark"] #bg-blur-overlay { background: rgba(0,0,0,0.5); }
         .bg-sphere { position: absolute; width: 200%; height: 200%; top: -50%; left: -50%; background: radial-gradient(circle, var(--accent-blue) 0%, var(--accent-purple) 25%, var(--key-color) 50%, var(--accent-green) 100%); filter: blur(100px); opacity: 0.5; animation: rotateBg 40s linear infinite; }
         @keyframes rotateBg { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
         #f-artwork-container { width: 82vw; max-width: 340px; aspect-ratio: 1/1; position: relative; transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1); z-index: 10; }
-        #f-img { width: 100%; height: 100%; border-radius: 42px; object-fit: cover; box-shadow: 0 40px 80px rgba(150,150,180,0.25); border: 8px solid #fff; }
+        #f-img { width: 100%; height: 100%; border-radius: 42px; object-fit: cover; box-shadow: 0 40px 80px rgba(150,150,180,0.25); border: 8px solid var(--border-color); }
         
         #f-lyrics-view { 
             position: absolute; inset: 0; 
@@ -166,12 +201,13 @@
             -webkit-backdrop-filter: blur(30px);
             border-radius: 42px; padding: 50px 30px; 
             overflow-y: auto; display: none; flex-direction: column; align-items: center; text-align: center; 
-            font-size: 19px; line-height: 2.4; color: #2d2d44; 
+            font-size: 19px; line-height: 2.4; color: var(--text-dark); 
             text-shadow: 0 0 15px rgba(255,255,255,0.8);
             font-weight: 800; z-index: 20; border: 1px solid rgba(255,255,255,0.4); 
             touch-action: pan-y; 
             transition: all 0.4s ease;
         }
+        [data-theme="dark"] #f-lyrics-view { background: rgba(0,0,0,0.4); text-shadow: 0 0 10px rgba(0,0,0,0.8); border: 1px solid rgba(255,255,255,0.1); }
         #f-lyrics-view.active { display: flex; }
         
         .fullscreen-lyrics {
@@ -179,49 +215,52 @@
             background: rgba(255, 255, 255, 0.85) !important; backdrop-filter: blur(50px) !important;
             max-width: 100% !important; padding: 80px 20px !important;
             -webkit-backdrop-filter: blur(50px) !important;
+            height: 100vh !important;
+            width: 100vw !important;
         }
+        [data-theme="dark"] .fullscreen-lyrics { background: rgba(0, 0, 0, 0.85) !important; }
 
-        .seeker { -webkit-appearance: none; width: 100%; height: 6px; background: rgba(166,203,227,0.25); border-radius: 10px; outline: none; margin: 40px 0 10px; }
+        .seeker { -webkit-appearance: none; width: 100%; height: 6px; background: var(--seeker-bg); border-radius: 10px; outline: none; margin: 40px 0 10px; }
         .seeker::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; background: #fff; border: 3px solid #a6cbe3; border-radius: 50%; box-shadow: 0 2px 8px rgba(166,203,227,0.3); cursor: pointer; }
 
-        .mini-player { position: fixed; bottom: calc(65px + env(safe-area-inset-bottom)); height: 64px; background: rgba(255,255,255,0.8); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border-radius: 24px; display: none; align-items: center; padding: 0 16px; box-shadow: 0 10px 30px rgba(180,190,220,0.2); z-index: 2000; border: 2px solid rgba(255,255,255,0.8); max-width: 360px; margin: 0 auto; left: 0; right: 0; width: 92%; }
-        #m-img { width: 48px; height: 48px; border-radius: 14px; margin-right: 14px; object-fit: cover; border: 2px solid #fff; }
+        .mini-player { position: fixed; bottom: calc(85px + env(safe-area-inset-bottom)); height: 64px; background: var(--glass); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border-radius: 24px; display: none; align-items: center; padding: 0 16px; box-shadow: 0 10px 30px rgba(180,190,220,0.2); z-index: 2000; border: 2px solid var(--border-color); max-width: 360px; margin: 0 auto; left: 0; right: 0; width: 92%; }
+        #m-img { width: 48px; height: 48px; border-radius: 14px; margin-right: 14px; object-fit: cover; border: 2px solid var(--border-color); }
         
         .tab-bar { 
             position: fixed !important; 
             bottom: 0 !important; 
             width: 100%; 
-            height: calc(75px + env(safe-area-inset-bottom)); 
-            background: rgba(255,255,255,0.92); backdrop-filter: blur(40px); display: flex; justify-content: space-around; 
-            padding-top: 15px; 
-            padding-bottom: calc(15px + env(safe-area-inset-bottom));
-            border-top: 1px solid rgba(255,255,255,0.8); z-index: 3000; max-width: 390px; margin: 0 auto; left: 0; right: 0; 
+            height: calc(80px + env(safe-area-inset-bottom)); 
+            background: var(--tab-bg); backdrop-filter: blur(40px); display: flex; justify-content: space-around; 
+            padding-top: 10px; 
+            padding-bottom: calc(20px + env(safe-area-inset-bottom));
+            border-top: 1px solid var(--border-color); z-index: 3000; max-width: 390px; margin: 0 auto; left: 0; right: 0; 
         }
-        .tab-item { border:none; background:none; color: #bcc1d8; font-weight: 800; font-size: 10px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 4px; width: 33%; transition: 0.3s; }
-        .tab-item.active { color: #a6cbe3; }
-        .tab-item i { font-size: 19px; margin-top: 6px; }
+        .tab-item { border:none; background:none; color: var(--sub-text); font-weight: 800; font-size: 10px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 4px; width: 33%; transition: 0.3s; }
+        .tab-item.active { color: #a6cbe3; transform: scale(1.1); }
+        .tab-item i { font-size: 24px; margin-top: 6px; }
         .tab-item span { margin-top: 2px; }
 
-        .modal { position: fixed; inset: 0; background: #ffffff; z-index: 7000; display: none; flex-direction: column; animation: modalSlide 0.4s cubic-bezier(0.1, 0.9, 0.2, 1); max-width: 390px; margin: 0 auto; left: 0; right: 0; }
+        .modal { position: fixed; inset: 0; background: var(--modal-bg); z-index: 7000; display: none; flex-direction: column; animation: modalSlide 0.4s cubic-bezier(0.1, 0.9, 0.2, 1); max-width: 390px; margin: 0 auto; left: 0; right: 0; }
         @keyframes modalSlide { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         
         .modal .header { position: relative !important; min-height: 70px; height: 70px; padding-top: calc(5px + env(safe-area-inset-top)); }
 
         .modal-body { padding: 30px; overflow-y: auto; flex: 1; -webkit-overflow-scrolling: touch; }
-        .edit-input { width: 100%; padding: 18px; border: 2.5px solid #f2f2f7; border-radius: 20px; margin-bottom: 22px; outline: none; font-size: 15px; background: #fbfbfc; color: var(--text-main); font-weight: 600; }
-        .edit-input:focus { border-color: #a6cbe3; background: #fff; }
+        .edit-input { width: 100%; padding: 18px; border: 2.5px solid var(--border-color); border-radius: 20px; margin-bottom: 22px; outline: none; font-size: 15px; background: var(--input-bg); color: var(--text-main); font-weight: 600; }
+        .edit-input:focus { border-color: #a6cbe3; background: var(--card-bg); }
         .field-label { font-size: 10px; color: #a6cbe3; font-weight: 900; letter-spacing: 0.12em; display: block; margin-bottom: 10px; margin-left: 5px; text-transform: uppercase; }
 
-        .artist-chip { display: inline-block; padding: 9px 18px; background: #fff; border: 2px solid #f0f0f5; border-radius: 25px; font-size: 12px; margin: 0 6px 10px 0; color: var(--sub-text); font-weight: 800; cursor: pointer; transition: 0.2s; }
+        .artist-chip { display: inline-block; padding: 9px 18px; background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 25px; font-size: 12px; margin: 0 6px 10px 0; color: var(--sub-text); font-weight: 800; cursor: pointer; transition: 0.2s; }
         .artist-chip:active { background: var(--accent-blue); color: #5a9abf; }
 
-        .del-badge { position: absolute; top: -10px; left: -10px; width: 32px; height: 32px; background: var(--grad-primary); color: #fff; border-radius: 50%; display: none; align-items: center; justify-content: center; border: 3px solid #fff; z-index: 10; font-size: 12px; box-shadow: 0 4px 12px rgba(166,203,227,0.3); }
+        .del-badge { position: absolute; top: -10px; left: -10px; width: 32px; height: 32px; background: var(--grad-primary); color: #fff; border-radius: 50%; display: none; align-items: center; justify-content: center; border: 3px solid var(--border-color); z-index: 10; font-size: 12px; box-shadow: 0 4px 12px rgba(166,203,227,0.3); }
         .editing .del-badge { display: flex; }
         
-        .check-item { display: flex; align-items: center; padding: 16px 25px; border-bottom: 1.5px solid #f8f8fa; cursor: pointer; }
+        .check-item { display: flex; align-items: center; padding: 16px 25px; border-bottom: 1.5px solid var(--border-color); cursor: pointer; }
         .check-item input[type="checkbox"] { width: 22px; height: 22px; margin-right: 18px; accent-color: #a6cbe3; }
 
-        .queue-panel { position: absolute; inset: 0; background: rgba(255,255,255,0.9); backdrop-filter: blur(50px); z-index: 6000; transform: translateY(100%); transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1); display: flex; flex-direction: column; max-width: 390px; margin: 0 auto; }
+        .queue-panel { position: absolute; inset: 0; background: var(--glass); backdrop-filter: blur(50px); z-index: 6000; transform: translateY(100%); transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1); display: flex; flex-direction: column; max-width: 390px; margin: 0 auto; }
         .queue-panel.open { transform: translateY(0); }
 
         .marquee-wrap { width: 100%; overflow: hidden; white-space: nowrap; position: relative; }
@@ -234,6 +273,19 @@
             body { max-width: 100%; width: 100%; box-shadow: none; }
             .header, .tab-bar, .full-player, .modal, .queue-panel { max-width: 100%; }
         }
+
+        .star-icon { color: #a6cbe3; }
+        .star-icon.active {
+            background: var(--star-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+        [data-theme="dark"] .star-icon.active { -webkit-text-fill-color: red; color: red; }
+
+        .artist-list-item { display: flex; align-items: center; padding: 14px 20px; border-bottom: 1px solid var(--border-color); cursor: pointer; transition: 0.3s; position: relative; background: var(--card-bg); }
+        
+        .color-preset-btn { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--border-color); cursor: pointer; margin-right: 10px; }
     </style>
 </head>
 <body>
@@ -245,6 +297,7 @@
             <button id="left-btn" onclick="handleHeaderLeft()"><i class="fa-solid fa-sliders"></i></button>
             <h2 id="view-title">Library</h2>
             <div style="display:flex; align-items:center; min-width:50px; justify-content:flex-end;">
+                <button id="settings-header-btn" style="display:none; background:none; border:none; color:#a6cbe3; font-size:18px; padding:10px; cursor:pointer;" onclick="openSettings()"><i class="fa-solid fa-gear"></i></button>
                 <button id="artist-setup-header-btn" style="display:none; background:none; border:none; color:#a6cbe3; font-size:18px; padding:10px; cursor:pointer;" onclick="openArtistSetup(currentArtist)"><i class="fa-solid fa-users-gear"></i></button>
                 <button id="right-btn" onclick="handleHeaderRight()"><i class="fa-solid fa-plus"></i></button>
             </div>
@@ -292,7 +345,7 @@
                     <div id="f-artist" onclick="goToArtistFromPlayer()" style="font-size:16px; color:#a6cbe3; margin-top:6px; font-weight:700; cursor:pointer; text-decoration:underline;"></div>
                 </div>
                 <div style="display:flex; gap:10px; align-items:center;">
-                    <button id="f-fav-btn" onclick="toggleFavoriteCurrentSong()" style="background:none; border:none; color:#a6cbe3; font-size:24px; padding:10px; opacity:0.6;"><i class="fa-regular fa-star"></i></button>
+                    <button id="f-fav-btn" onclick="toggleFavoriteCurrentSong()" style="background:none; border:none; color:#a6cbe3; font-size:24px; padding:10px; opacity:0.6;"><i class="fa-regular fa-star star-icon"></i></button>
                 </div>
             </div>
             
@@ -318,7 +371,7 @@
         </div>
 
         <div class="queue-panel" id="queue-panel">
-            <div style="padding:22px 25px; border-bottom:1.5px solid #f5f5f7; display:flex; justify-content:space-between; align-items:center;">
+            <div style="padding:22px 25px; border-bottom:1.5px solid var(--border-color); display:flex; justify-content:space-between; align-items:center;">
                 <h3 style="margin:0; font-size:18px; font-weight:900; color:#6a89cc;">Next Up</h3>
                 <button onclick="toggleQueue()" style="background:#e1f1fa; border:none; font-size:13px; color:#5a9abf; font-weight:800; padding:8px 16px; border-radius:15px;">Close</button>
             </div>
@@ -340,9 +393,12 @@
     <div id="pl-edit-modal" class="modal">
         <div class="header"><div class="header-top"><button class="modal-close-btn" onclick="closePlEdit()"><i class="fa-solid fa-xmark"></i></button><h2>Playlist</h2><button onclick="savePlEdit()" style="color:#a6cbe3; font-weight:900;">Done</button></div></div>
         <div class="modal-body" style="text-align:center;">
-            <div style="position:relative; display:inline-block; margin-bottom:30px;">
-                <img id="pl-edit-img" style="width:200px; height:200px; border-radius:35px; object-fit:cover; border:5px solid #fff; box-shadow:0 15px 40px rgba(0,0,0,0.08); cursor:pointer;" onclick="document.getElementById('pl-img-input').click()">
+            <div style="position:relative; display:inline-block; margin-bottom:10px;">
+                <img id="pl-edit-img" style="width:200px; height:200px; border-radius:35px; object-fit:cover; border:5px solid var(--border-color); box-shadow:0 15px 40px rgba(0,0,0,0.08); cursor:pointer;" onclick="document.getElementById('pl-img-input').click()">
                 <div style="position:absolute; bottom:10px; right:10px; background:var(--grad-primary); width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; pointer-events:none;"><i class="fa-solid fa-camera" style="font-size:16px;"></i></div>
+            </div>
+            <div style="margin-bottom:20px;">
+                <button onclick="togglePlFav()" id="pl-fav-btn" style="background:none; border:none; font-size:24px; color:#a6cbe3;"><i class="fa-regular fa-star star-icon"></i></button>
             </div>
             <input type="file" id="pl-img-input" style="display:none" onchange="previewPlImg(event)">
             <div style="text-align:left;">
@@ -351,7 +407,7 @@
                 <div style="display:flex; flex-direction:column; margin-bottom:22px;">
                     <div style="display:flex; align-items:center; margin-bottom:10px;">
                         <input type="text" id="pl-edit-tag" class="edit-input" placeholder="Add Tag..." style="margin-bottom:0;" oninput="updateTagSuggest(this.value)">
-                        <button onclick="addPlTag()" style="margin-left:10px; padding:15px; background:transparent; color:#a6cbe3; border:2px solid #e1f1fa; border-radius:15px; font-weight:800; font-size:14px; white-space:nowrap;"><i class="fa-solid fa-plus"></i></button>
+                        <button onclick="addPlTag()" style="margin-left:10px; padding:15px; background:transparent; color:#a6cbe3; border:2px solid var(--border-color); border-radius:15px; font-weight:800; font-size:14px; white-space:nowrap;"><i class="fa-solid fa-plus"></i></button>
                     </div>
                     <div id="pl-active-tags" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
                 </div>
@@ -365,10 +421,41 @@
         <div class="modal-body" id="artist-setup-body"></div>
     </div>
 
+    <div id="settings-modal" class="modal">
+        <div class="header"><div class="header-top"><button class="modal-close-btn" onclick="document.getElementById('settings-modal').style.display='none'"><i class="fa-solid fa-xmark"></i></button><h2>Settings</h2><div></div></div></div>
+        <div class="modal-body">
+            <span class="field-label">Theme Mode</span>
+            <select id="theme-select" class="edit-input" onchange="applyTheme(this.value)">
+                <option value="system">端末の設定に追従</option>
+                <option value="light">ライトモード</option>
+                <option value="dark">ダークモード</option>
+            </select>
+            
+            <span class="field-label">Sleep Timer (Minutes)</span>
+            <div style="display:flex; gap:10px;">
+                <input type="number" id="timer-input" class="edit-input" placeholder="0" style="margin-bottom:0;" pattern="[0-9]*" inputmode="numeric">
+                <button onclick="startTimer()" style="background:#a6cbe3; color:#fff; border:none; border-radius:15px; font-weight:800; padding:0 20px;">Start</button>
+            </div>
+            <div id="timer-display" style="margin-top:10px; font-size:12px; color:var(--sub-text);"></div>
+
+            <span class="field-label" style="margin-top:20px;">UI/UX Color Preset</span>
+            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;">
+                <div class="color-preset-btn" style="background:linear-gradient(135deg, #a6cbe3, #fbe0e6);" onclick="setPreset('#a6cbe3', '#fbe0e6')"></div>
+                <div class="color-preset-btn" style="background:linear-gradient(135deg, #ffb6c1, #ff69b4);" onclick="setPreset('#ffb6c1', '#ff69b4')"></div>
+                <div class="color-preset-btn" style="background:linear-gradient(135deg, #98fb98, #3cb371);" onclick="setPreset('#98fb98', '#3cb371')"></div>
+                <div class="color-preset-btn" style="background:linear-gradient(135deg, #dda0dd, #8a2be2);" onclick="setPreset('#dda0dd', '#8a2be2')"></div>
+            </div>
+            <span class="field-label">Custom Gradient Color 1</span>
+            <input type="color" id="custom-col-1" value="#a6cbe3" class="edit-input" onchange="updateCustomColor()">
+            <span class="field-label">Custom Gradient Color 2</span>
+            <input type="color" id="custom-col-2" value="#fbe0e6" class="edit-input" onchange="updateCustomColor()">
+        </div>
+    </div>
+
     <div id="lyric-paint-modal" class="modal" style="z-index: 8000;">
         <div class="header"><div class="header-top"><button class="modal-close-btn" onclick="document.getElementById('lyric-paint-modal').style.display='none'"><i class="fa-solid fa-xmark"></i></button><h2>Paint Lyrics</h2><button onclick="saveLyricPaint()" style="color:#a6cbe3; font-weight:900;">Save</button></div></div>
         <div class="modal-body" style="padding:10px;">
-            <div id="paint-palette" style="display:flex; gap:10px; overflow-x:auto; margin-bottom:15px; padding:10px; border-bottom:1px solid #f0f0f5;"></div>
+            <div id="paint-palette" style="display:flex; gap:10px; overflow-x:auto; margin-bottom:15px; padding:10px; border-bottom:1px solid var(--border-color);"></div>
             <div id="paint-lyrics-container" style="display:flex; flex-direction:column; gap:8px; padding-bottom:40px;"></div>
         </div>
     </div>
@@ -387,16 +474,67 @@
         let db, tracks = [], playlists = [], artistMeta = {}, isEditing = false, currentView = 'library', currentArtist = null, currentPlaylistId = null;
         let playingTracks = [], currentTrackIdx = -1, isShuffle = false, repeatMode = 0; 
         let editingId = null, editingPlId = null, tempPlImg = null, editingArtistName = null;
-        let currentPlTags = [];
+        let currentPlTags = [], tempPlFav = false;
         let editingArtistSetupName = null;
         let currentMembersEdit = [];
         let currentPaintColor = '';
         let currentLyricColors = [];
+        let sleepTimerId = null;
         const audio = document.getElementById('audio-element');
 
         let sortStates = { artists: 'added', library: 'added', playlist: 'added', playlistDetail: 'custom' };
         let searchQueries = { artists: '', library: '', playlist: '', playlistDetail: '', bulkAdd: '' };
         let activeArtistFilter = null; 
+
+        // Theme and UI Colors
+        function applyTheme(mode) {
+            if(mode === 'system') {
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) { document.documentElement.setAttribute('data-theme', 'dark'); }
+                else { document.documentElement.removeAttribute('data-theme'); }
+            } else if(mode === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+            }
+            localStorage.setItem('themeMode', mode);
+            updatePlayerBlurBg();
+        }
+        function initTheme() {
+            let mode = localStorage.getItem('themeMode') || 'system';
+            document.getElementById('theme-select').value = mode;
+            applyTheme(mode);
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                if(document.getElementById('theme-select').value === 'system') applyTheme('system');
+            });
+        }
+        initTheme();
+
+        function setPreset(c1, c2) {
+            document.documentElement.style.setProperty('--grad-primary', `linear-gradient(135deg, ${c1} 0%, ${c2} 100%)`);
+            document.documentElement.style.setProperty('--accent-blue', c1);
+            document.documentElement.style.setProperty('--key-color', c2);
+            document.getElementById('custom-col-1').value = c1;
+            document.getElementById('custom-col-2').value = c2;
+        }
+        function updateCustomColor() {
+            const c1 = document.getElementById('custom-col-1').value;
+            const c2 = document.getElementById('custom-col-2').value;
+            setPreset(c1, c2);
+        }
+        function openSettings() { document.getElementById('settings-modal').style.display = 'flex'; }
+        
+        function startTimer() {
+            const min = parseInt(document.getElementById('timer-input').value);
+            if(isNaN(min) || min <= 0) return;
+            if(sleepTimerId) clearTimeout(sleepTimerId);
+            const endTime = Date.now() + min * 60000;
+            document.getElementById('timer-display').innerText = `Timer set for ${min} minutes.`;
+            sleepTimerId = setTimeout(() => {
+                audio.pause();
+                document.getElementById('timer-display').innerText = "Timer finished.";
+                sleepTimerId = null;
+            }, min * 60000);
+        }
 
         const req = indexedDB.open("MusicStudioWishcore_V6", 1);
         req.onupgradeneeded = (e) => {
@@ -435,6 +573,13 @@
             render();
         }
 
+        function getArtistStarColor(artistName) {
+            if(artistMeta[artistName] && artistMeta[artistName].syncColor) {
+                return artistMeta[artistName].syncColor;
+            }
+            return '';
+        }
+
         function render() {
             const display = document.getElementById('main-display');
             const title = document.getElementById('view-title');
@@ -445,10 +590,14 @@
             const tagSuggest = document.getElementById('playlist-tag-suggestions');
             const artistFilter = document.getElementById('artist-filter-container');
             const artistSetupBtn = document.getElementById('artist-setup-header-btn');
+            const settingsBtn = document.getElementById('settings-header-btn');
             
             tagSuggest.style.display = 'none';
             artistFilter.style.display = 'none';
             if (artistSetupBtn) artistSetupBtn.style.display = currentArtist ? 'inline-block' : 'none';
+            if (settingsBtn) settingsBtn.style.display = (currentView === 'artists' && !currentArtist) ? 'inline-block' : 'none';
+            
+            rightBtn.style.display = (currentView === 'artists' && !currentArtist && !isEditing) ? 'none' : 'flex';
 
             const viewKey = (currentView === 'playlist' && currentPlaylistId !== null) ? 'playlistDetail' : currentView;
             let currentSearch = searchQueries[viewKey];
@@ -498,6 +647,7 @@
                 if (!currentArtist) {
                     title.innerText = "Artists"; display.className = "";
                     let allArts = new Set();
+                    Object.keys(artistMeta).forEach(k => allArts.add(k)); // allow custom added artists
                     tracks.forEach(t => { if(t.artist) t.artist.split(/[,、/]/).forEach(a => { if(a.trim()) allArts.add(a.trim()); }) });
                     let artists = [...allArts];
                     
@@ -520,12 +670,20 @@
                         const firstSong = tracks.find(t => t.artist.split(/[,、/]/).map(x=>x.trim()).includes(a));
                         const isFav = artistMeta[a] && artistMeta[a].favorite;
                         const icon = (artistMeta[a] && artistMeta[a].icon) ? `<img src="${artistMeta[a].icon}" class="artist-icon">` : (firstSong && firstSong.cover ? `<img src="${firstSong.cover}" class="artist-icon">` : `<div class="artist-icon"><i class="fa-solid fa-user" style="font-size:24px;"></i></div>`);
-                        return `<div class="list-item" onclick="isEditing ? selectArtistIcon('${a}') : openArtist('${a}')">
+                        let starCol = getArtistStarColor(a);
+                        let starStyle = starCol ? `color:${starCol};` : (isFav ? '' : 'color:#a6cbe3;');
+                        let starClass = (isFav && !starCol) ? 'star-icon active' : 'star-icon';
+                        
+                        return `
+                        <div class="swipe-container" id="swipe-art-${CSS.escape(a)}">
+                            <div class="swipe-delete-btn" onclick="deleteCustomArtist('${a}')">Delete</div>
+                            <div class="artist-list-item" onclick="isEditing ? selectArtistIcon('${a}') : openArtist('${a}')" ontouchstart="handleTouchStart(event, 'art-${a}')" ontouchmove="handleTouchMove(event, 'art-${a}')" ontouchend="handleTouchEnd(event, 'art-${a}')">
                                 <div class="artist-icon-container">${icon}</div>
                                 <div style="font-weight:800; font-size:16px; flex:1;">${a}</div>
-                                <button onclick="event.stopPropagation(); toggleFavArtist('${a}')" style="background:none; border:none; font-size:20px; padding:10px; margin-right:10px; color:${isFav?'#ffd700':'#a6cbe3'};"><i class="fa-${isFav?'solid':'regular'} fa-star"></i></button>
+                                <button onclick="event.stopPropagation(); toggleFavArtist('${a}')" style="background:none; border:none; font-size:20px; padding:10px; margin-right:10px; ${starStyle}" class="${starClass}"><i class="fa-${isFav?'solid':'regular'} fa-star"></i></button>
                                 <i class="fa-solid fa-chevron-right" style="font-size:12px; color:#a6cbe3;"></i>
-                            </div>`;
+                            </div>
+                        </div>`;
                     }).join('');
                 } else {
                     title.innerText = currentArtist; display.className = "grid";
@@ -556,12 +714,15 @@
                         }
                     }
                     let list = playlists.filter(p => searchTerms.every(term => p.name.toLowerCase().includes(term) || (p.tag && p.tag.toLowerCase().includes(term))));
+                    if(isFavSearch) list = list.filter(p => p.favorite);
+
                     display.innerHTML = list.map(p => {
                         const firstSong = tracks.find(t => p.songIds.includes(t.id));
                         const tagsHtml = p.tag ? p.tag.split(/[,、]/).map(tg => `<div class="card-tag">${tg.trim()}</div>`).join(' ') : '';
                         return `<div class="card ${isEditing?'editing':''}" onclick="isEditing?openPlEdit(${p.id}):openPlaylist(${p.id})">
                             <div class="del-badge" onclick="event.stopPropagation(); deletePlaylist(${p.id})"><i class="fa-solid fa-x"></i></div>
                             <img src="${p.cover || (firstSong?firstSong.cover:'')}" class="card-img">
+                            ${p.favorite ? '<i class="fa-solid fa-star star-icon active" style="position:absolute; top:15px; right:15px; font-size:18px; filter:drop-shadow(0 2px 5px rgba(0,0,0,0.4)); z-index:10;"></i>' : ''}
                             <div class="card-info">
                                 <div class="card-title">${p.name}</div>
                                 <div class="card-sub">${p.songIds.length} tracks</div>
@@ -601,12 +762,15 @@
                     display.innerHTML = filtered.map((t, idx) => `
                         <div class="swipe-container" id="swipe-${t.id}">
                             <div class="swipe-delete-btn" onclick="removeTrackFromPlaylist(${t.id})">Remove</div>
-                            <div class="list-item" onclick="playSong(${t.id},'pl')" ontouchstart="handleTouchStart(event, ${t.id})" ontouchmove="handleTouchMove(event, ${t.id})" ontouchend="handleTouchEnd(event, ${t.id})">
-                                <img src="${t.cover||''}">
-                                <div style="flex:1;"><div style="font-weight:800; font-size:14px; display:flex; align-items:center; gap:5px;">${t.name} ${t.favorite ? '<i class="fa-solid fa-star" style="color:#ffd700; font-size:12px;"></i>' : ''}</div><div style="font-size:11px; color:#a6cbe3; margin-top:3px; font-weight:700;">${t.artist}</div></div>
+                            <div class="list-item" onclick="playSong(${t.id},'pl')" ontouchstart="handleTouchStart(event, '${t.id}')" ontouchmove="handleTouchMove(event, '${t.id}')" ontouchend="handleTouchEnd(event, '${t.id}')">
+                                <div style="position:relative; margin-right:16px;">
+                                    ${t.favorite ? '<i class="fa-solid fa-star star-icon active" style="position:absolute; top:-5px; left:-5px; font-size:12px; z-index:5;"></i>' : ''}
+                                    <img src="${t.cover||''}" style="margin-right:0;">
+                                </div>
+                                <div style="flex:1;"><div style="font-weight:800; font-size:14px; display:flex; align-items:center; gap:5px;">${t.name}</div><div style="font-size:11px; color:#a6cbe3; margin-top:3px; font-weight:700;">${t.artist}</div></div>
                                 ${currentSort==='custom'? `<div class="reorder-btns" onclick="event.stopPropagation()"><i class="fa-solid fa-chevron-up" onclick="moveTrack(${idx}, -1)"></i><i class="fa-solid fa-chevron-down" onclick="moveTrack(${idx}, 1)"></i></div>` : ''}
                             </div>
-                        </div>`).join('') + `<div style="padding:40px; text-align:center;"><button onclick="openBulkAddModal()" style="background:#fff; color:#6a89cc; border:2px solid #e1f1fa; padding:15px 30px; border-radius:30px; font-weight:900; font-size:12px;">+ Add Tracks</button></div>`;
+                        </div>`).join('') + `<div style="padding:40px; text-align:center;"><button onclick="openBulkAddModal()" style="background:var(--card-bg); color:#6a89cc; border:2px solid var(--accent-blue); padding:15px 30px; border-radius:30px; font-weight:900; font-size:12px;">+ Add Tracks</button></div>`;
                 }
             }
 
@@ -615,19 +779,25 @@
             } else {
                 leftBtn.innerHTML = isEditing ? '<i class="fa-solid fa-check"></i>' : '<i class="fa-solid fa-sliders"></i>';
             }
-            rightBtn.innerHTML = currentArtist ? '<i class="fa-solid fa-play"></i>' : '<i class="fa-solid fa-plus"></i>';
+            if (currentArtist) {
+                rightBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+            } else if (currentView === 'artists' && isEditing && !currentArtist) {
+                rightBtn.innerHTML = '<i class="fa-solid fa-plus"></i>';
+            } else {
+                rightBtn.innerHTML = '<i class="fa-solid fa-plus"></i>';
+            }
         }
 
         function renderCards(list, container, sort) {
             if (sort === 'name_asc') list.sort((a,b) => a.name.localeCompare(b.name,'ja'));
             else if (sort === 'name_desc') list.sort((a,b) => b.name.localeCompare(a.name,'ja'));
-            else if (sort === 'year') list.sort((a,b) => b.year.toString().localeCompare(a.year.toString()));
+            else if (sort === 'year') list.sort((a,b) => (b.year||'').toString().localeCompare((a.year||'').toString()));
             
             container.innerHTML = list.map(t => `
                 <div class="card ${isEditing?'editing':''}" onclick="isEditing?openEdit(${t.id}):playSong(${t.id},'lib')">
                     <div class="del-badge" onclick="event.stopPropagation(); deleteSong(${t.id})"><i class="fa-solid fa-trash-can"></i></div>
                     <img src="${t.cover||''}" class="card-img">
-                    ${t.favorite ? '<i class="fa-solid fa-star" style="position:absolute; top:15px; right:15px; color:#ffd700; font-size:18px; filter:drop-shadow(0 2px 5px rgba(0,0,0,0.4)); z-index:10;"></i>' : ''}
+                    ${t.favorite ? '<i class="fa-solid fa-star star-icon active" style="position:absolute; top:15px; right:15px; font-size:18px; filter:drop-shadow(0 2px 5px rgba(0,0,0,0.4)); z-index:10;"></i>' : ''}
                     <div class="card-info">
                         <div class="card-title">${t.name}</div>
                         <div class="card-sub">${t.artist} ${t.year ? `<span class="card-year">${t.year}</span>`:''}</div>
@@ -664,6 +834,12 @@
             artistMeta[a] = meta;
             db.transaction("artistMeta", "readwrite").objectStore("artistMeta").put(meta).onsuccess = loadAll;
         }
+        
+        function deleteCustomArtist(a) {
+            if(confirm(`Delete artist '${a}'?`)) {
+                db.transaction("artistMeta", "readwrite").objectStore("artistMeta").delete(a).onsuccess = loadAll;
+            }
+        }
 
         function toggleFavoriteCurrentSong() {
             if (currentTrackIdx === -1) return;
@@ -678,9 +854,12 @@
         function updateFavBtn(isFav) {
             const btn = document.getElementById('f-fav-btn');
             if(btn) {
-                btn.style.color = isFav ? "#ffd700" : "#a6cbe3";
-                btn.style.opacity = isFav ? "1" : "0.6";
-                btn.innerHTML = isFav ? '<i class="fa-solid fa-star"></i>' : '<i class="fa-regular fa-star"></i>';
+                const icon = btn.querySelector('i');
+                if(isFav) {
+                    icon.className = 'fa-solid fa-star star-icon active';
+                } else {
+                    icon.className = 'fa-regular fa-star star-icon';
+                }
             }
         }
 
@@ -727,7 +906,7 @@
                 const fsToggleBtn = `<button id="fs-lyric-btn" onclick="event.stopPropagation(); toggleFullscreenLyrics()" style="position:absolute; top:25px; right:25px; background:rgba(0,0,0,0.1); border:none; color:#a6cbe3; padding:12px; border-radius:12px; z-index:50;"><i class="fa-solid fa-expand"></i></button>`;
                 const paintBtn = `<button onclick="event.stopPropagation(); openLyricPaint()" style="position:absolute; top:25px; left:25px; background:rgba(0,0,0,0.1); border:none; color:#a6cbe3; padding:12px; border-radius:12px; z-index:50;"><i class="fa-solid fa-palette"></i></button>`;
                 
-                view.innerHTML = fsToggleBtn + paintBtn + lines.map((l, i) => `<div style="color:${colors[i] || 'inherit'}; width:100%; word-wrap:break-word;">${l}</div>`).join('');
+                view.innerHTML = fsToggleBtn + paintBtn + `<div id="lyrics-content-scroll" style="width:100%; height:100%; overflow-y:auto; padding-top:40px;">` + lines.map((l, i) => `<div style="color:${colors[i] || 'inherit'}; width:100%; word-wrap:break-word;">${l}</div>`).join('') + `</div>`;
                 
                 if(view.classList.contains('fullscreen-lyrics')) {
                     document.getElementById('fs-lyric-btn').innerHTML = '<i class="fa-solid fa-compress"></i>';
@@ -735,6 +914,7 @@
             } else {
                 document.getElementById('f-img').style.opacity = "1";
                 document.getElementById('f-artwork-container').style.transform = "scale(1)";
+                view.classList.remove('fullscreen-lyrics');
                 view.innerHTML = '';
             }
         }
@@ -745,8 +925,10 @@
             const btn = document.getElementById('fs-lyric-btn');
             if(view.classList.contains('fullscreen-lyrics')) {
                 btn.innerHTML = '<i class="fa-solid fa-compress"></i>';
+                document.getElementById('f-artwork-container').style.position = 'static';
             } else {
                 btn.innerHTML = '<i class="fa-solid fa-expand"></i>';
+                document.getElementById('f-artwork-container').style.position = 'relative';
             }
         }
 
@@ -757,7 +939,7 @@
                 switchTab('artists');
                 const arts = playingTracks[currentTrackIdx].artist.split(/[,、/]/).map(a=>a.trim());
                 openArtist(arts[0]);
-            }, 400);
+            }, 800); // 速度をゆっくりに
         }
 
         function openBulkAddModal() {
@@ -812,7 +994,8 @@
             if(currentArtist) { const artTracks = tracks.filter(t => t.artist.split(/[,、/]/).map(x=>x.trim()).includes(currentArtist)); if(artTracks.length > 0) playSong(artTracks[0].id, 'art'); }
             else if(currentPlaylistId) openBulkAddModal();
             else if(currentView==='library') document.getElementById('audio-upload').click(); 
-            else if(currentView==='playlist') { const n = prompt("Playlist Name:"); if(n) db.transaction("playlists","readwrite").objectStore("playlists").add({ name: n, songIds: [], tag: "", cover: null }).onsuccess = loadAll; } 
+            else if(currentView==='playlist') { const n = prompt("Playlist Name:"); if(n) db.transaction("playlists","readwrite").objectStore("playlists").add({ name: n, songIds: [], tag: "", cover: null, favorite: false }).onsuccess = loadAll; } 
+            else if(currentView==='artists') { const n = prompt("Artist Name:"); if(n) db.transaction("artistMeta","readwrite").objectStore("artistMeta").put({ name: n, icon: null, favorite: false, members: [] }).onsuccess = loadAll; }
         }
         function togglePlay() { audio.paused ? audio.play() : audio.pause(); }
 
@@ -841,6 +1024,18 @@
             currentTrackIdx = playingTracks.findIndex(x => x.id === id);
             loadTrack(playingTracks[currentTrackIdx]);
         }
+        
+        function updatePlayerBlurBg() {
+            if(document.documentElement.getAttribute('data-theme') === 'dark') {
+                const t = playingTracks[currentTrackIdx];
+                if(t && t.cover) {
+                    document.documentElement.style.setProperty('--blur-bg', `url(${t.cover})`);
+                } else {
+                    document.documentElement.style.setProperty('--blur-bg', 'none');
+                }
+            }
+        }
+        
         function loadTrack(t) {
             if(!t) return;
             if(audio.src) URL.revokeObjectURL(audio.src);
@@ -851,6 +1046,7 @@
             document.getElementById('f-lyrics-view').classList.remove('active');
             document.getElementById('f-img').style.opacity = "1";
             updateFavBtn(t.favorite);
+            updatePlayerBlurBg();
             audio.play();
         }
         function checkMarquee(elId, text) {
@@ -859,7 +1055,18 @@
             else el.innerText = text;
         }
         function formatTime(s) { let m=Math.floor(s/60), sec=Math.floor(s%60); return `${m}:${sec<10?'0':''}${sec}`; }
-        audio.ontimeupdate = () => { if(!isNaN(audio.duration)){ const s = document.getElementById('seeker'); s.max = audio.duration; s.value = audio.currentTime; document.getElementById('cur-time').innerText = formatTime(audio.currentTime); document.getElementById('dur-time').innerText = formatTime(audio.duration); } };
+        audio.ontimeupdate = () => { 
+            if(!isNaN(audio.duration)){ 
+                const s = document.getElementById('seeker'); 
+                s.max = audio.duration; 
+                s.value = audio.currentTime; 
+                document.getElementById('cur-time').innerText = formatTime(audio.currentTime); 
+                document.getElementById('dur-time').innerText = formatTime(audio.duration); 
+                // シーカーグラデーション
+                const percent = (audio.currentTime / audio.duration) * 100;
+                s.style.background = `linear-gradient(to right, var(--accent-blue) 0%, var(--key-color) ${percent}%, var(--seeker-bg) ${percent}%, var(--seeker-bg) 100%)`;
+            } 
+        };
         audio.onplay = () => { document.getElementById('m-pp').className = 'fa-solid fa-pause'; document.getElementById('f-pp').className = 'fa-solid fa-pause'; };
         audio.onpause = () => { document.getElementById('m-pp').className = 'fa-solid fa-play'; document.getElementById('f-pp').className = 'fa-solid fa-play'; };
         audio.onended = () => { next(); };
@@ -891,10 +1098,25 @@
             renderPlTags();
         }
 
+        function togglePlFav() {
+            tempPlFav = !tempPlFav;
+            const icon = document.getElementById('pl-fav-btn').querySelector('i');
+            if(tempPlFav) {
+                icon.className = 'fa-solid fa-star star-icon active';
+            } else {
+                icon.className = 'fa-regular fa-star star-icon';
+            }
+        }
+
         function openPlEdit(id) { 
             editingPlId = id; const pl = playlists.find(p => p.id === id); 
             document.getElementById('pl-edit-name').value = pl.name; 
             currentPlTags = pl.tag ? pl.tag.split(/[,、]/).map(t=>t.trim()).filter(t=>t) : [];
+            tempPlFav = pl.favorite || false;
+            
+            const icon = document.getElementById('pl-fav-btn').querySelector('i');
+            icon.className = tempPlFav ? 'fa-solid fa-star star-icon active' : 'fa-regular fa-star star-icon';
+            
             document.getElementById('pl-edit-tag').value = '';
             renderPlTags();
             tempPlImg = pl.cover; document.getElementById('pl-edit-img').src = tempPlImg || ""; 
@@ -907,6 +1129,7 @@
             pl.name = document.getElementById('pl-edit-name').value; 
             pl.tag = currentPlTags.join(',');
             pl.cover = tempPlImg; 
+            pl.favorite = tempPlFav;
             db.transaction("playlists","readwrite").objectStore("playlists").put(pl).onsuccess = () => { closePlEdit(); loadAll(); }; 
         }
         
@@ -943,33 +1166,52 @@
 
         // Artist Setup and Lyric Paint functions
         function openArtistSetup(a) {
-            const meta = artistMeta[a] || { name: a, favorite: false, members: [] };
+            const meta = artistMeta[a] || { name: a, favorite: false, members: [], syncColor: '' };
             if(!meta.members) meta.members = [];
             editingArtistSetupName = a;
             currentMembersEdit = JSON.parse(JSON.stringify(meta.members));
-            renderArtistSetup();
+            renderArtistSetup(meta.syncColor);
             document.getElementById('artist-setup-modal').style.display = 'flex';
         }
-        function renderArtistSetup() {
+        function renderArtistSetup(syncCol = '') {
             const body = document.getElementById('artist-setup-body');
             body.innerHTML = `
-                <div style="margin-bottom:20px;">
+                <div style="margin-bottom:20px; display:flex; gap:10px; align-items:center;">
                     <button onclick="addArtistMember()" style="padding:10px 20px; background:#a6cbe3; color:#fff; border:none; border-radius:15px; font-weight:800;">+ Add Member</button>
+                    <div style="flex:1;"></div>
+                    <span style="font-size:10px; font-weight:800; color:#a6cbe3;">Star Sync Color</span>
+                    <input type="color" id="sync-color-input" value="${syncCol || '#000000'}" style="width:30px; height:30px; border:none;">
+                    <button onclick="document.getElementById('sync-color-input').value='#000000';" style="font-size:10px;">Clear</button>
                 </div>
-                ${currentMembersEdit.map((m, i) => `
-                    <div style="display:flex; gap:10px; margin-bottom:15px; align-items:center;">
-                        <input type="color" value="${m.color || '#000000'}" onchange="currentMembersEdit[${i}].color=this.value" style="width:40px; height:40px; border:none; border-radius:10px;">
-                        <input type="text" class="edit-input" style="margin-bottom:0; flex:1;" value="${m.name}" oninput="currentMembersEdit[${i}].name=this.value" placeholder="Member Name">
-                        <button onclick="removeArtistMember(${i})" style="color:#ff8a80; background:none; border:none; font-size:18px;"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                `).join('')}
+                <div id="artist-members-list">
+                    ${currentMembersEdit.map((m, i) => `
+                        <div class="swipe-container" id="swipe-mem-${i}" style="margin-bottom:10px; border-radius:15px;">
+                            <div class="swipe-delete-btn" onclick="removeArtistMember(${i})">Delete</div>
+                            <div class="list-item" ontouchstart="handleTouchStart(event, 'mem-${i}')" ontouchmove="handleTouchMove(event, 'mem-${i}')" ontouchend="handleTouchEnd(event, 'mem-${i}')" style="display:flex; gap:10px; align-items:center; background:var(--card-bg); border-radius:15px;">
+                                <i class="fa-solid fa-bars" style="color:#ccc; padding:0 10px;" onmousedown="moveMemberUp(${i})"></i>
+                                <input type="color" value="${m.color || '#000000'}" onchange="currentMembersEdit[${i}].color=this.value" style="width:40px; height:40px; border:none; border-radius:10px;">
+                                <input type="text" class="edit-input" style="margin-bottom:0; flex:1;" value="${m.name}" oninput="currentMembersEdit[${i}].name=this.value" placeholder="Member Name">
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
             `;
         }
         function addArtistMember() { currentMembersEdit.push({name:'', color:'#a6cbe3'}); renderArtistSetup(); }
         function removeArtistMember(i) { currentMembersEdit.splice(i, 1); renderArtistSetup(); }
+        function moveMemberUp(i) {
+            if(i > 0) {
+                let temp = currentMembersEdit[i-1];
+                currentMembersEdit[i-1] = currentMembersEdit[i];
+                currentMembersEdit[i] = temp;
+                renderArtistSetup();
+            }
+        }
         function saveArtistSetup() {
             let meta = artistMeta[editingArtistSetupName] || { name: editingArtistSetupName, favorite: false };
             meta.members = currentMembersEdit;
+            let syncCol = document.getElementById('sync-color-input').value;
+            meta.syncColor = syncCol !== '#000000' ? syncCol : '';
             artistMeta[editingArtistSetupName] = meta;
             db.transaction("artistMeta", "readwrite").objectStore("artistMeta").put(meta).onsuccess = () => {
                 document.getElementById('artist-setup-modal').style.display = 'none';
@@ -996,7 +1238,7 @@
             const pal = document.getElementById('paint-palette');
             pal.innerHTML = allMembers.map(m => `
                 <div onclick="currentPaintColor='${m.color}'" style="display:flex; flex-direction:column; align-items:center; cursor:pointer; min-width:45px;">
-                    <div style="width:30px; height:30px; border-radius:50%; background:${m.color || '#ccc'}; border:2px solid ${m.color?m.color:'#fff'}; box-shadow:0 2px 5px rgba(0,0,0,0.2);"></div>
+                    <div style="width:30px; height:30px; border-radius:50%; background:${m.color || '#ccc'}; border:2px solid ${m.color?m.color:'var(--border-color)'}; box-shadow:0 2px 5px rgba(0,0,0,0.2);"></div>
                     <span style="font-size:10px; margin-top:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%; text-align:center;">${m.name}</span>
                 </div>
             `).join('');
@@ -1009,7 +1251,7 @@
             const lines = (t.lyrics || '').split('\n');
             const container = document.getElementById('paint-lyrics-container');
             container.innerHTML = lines.map((l, i) => `
-                <div onclick="applyLyricColor(${i})" style="padding:15px; border-radius:12px; background:#f9f9ff; color:${currentLyricColors[i] || 'var(--text-main)'}; border-left:6px solid ${currentLyricColors[i] || 'transparent'}; cursor:pointer; font-weight:800; text-align:center;">
+                <div onclick="applyLyricColor(${i})" style="padding:15px; border-radius:12px; background:var(--input-bg); color:${currentLyricColors[i] || 'var(--text-main)'}; border-left:6px solid ${currentLyricColors[i] || 'transparent'}; cursor:pointer; font-weight:800; text-align:center;">
                     ${l || '<span style="color:#ccc; font-size:12px;">(empty line)</span>'}
                 </div>
             `).join('');
@@ -1058,12 +1300,13 @@
         function handleTouchMove(e, id) {
             if(isEditing) return;
             let moveX = e.touches[0].clientX - touchStartX;
-            const el = document.querySelector(`#swipe-${id} .list-item`);
-            if (moveX < 0) { el.style.transform = `translateX(${Math.max(moveX, -85)}px)`; el.style.transition = "none"; }
+            const el = document.querySelector(`#swipe-${id} .list-item`) || document.querySelector(`#swipe-${id} .artist-list-item`);
+            if (el && moveX < 0) { el.style.transform = `translateX(${Math.max(moveX, -85)}px)`; el.style.transition = "none"; }
         }
         function handleTouchEnd(e, id) {
             if(isEditing) return;
-            const el = document.querySelector(`#swipe-${id} .list-item`);
+            const el = document.querySelector(`#swipe-${id} .list-item`) || document.querySelector(`#swipe-${id} .artist-list-item`);
+            if(!el) return;
             let moveX = e.changedTouches[0].clientX - touchStartX;
             el.style.transition = "transform 0.4s ease";
             el.style.transform = moveX < -40 ? `translateX(-85px)` : `translateX(0)`;
