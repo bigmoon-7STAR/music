@@ -23,14 +23,14 @@
             --grad-primary: linear-gradient(135deg, #a6cbe3 0%, #fbe0e6 100%);
             --bg-color: transparent;
             --card-bg: rgba(255, 255, 255, 0.6);
-            --modal-bg: rgba(255, 255, 255, 0.5);
+            --modal-bg: rgba(255, 255, 255, 0.35);
             --border-color: rgba(255,255,255,0.4);
             --tab-bg: rgba(255,255,255,0.4);
             --input-bg: #fbfbfc;
             --seeker-bg: rgba(166,203,227,0.25);
             --list-hover: rgba(255,255,255,0.5);
-            --star-grad: linear-gradient(45deg, #ffff00, #9acd32, #add8e6);
-            --player-bg: rgba(255, 255, 255, 0.4);
+            --star-grad: #ffd700;
+            --player-bg: rgba(255, 255, 255, 0.35);
             --icon-color: #a6cbe3;
             --icon-active: #6a89cc;
             --del-color: #ff8a80;
@@ -51,14 +51,14 @@
             --grad-primary: linear-gradient(135deg, #004060 0%, #002040 100%);
             --bg-color: transparent;
             --card-bg: rgba(0, 21, 40, 0.6);
-            --modal-bg: rgba(0, 10, 20, 0.6);
+            --modal-bg: rgba(0, 10, 20, 0.45);
             --border-color: rgba(255,255,255,0.1);
             --tab-bg: rgba(0,10,20,0.4);
             --input-bg: #001a33;
             --seeker-bg: rgba(0,100,150,0.3);
             --list-hover: rgba(0,255,255,0.1);
-            --star-grad: linear-gradient(45deg, #ffff00, #9acd32, #add8e6);
-            --player-bg: rgba(0, 10, 20, 0.7);
+            --star-grad: #ffd700;
+            --player-bg: rgba(0, 10, 20, 0.45);
             --icon-color: #0088cc;
             --icon-active: #00ccff;
             --del-color: #004466;
@@ -87,16 +87,14 @@
         @keyframes float { from { transform: translate(0,0); } to { transform: translate(30px, 50px); } }
 
         .header { position: fixed !important; top: 0 !important; left: 0; right: 0; padding: calc(5px + env(safe-area-inset-top)) 20px 5px; background: var(--glass); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); border-bottom: 1.5px solid var(--border-color); z-index: 1000; box-shadow: 0 2px 15px rgba(0,0,0,0.02); width: 100%; display: flex; flex-direction: column; justify-content: flex-end; min-height: 70px; height: 70px; max-width: 390px; margin: 0 auto; }
-        .header-top { display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1001; width: 100%; height: 40px; }
-        .header-top h2 { font-size: 17px; font-weight: 800; color: var(--icon-active); margin: 0; letter-spacing: 0.05em; position: absolute; left: 50%; transform: translateX(-50%); text-align: center; width: 60%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .header-top { display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1001; width: 100%; }
+        .header-top h2 { font-size: 17px; font-weight: 800; color: var(--icon-active); margin: 0; letter-spacing: 0.05em; text-align: center; flex: 1; }
         
-        #left-btn, #right-btn, .modal-close-btn { background: none; border: none; color: var(--icon-color); font-size: 18px; cursor: pointer; padding: 10px; min-width: 50px; display: flex; align-items: center; justify-content: center; transition: 0.2s; z-index: 2; }
+        #left-btn, #right-btn, .modal-close-btn { background: none; border: none; color: var(--icon-color); font-size: 18px; cursor: pointer; padding: 10px; min-width: 50px; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
         #left-btn:active { opacity: 0.5; transform: scale(0.9); }
-        #left-btn { justify-content: flex-start; font-size: 20px; margin-right: auto; }
-        #right-btn { justify-content: flex-end; margin-left: auto; }
+        #left-btn { justify-content: flex-start; font-size: 20px; }
+        #right-btn { justify-content: flex-end; }
         #right-btn i { font-size: 18px; color: #fff; background: var(--grad-primary); width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-
-        .header-actions { display: flex; align-items: center; justify-content: flex-end; min-width: 50px; z-index: 2; margin-left: auto; }
 
         .search-container { position: relative; z-index: 90; padding: 10px 20px; background: var(--glass); backdrop-filter: blur(40px); display: flex; flex-direction: column; gap: 8px; border-bottom: 0.5px solid var(--border-color); }
         .search-bar-row { display: flex; gap: 10px; align-items: center; width: 100%; }
@@ -150,11 +148,12 @@
         #f-artwork-container { width: 82vw; max-width: 340px; aspect-ratio: 1/1; position: relative; transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1); z-index: 10; }
         #f-img { width: 100%; height: 100%; border-radius: 42px; object-fit: cover; box-shadow: 0 40px 80px rgba(150,150,180,0.25); border: 8px solid var(--border-color); }
         
-        #f-lyrics-view { position: absolute; inset: 0; background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border-radius: 42px; padding: 50px 30px; overflow-y: auto; display: none; flex-direction: column; align-items: center; text-align: center; font-size: 19px; line-height: 2.4; color: var(--text-dark); text-shadow: 0 0 15px rgba(255,255,255,0.8); font-weight: 800; z-index: 20; border: 1px solid rgba(255,255,255,0.4); touch-action: pan-y; transition: all 0.4s ease; }
+        #f-lyrics-view { position: absolute; inset: 0; background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border-radius: 42px; padding: 50px 30px; overflow-y: auto; display: none; flex-direction: column; align-items: center; text-align: center; font-size: 19px; line-height: 2.4; color: var(--text-dark); text-shadow: 0 0 15px rgba(255,255,255,0.8); font-weight: 800; z-index: 20; border: 1px solid rgba(255,255,255,0.4); touch-action: pan-y; transition: all 0.4s ease; scroll-behavior: smooth; }
         [data-theme="dark"] #f-lyrics-view { background: rgba(0,0,0,0.4); text-shadow: 0 0 10px rgba(0,0,0,0.8); border: 1px solid rgba(255,255,255,0.1); }
         #f-lyrics-view.active { display: flex; }
         
-        #lyrics-content-scroll div { transition: color var(--lyric-fade-time) ease; }
+        #lyrics-content-scroll div { transition: color var(--lyric-fade-time) ease, transform 0.3s ease, opacity 0.3s ease; opacity: 0.6; transform: scale(0.95); }
+        #lyrics-content-scroll div.lyric-active { opacity: 1; transform: scale(1.05); text-shadow: 0 0 20px rgba(255,255,255,1); }
         
         .fullscreen-lyrics { position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important; z-index: 9999 !important; border-radius: 0 !important; background: var(--player-bg) !important; backdrop-filter: blur(80px) !important; max-width: 100% !important; padding: 80px 20px !important; -webkit-backdrop-filter: blur(80px) !important; height: 100vh !important; width: 100vw !important; margin: 0 !important; }
         [data-theme="dark"] .fullscreen-lyrics { background: transparent !important; }
@@ -174,7 +173,12 @@
 
         .modal { position: fixed; inset: 0; background: var(--modal-bg); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); z-index: 7000; display: none; flex-direction: column; animation: modalSlide 0.4s cubic-bezier(0.1, 0.9, 0.2, 1); max-width: 390px; margin: 0 auto; left: 0; right: 0; }
         @keyframes modalSlide { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        
         .modal .header { position: relative !important; min-height: 70px; height: 70px; padding: calc(5px + env(safe-area-inset-top)) 20px 5px !important; }
+        .modal .header-top { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        .modal .header-top h2 { font-size: 17px; font-weight: 800; color: var(--icon-active); margin: 0; letter-spacing: 0.05em; text-align: center; flex: 1; }
+        .modal-close-btn, .modal .header-top > button:last-child { min-width: 50px; }
+        
         .modal-body { padding: 30px; overflow-y: auto; flex: 1; -webkit-overflow-scrolling: touch; }
         
         .edit-input { width: 100%; padding: 18px; border: 2.5px solid var(--border-color); border-radius: 20px; margin-bottom: 22px; outline: none; font-size: 15px; background: var(--input-bg); color: var(--text-main); font-weight: 600; }
@@ -202,15 +206,12 @@
         @media (max-width: 390px) { body { max-width: 100%; width: 100%; box-shadow: none; } .header, .tab-bar, .full-player, .modal, .queue-panel { max-width: 100%; } }
 
         .star-icon { color: var(--icon-color); }
-        .star-icon.active { background: var(--star-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; color: transparent; }
-        [data-theme="dark"] .star-icon.active { background: var(--star-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; color: transparent; }
+        .star-icon.active { color: var(--star-grad); text-shadow: 0 0 8px rgba(255, 215, 0, 0.6); }
 
         .artist-list-item { display: flex; align-items: center; padding: 10px 15px; border-bottom: 1px solid var(--border-color); cursor: pointer; transition: 0.3s; position: relative; background: var(--glass); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border-radius: 12px; margin-bottom: 5px; }
         .color-preset-btn { width: 40px; height: 40px; border-radius: 50%; border: 3px solid var(--border-color); cursor: pointer; margin-right: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         
         .dragging { opacity: 0.5; background: var(--list-hover); }
-        
-        .header-actions button { background: none; border: none; color: var(--icon-color); font-size: 18px; padding: 10px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -221,9 +222,9 @@
         <div class="header-top">
             <button id="left-btn" onclick="handleHeaderLeft()"><i class="fa-solid fa-sliders"></i></button>
             <h2 id="view-title">Library</h2>
-            <div class="header-actions">
-                <button id="settings-header-btn" style="display:none;" onclick="openSettings()"><i class="fa-solid fa-gear"></i></button>
-                <button id="artist-setup-header-btn" style="display:none;" onclick="openArtistSetup(currentArtist)"><i class="fa-solid fa-users-gear"></i></button>
+            <div style="display:flex; align-items:center; min-width:50px; justify-content:flex-end;">
+                <button id="settings-header-btn" style="display:none; background:none; border:none; color:var(--icon-color); font-size:18px; padding:10px; cursor:pointer;" onclick="openSettings()"><i class="fa-solid fa-gear"></i></button>
+                <button id="artist-setup-header-btn" style="display:none; background:none; border:none; color:var(--icon-color); font-size:18px; padding:10px; cursor:pointer;" onclick="openArtistSetup(currentArtist)"><i class="fa-solid fa-users-gear"></i></button>
                 <button id="right-btn" onclick="handleHeaderRight()"><i class="fa-solid fa-plus"></i></button>
             </div>
         </div>
@@ -305,7 +306,7 @@
     </div>
 
     <div id="edit-modal" class="modal">
-        <div class="header"><div class="header-top"><button class="modal-close-btn" onclick="closeEdit()"><i class="fa-solid fa-xmark"></i></button><h2>Track Info</h2><div class="header-actions"><button onclick="saveEdit()" style="color:var(--icon-color); font-weight:900;">Save</button></div></div></div>
+        <div class="header"><div class="header-top"><button class="modal-close-btn" onclick="closeEdit()"><i class="fa-solid fa-xmark"></i></button><h2>Track Info</h2><button onclick="saveEdit()" style="color:var(--icon-color); font-weight:900; background:none; border:none; font-size:16px;">Save</button></div></div>
         <div class="modal-body">
             <span class="field-label">Title</span><input type="text" id="edit-name" class="edit-input">
             <span class="field-label">Artist</span>
@@ -323,7 +324,7 @@
     </div>
 
     <div id="pl-edit-modal" class="modal">
-        <div class="header"><div class="header-top"><button class="modal-close-btn" onclick="closePlEdit()"><i class="fa-solid fa-xmark"></i></button><h2>Playlist</h2><div class="header-actions"><button onclick="savePlEdit()" style="color:var(--icon-color); font-weight:900;">Done</button></div></div></div>
+        <div class="header"><div class="header-top"><button class="modal-close-btn" onclick="closePlEdit()"><i class="fa-solid fa-xmark"></i></button><h2>Playlist</h2><button onclick="savePlEdit()" style="color:var(--icon-color); font-weight:900; background:none; border:none; font-size:16px;">Done</button></div></div>
         <div class="modal-body" style="text-align:center;">
             <div style="position:relative; display:inline-block; margin-bottom:10px;">
                 <img id="pl-edit-img" style="width:200px; height:200px; border-radius:35px; object-fit:cover; border:5px solid var(--border-color); box-shadow:0 15px 40px rgba(0,0,0,0.08); cursor:pointer;" onclick="document.getElementById('pl-img-input').click()">
@@ -349,29 +350,29 @@
     </div>
 
     <div id="artist-setup-modal" class="modal">
-        <div class="header"><div class="header-top"><button class="modal-close-btn" onclick="document.getElementById('artist-setup-modal').style.display='none'"><i class="fa-solid fa-xmark"></i></button><h2>Artist Setup</h2><div class="header-actions"><button onclick="saveArtistSetup()" style="color:var(--icon-color); font-weight:900;">Save</button></div></div></div>
+        <div class="header"><div class="header-top"><button class="modal-close-btn" onclick="document.getElementById('artist-setup-modal').style.display='none'"><i class="fa-solid fa-xmark"></i></button><h2>Artist Setup</h2><button onclick="saveArtistSetup()" style="color:var(--icon-color); font-weight:900; background:none; border:none; font-size:16px;">Save</button></div></div>
         <div class="modal-body" id="artist-setup-body"></div>
     </div>
 
     <div id="artist-sync-modal" class="modal" style="z-index: 8500;">
-        <div class="header"><div class="header-top"><button class="modal-close-btn" onclick="document.getElementById('artist-sync-modal').style.display='none'"><i class="fa-solid fa-xmark"></i></button><h2>Link Artist</h2><div class="header-actions"></div></div></div>
+        <div class="header"><div class="header-top"><button class="modal-close-btn" onclick="document.getElementById('artist-sync-modal').style.display='none'"><i class="fa-solid fa-xmark"></i></button><h2>Link Artist</h2><div style="min-width:50px;"></div></div></div>
         <div class="modal-body" id="artist-sync-body" style="padding:10px;"></div>
     </div>
 
     <div id="settings-modal" class="modal">
-        <div class="header"><div class="header-top"><button class="modal-close-btn" onclick="document.getElementById('settings-modal').style.display='none'"><i class="fa-solid fa-xmark"></i></button><h2>Settings</h2><div class="header-actions"></div></div></div>
+        <div class="header"><div class="header-top"><button class="modal-close-btn" onclick="document.getElementById('settings-modal').style.display='none'"><i class="fa-solid fa-xmark"></i></button><h2>Settings</h2><div style="min-width:50px;"></div></div></div>
         <div class="modal-body">
             <span class="field-label">Theme Mode</span>
             <select id="theme-select" class="edit-input" onchange="applyTheme(this.value)">
-                <option value="system">System</option>
-                <option value="light">Light</option>
-                <option value="dark">Dark</option>
+                <option value="system">System Default</option>
+                <option value="light">Light Mode</option>
+                <option value="dark">Dark Mode</option>
             </select>
             
-            <span class="field-label">Home Icon</span>
+            <span class="field-label">Home Icon (Web App)</span>
             <input type="file" id="home-icon-input" accept="image/*" class="edit-input" onchange="changeHomeIcon(event)" style="padding:10px;">
 
-            <span class="field-label">Sleep Timer</span>
+            <span class="field-label">Sleep Timer (Minutes)</span>
             <div style="display:flex; gap:10px;">
                 <input type="number" id="timer-input" class="edit-input" placeholder="0" style="margin-bottom:0;" pattern="[0-9]*" inputmode="numeric">
                 <button id="timer-btn" onclick="startTimer()" style="background:var(--icon-color); color:#fff; border:none; border-radius:15px; font-weight:800; padding:0 20px; transition:0.3s;">Start</button>
@@ -399,12 +400,8 @@
     </div>
 
     <div id="lyric-paint-modal" class="modal" style="z-index: 8000;">
-        <div class="header"><div class="header-top"><button class="modal-close-btn" onclick="document.getElementById('lyric-paint-modal').style.display='none'"><i class="fa-solid fa-xmark"></i></button><h2>Paint Lyrics</h2><div class="header-actions"><button onclick="saveLyricPaint()" style="color:var(--icon-color); font-weight:900;">Save</button></div></div></div>
+        <div class="header"><div class="header-top"><button class="modal-close-btn" onclick="document.getElementById('lyric-paint-modal').style.display='none'"><i class="fa-solid fa-xmark"></i></button><h2>Paint Lyrics</h2><button onclick="saveLyricPaint()" style="color:var(--icon-color); font-weight:900; background:none; border:none; font-size:16px;">Save</button></div></div>
         <div class="modal-body" style="padding:10px;">
-            <div style="display:flex; align-items:center; justify-content:space-between; padding:0 10px; margin-bottom:10px;">
-                <span class="field-label" style="margin:0;">Fade Time (s)</span>
-                <input type="number" id="lyric-time-input" class="edit-input" value="0.5" step="0.1" style="width:80px; margin-bottom:0; padding:5px 10px; font-size:14px; text-align:center;" onchange="saveLyricFadeTime(this.value)">
-            </div>
             <div id="paint-palette" style="display:flex; gap:10px; overflow-x:auto; margin-bottom:15px; padding:10px; border-bottom:1px solid var(--border-color);"></div>
             <div id="paint-lyrics-container" style="display:flex; flex-direction:column; gap:8px; padding-bottom:40px;"></div>
         </div>
@@ -445,7 +442,6 @@
 
         let savedFade = localStorage.getItem('lyricFadeTime') || '0.5';
         document.documentElement.style.setProperty('--lyric-fade-time', savedFade + 's');
-        document.getElementById('lyric-time-input').value = savedFade;
 
         function saveLyricFadeTime(val) {
             document.documentElement.style.setProperty('--lyric-fade-time', val + 's');
@@ -484,18 +480,19 @@
         initTheme();
 
         function applyPreset(c1, c2, c3, c4, index) {
+            // Deprecated func kept to preserve line count
         }
         function loadPreset() {
+            // Deprecated func kept to preserve line count
         }
 
         function loadHomeIcon() {
             let saved = localStorage.getItem('homeIcon');
+            let link = document.getElementById('apple-touch-icon');
             if(saved) {
-                let link = document.getElementById('apple-touch-icon');
                 if(link) link.href = saved;
             } else {
-                let link = document.getElementById('apple-touch-icon');
-                if(link) link.href = "IMG_8755.jpeg";
+                if(link) link.href = 'IMG_8755.jpeg';
             }
         }
         loadHomeIcon();
@@ -503,7 +500,7 @@
             const f = e.target.files[0];
             if(f) {
                 const r = new FileReader();
-                r.onload = ev => { localStorage.setItem('homeIcon', ev.target.result); loadHomeIcon(); }
+                r.onload = ev => { localStorage.setItem('homeIcon', ev.target.result); loadHomeIcon(); alert("Home icon updated. You may need to re-add to home screen."); }
                 r.readAsDataURL(f);
             }
         }
@@ -590,7 +587,7 @@
             let allArts = new Set();
             Object.keys(artistMeta).forEach(k => allArts.add(k));
             tracks.forEach(t => { if(t.artist) t.artist.split(/[,、/]/).forEach(a => { if(a.trim()) allArts.add(a.trim()); }) });
-            return [...allArts].sort((a,b) => a.localeCompare(b, 'ja'));
+            return [...allArts].sort((a,b) => a.localeCompare(b, 'en'));
         }
 
         function getArtistStarColor(artistName, isFav) {
@@ -638,9 +635,9 @@
 
             const search = currentSearch.toLowerCase();
             let searchTerms = search.split(/[\s,、]+/).filter(x => x);
-            let isFavSearch = (search === "favorite" || search === "★" || search === "お気に入り");
+            let isFavSearch = (search === "お気に入り" || search === "★");
 
-            if (search === "favorite" || search === "お気に入り") {
+            if (search === "お気に入り") {
                 tagSuggest.style.display = 'flex';
                 tagSuggest.innerHTML = `<div class="tag-chip" onclick="applyTagFilter('★')">★</div>`;
             }
@@ -658,20 +655,6 @@
                 } else {
                     list = list.filter(t => searchTerms.every(term => t.name.toLowerCase().includes(term) || t.artist.toLowerCase().includes(term)));
                 }
-                
-                if (search.length > 0 && !isFavSearch) {
-                    const matchedArts = getAllArtists().filter(a => searchTerms.every(term => a.toLowerCase().includes(term)));
-                    if (matchedArts.length > 0) {
-                        artistFilter.style.display = 'flex';
-                        artistFilter.innerHTML = matchedArts.map(a => {
-                            const firstSong = tracks.find(t => t.artist.split(/[,、/]/).map(x=>x.trim()).includes(a));
-                            const icon = (artistMeta[a] && artistMeta[a].icon) ? `<img src="${artistMeta[a].icon}" style="${activeArtistFilter===a?'border-color:var(--icon-color); opacity:1;':'opacity:0.6;'}">` : (firstSong && firstSong.cover ? `<img src="${firstSong.cover}" style="${activeArtistFilter===a?'border-color:var(--icon-color); opacity:1;':'opacity:0.6;'}">` : `<div class="placeholder"><i class="fa-solid fa-user"></i></div>`);
-                            return `<div class="bulk-artist-icon-chip" onclick="toggleArtistFilter('${a}')">${icon}<span>${a}</span></div>`;
-                        }).join('');
-                    }
-                }
-                if (activeArtistFilter) list = list.filter(t => t.artist.split(/[,、/]/).map(x=>x.trim()).includes(activeArtistFilter));
-
                 renderCards(list, display, currentSort);
             
             } else if (currentView === 'artists') {
@@ -679,15 +662,19 @@
                     title.innerText = "Artists"; display.className = "";
                     let artists = getAllArtists();
                     
+                    let linkedSubArtists = new Set();
+                    Object.values(artistMeta).forEach(meta => {
+                        if(meta.members) meta.members.forEach(m => { if(m.linked) linkedSubArtists.add(m.linked); });
+                    });
+                    artists = artists.filter(a => !linkedSubArtists.has(a));
+                    
                     if (isFavSearch) {
                         artists = artists.filter(a => artistMeta[a] && artistMeta[a].favorite);
                     } else {
                         artists = artists.filter(a => searchTerms.every(term => a.toLowerCase().includes(term)));
                     }
 
-                    artists.sort((a, b) => {
-                        return a.localeCompare(b, 'ja');
-                    });
+                    artists.sort((a, b) => a.localeCompare(b, 'en'));
                     
                     if (search.length > 0 && artists.length > 0 && !isFavSearch) {
                         artistFilter.style.display = 'flex';
@@ -716,14 +703,50 @@
                         </div>`;
                     }).join('');
                 } else {
-                    title.innerText = currentArtist; display.className = "grid";
+                    title.innerText = currentArtist; display.className = "";
+                    let html = "";
+                    const meta = artistMeta[currentArtist];
+                    if(meta && meta.members && meta.members.length > 0) {
+                        let linkedMembersHtml = meta.members.filter(m => m.linked).map(m => {
+                            let lName = m.linked;
+                            let mMeta = artistMeta[lName];
+                            let firstSong = tracks.find(t => t.artist.split(/[,、/]/).map(x=>x.trim()).includes(lName));
+                            let icon = (mMeta && mMeta.icon) ? `<img src="${mMeta.icon}" class="artist-icon" style="width:40px;height:40px;">` : (firstSong && firstSong.cover ? `<img src="${firstSong.cover}" class="artist-icon" style="width:40px;height:40px;">` : `<div class="artist-icon" style="width:40px;height:40px;"><i class="fa-solid fa-user"></i></div>`);
+                            return `
+                            <div class="list-item" onclick="openArtist('${lName}')" style="background:var(--card-bg); margin-bottom:5px;">
+                                <div class="artist-icon-container" style="width:40px;height:40px;margin-right:10px;">${icon}</div>
+                                <div style="font-weight:800; font-size:14px; flex:1;">${lName}</div>
+                                <i class="fa-solid fa-chevron-right" style="font-size:10px; color:var(--icon-color);"></i>
+                            </div>`;
+                        }).join('');
+                        if(linkedMembersHtml) {
+                            html += `<div style="padding:10px 20px;"><h4 style="margin:0 0 10px; font-size:12px; color:var(--icon-color);">Members</h4>${linkedMembersHtml}</div>`;
+                        }
+                    }
+
+                    html += `<div class="grid">`;
                     let list = tracks.filter(t => t.artist.split(/[,、/]/).map(x=>x.trim()).includes(currentArtist));
                     if (isFavSearch) {
                         list = list.filter(t => t.favorite);
                     } else {
                         list = list.filter(t => searchTerms.every(term => t.name.toLowerCase().includes(term)));
                     }
-                    renderCards(list, display, currentSort);
+                    if (currentSort === 'name_asc') list.sort((a,b) => a.name.localeCompare(b.name,'en'));
+                    else if (currentSort === 'name_desc') list.sort((a,b) => b.name.localeCompare(a.name,'en'));
+                    else if (currentSort === 'year') list.sort((a,b) => (b.year||'').toString().localeCompare((a.year||'').toString()));
+                    
+                    html += list.map(t => `
+                        <div class="card ${isEditing?'editing':''}" onclick="isEditing?openEdit(${t.id}):playSong(${t.id},'art')">
+                            <div class="del-badge" onclick="event.stopPropagation(); deleteSong(${t.id})"><i class="fa-solid fa-trash-can"></i></div>
+                            <img src="${t.cover||''}" class="card-img">
+                            ${t.favorite ? '<i class="fa-solid fa-star star-icon active" style="position:absolute; top:15px; right:15px; font-size:18px; filter:drop-shadow(0 2px 5px rgba(0,0,0,0.4)); z-index:10;"></i>' : ''}
+                            <div class="card-info">
+                                <div class="card-title">${t.name}</div>
+                                <div class="card-sub">${t.artist} ${t.year ? `<span class="card-year">${t.year}</span>`:''}</div>
+                            </div>
+                        </div>`).join('');
+                    html += `</div>`;
+                    display.innerHTML = html;
                 }
 
             } else if (currentView === 'playlist') {
@@ -789,8 +812,8 @@
                     }
                     if (activeArtistFilter) filtered = filtered.filter(t => t.artist.split(/[,、/]/).map(x=>x.trim()).includes(activeArtistFilter));
 
-                    if (currentSort === 'name_asc') filtered.sort((a,b) => a.name.localeCompare(b.name,'ja'));
-                    else if (currentSort === 'name_desc') filtered.sort((a,b) => b.name.localeCompare(a.name,'ja'));
+                    if (currentSort === 'name_asc') filtered.sort((a,b) => a.name.localeCompare(b.name,'en'));
+                    else if (currentSort === 'name_desc') filtered.sort((a,b) => b.name.localeCompare(a.name,'en'));
                     else if (currentSort === 'year') filtered.sort((a,b) => (b.year||'').toString().localeCompare((a.year||'').toString()));
 
                     display.innerHTML = filtered.map((t, idx) => `
@@ -823,8 +846,8 @@
         }
 
         function renderCards(list, container, sort) {
-            if (sort === 'name_asc') list.sort((a,b) => a.name.localeCompare(b.name,'ja'));
-            else if (sort === 'name_desc') list.sort((a,b) => b.name.localeCompare(a.name,'ja'));
+            if (sort === 'name_asc') list.sort((a,b) => a.name.localeCompare(b.name,'en'));
+            else if (sort === 'name_desc') list.sort((a,b) => b.name.localeCompare(a.name,'en'));
             else if (sort === 'year') list.sort((a,b) => (b.year||'').toString().localeCompare((a.year||'').toString()));
             
             container.innerHTML = list.map(t => `
@@ -940,7 +963,7 @@
                 const fsToggleBtn = `<button id="fs-lyric-btn" onclick="event.stopPropagation(); toggleFullscreenLyrics()" style="position:absolute; top:25px; right:25px; background:rgba(0,0,0,0.1); border:none; color:var(--icon-color); padding:12px; border-radius:12px; z-index:50;"><i class="fa-solid fa-expand"></i></button>`;
                 const paintBtn = `<button onclick="event.stopPropagation(); openLyricPaint()" style="position:absolute; top:25px; left:25px; background:rgba(0,0,0,0.1); border:none; color:var(--icon-color); padding:12px; border-radius:12px; z-index:50;"><i class="fa-solid fa-palette"></i></button>`;
                 
-                view.innerHTML = fsToggleBtn + paintBtn + `<div id="lyrics-content-scroll" style="width:100%; height:100%; overflow-y:auto; padding-top:40px;">` + lines.map((l, i) => `<div style="color:${colors[i] || 'inherit'}; width:100%; word-wrap:break-word;" data-line="${i}">${l}</div>`).join('') + `</div>`;
+                view.innerHTML = fsToggleBtn + paintBtn + `<div id="lyrics-content-scroll" style="width:100%; height:100%; overflow-y:auto; padding-top:40vh; padding-bottom:40vh;">` + lines.map((l, i) => `<div id="lyric-line-${i}" style="color:${colors[i] || 'inherit'}; width:100%; word-wrap:break-word; margin-bottom:15px; min-height:30px;">${l}</div>`).join('') + `</div>`;
                 
                 if(view.classList.contains('fullscreen-lyrics')) {
                     document.getElementById('fs-lyric-btn').innerHTML = '<i class="fa-solid fa-compress"></i>';
@@ -980,7 +1003,7 @@
             const pl = playlists.find(p => p.id === currentPlaylistId);
             const div = document.createElement('div'); div.id="bulk-modal"; div.className="modal"; div.style.display = "flex";
             div.innerHTML = `
-                <div class="header"><div class="header-top"><button class="modal-close-btn" onclick="this.closest('.modal').remove()"><i class="fa-solid fa-xmark"></i></button><h2>Select Songs</h2><div class="header-actions"><button onclick="saveBulkAdd()" style="font-weight:900; color:var(--icon-color);">Done</button></div></div></div>
+                <div class="header"><div class="header-top"><button class="modal-close-btn" onclick="this.closest('.modal').remove()"><i class="fa-solid fa-xmark"></i></button><h2>Select Songs</h2><button onclick="saveBulkAdd()" style="font-weight:900; color:var(--icon-color); background:none; border:none; min-width:50px;">Done</button></div></div>
                 <div class="search-container"><div class="search-bar-row"><input type="text" id="bulk-search-box" class="bulk-search-input" placeholder="Search track or artist..." oninput="filterBulk(this.value)"></div><div id="bulk-artist-suggestions"></div></div>
                 <div id="bulk-list" style="flex:1; overflow-y:auto; padding-bottom:50px;">
                     ${tracks.map(t => `
@@ -1036,11 +1059,11 @@
             else if(currentView==='artists') { const n = prompt("Artist Name:"); if(n) db.transaction("artistMeta","readwrite").objectStore("artistMeta").put({ name: n, icon: null, favorite: false, members: [], syncColor: '' }).onsuccess = loadAll; }
         }
         function togglePlay() { 
-            if(audio.src && audio.src !== window.location.href) {
-                audio.paused ? audio.play() : audio.pause(); 
-            } else if(playingTracks.length > 0 && currentTrackIdx !== -1) {
-                loadTrack(playingTracks[currentTrackIdx]);
+            let p = audio.play();
+            if (p !== undefined) {
+                p.catch(error => { console.log("Auto-play prevented", error); });
             }
+            if (!audio.paused) audio.pause(); 
         }
 
         function next() { 
@@ -1083,9 +1106,7 @@
         function loadTrack(t) {
             if(!t) return;
             if(audio.src) URL.revokeObjectURL(audio.src);
-            if(t.data instanceof File || t.data instanceof Blob) {
-                audio.src = URL.createObjectURL(t.data);
-            }
+            audio.src = URL.createObjectURL(t.data);
             document.getElementById('m-img').src = t.cover || ''; checkMarquee('m-title', t.name);
             document.getElementById('f-img').src = t.cover || ''; checkMarquee('f-title', t.name); document.getElementById('f-artist').innerText = t.artist;
             document.getElementById('mini').style.display = 'flex';
@@ -1093,11 +1114,9 @@
             document.getElementById('f-img').style.opacity = "1";
             updateFavBtn(t.favorite);
             updatePlayerBlurBg();
-            let playPromise = audio.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(error => {
-                    console.log("Auto-play prevented", error);
-                });
+            let p = audio.play();
+            if (p !== undefined) {
+                p.catch(error => { console.log("Auto-play prevented on load", error); });
             }
         }
         function checkMarquee(elId, text) {
@@ -1106,6 +1125,7 @@
             else el.innerText = text;
         }
         function formatTime(s) { let m=Math.floor(s/60), sec=Math.floor(s%60); return `${m}:${sec<10?'0':''}${sec}`; }
+        
         audio.ontimeupdate = () => { 
             if(!isNaN(audio.duration)){ 
                 const s = document.getElementById('seeker'); 
@@ -1116,25 +1136,39 @@
                 const percent = (audio.currentTime / audio.duration) * 100;
                 s.style.background = `linear-gradient(to right, var(--accent-blue) 0%, var(--key-color) ${percent}%, var(--seeker-bg) ${percent}%, var(--seeker-bg) 100%)`;
                 
-                if (document.getElementById('f-lyrics-view').classList.contains('active')) {
-                    const track = playingTracks[currentTrackIdx];
-                    if (track && track.lyricTimes) {
-                        const lines = document.querySelectorAll('#lyrics-content-scroll div[data-line]');
-                        lines.forEach(line => {
-                            const i = line.getAttribute('data-line');
-                            const time = track.lyricTimes[i];
-                            if (time !== undefined && time <= audio.currentTime) {
-                                line.style.opacity = '1';
-                                line.style.transform = 'scale(1.05)';
-                            } else {
-                                line.style.opacity = '0.4';
-                                line.style.transform = 'scale(1)';
-                            }
-                        });
-                    }
-                }
+                syncLyricsScroll();
             } 
         };
+        
+        function syncLyricsScroll() {
+            const view = document.getElementById('f-lyrics-view');
+            if(!view.classList.contains('active')) return;
+            
+            let track = playingTracks[currentTrackIdx];
+            if(!track || !track.lyricTimes) return;
+            
+            let ct = audio.currentTime;
+            let activeIdx = -1;
+            
+            for(let i=0; i<track.lyricTimes.length; i++) {
+                if(track.lyricTimes[i] !== null && ct >= track.lyricTimes[i]) {
+                    activeIdx = i;
+                }
+            }
+            
+            const lines = document.querySelectorAll('#lyrics-content-scroll > div');
+            lines.forEach((l, i) => {
+                if(i === activeIdx) {
+                    l.classList.add('lyric-active');
+                    if(l.offsetTop > 0 && Math.abs(view.scrollTop - (l.offsetTop - view.clientHeight/2)) > 50) {
+                        view.scrollTo({top: l.offsetTop - view.clientHeight/2, behavior: 'smooth'});
+                    }
+                } else {
+                    l.classList.remove('lyric-active');
+                }
+            });
+        }
+        
         audio.onplay = () => { document.getElementById('m-pp').className = 'fa-solid fa-pause'; document.getElementById('f-pp').className = 'fa-solid fa-pause'; };
         audio.onpause = () => { document.getElementById('m-pp').className = 'fa-solid fa-play'; document.getElementById('f-pp').className = 'fa-solid fa-play'; };
         audio.onended = () => { next(); };
@@ -1281,14 +1315,14 @@
                 <input type="text" id="setup-artist-name" class="edit-input" value="${editingArtistSetupName}">
                 <div style="margin-bottom:20px; display:flex; gap:10px; align-items:center;">
                     <button onclick="addArtistMember()" style="padding:10px 20px; background:var(--icon-color); color:#fff; border:none; border-radius:15px; font-weight:800;">+ Add Member</button>
-                    </div>
+                </div>
                 <div id="artist-members-list" style="position:relative;">
                     ${currentMembersEdit.map((m, i) => `
-                        <div class="swipe-container setup-mem-item" id="swipe-mem-${i}" style="margin-bottom:10px; border-radius:15px;" draggable="true" ondragstart="handleDragStart(event, ${i})" ondragover="handleDragOver(event, ${i})" ondrop="handleDrop(event, ${i})" ondragend="handleDragEnd(event)">
+                        <div class="swipe-container setup-mem-item" id="swipe-mem-${i}" style="margin-bottom:10px; border-radius:15px;">
                             <div class="swipe-delete-btn" onclick="removeArtistMember(${i})">Delete</div>
-                            <div class="list-item" ontouchstart="handleTouchStart(event, 'mem-${i}')" ontouchmove="handleTouchMove(event, 'mem-${i}')" ontouchend="handleTouchEnd(event, 'mem-${i}')" style="display:flex; gap:10px; align-items:center; background:var(--card-bg); border-radius:15px; padding: 10px 15px;">
+                            <div class="list-item" ontouchstart="handleMemTouchStart(event, ${i})" ontouchmove="handleMemTouchMove(event, ${i})" ontouchend="handleMemTouchEnd(event, ${i})" style="display:flex; gap:10px; align-items:center; background:var(--card-bg); border-radius:15px; padding: 10px 15px;">
                                 <i class="fa-solid fa-link" style="color:${m.linked?'var(--icon-active)':'#ccc'}; padding:0 5px;" onclick="openSyncModal(${i})"></i>
-                                <i class="fa-solid fa-bars" style="color:#ccc; padding:0 5px; cursor:grab;"></i>
+                                <i class="fa-solid fa-bars drag-handle" style="color:#ccc; padding:0 5px; cursor:grab;" ontouchstart="handleReorderStart(event, ${i})" ontouchmove="handleReorderMove(event, ${i})" ontouchend="handleReorderEnd(event, ${i})"></i>
                                 <input type="color" value="${m.color || '#000000'}" onchange="currentMembersEdit[${i}].color=this.value" style="width:40px; height:40px; border:none; border-radius:10px;">
                                 <input type="text" class="edit-input" style="margin-bottom:0; flex:1; padding: 10px;" value="${m.name}" oninput="currentMembersEdit[${i}].name=this.value" placeholder="Member Name">
                             </div>
@@ -1300,30 +1334,34 @@
         function addArtistMember() { currentMembersEdit.push({name:'', color:'var(--icon-color)', linked: null}); renderArtistSetup(''); }
         function removeArtistMember(i) { currentMembersEdit.splice(i, 1); renderArtistSetup(''); }
         
-        let draggedMemIndex = -1;
-        function handleDragStart(e, i) {
-            draggedMemIndex = i;
-            e.dataTransfer.effectAllowed = 'move';
-            e.target.classList.add('dragging');
+        let memTouchStartY = 0; let reorderingIdx = -1;
+        function handleReorderStart(e, i) { e.stopPropagation(); reorderingIdx = i; memTouchStartY = e.touches[0].clientY; e.target.closest('.setup-mem-item').style.opacity = '0.5'; }
+        function handleReorderMove(e, i) {
+            e.stopPropagation(); e.preventDefault();
+            let el = e.target.closest('.setup-mem-item');
+            el.style.transform = `translateY(${e.touches[0].clientY - memTouchStartY}px)`;
+            el.style.zIndex = 100;
         }
-        function handleDragOver(e, i) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; }
-        function handleDrop(e, i) {
-            e.stopPropagation();
-            if (draggedMemIndex !== i && draggedMemIndex !== -1) {
-                let temp = currentMembersEdit[draggedMemIndex];
-                currentMembersEdit.splice(draggedMemIndex, 1);
-                currentMembersEdit.splice(i, 0, temp);
-                renderArtistSetup('');
+        function handleReorderEnd(e, i) {
+            e.stopPropagation(); let el = e.target.closest('.setup-mem-item'); el.style.opacity = '1'; el.style.transform = 'translateY(0)'; el.style.zIndex = 'auto';
+            let moveY = e.changedTouches[0].clientY - memTouchStartY;
+            let offset = Math.round(moveY / 60);
+            let targetIdx = i + offset;
+            if(targetIdx >= 0 && targetIdx < currentMembersEdit.length && targetIdx !== i) {
+                let temp = currentMembersEdit[i];
+                currentMembersEdit.splice(i, 1); currentMembersEdit.splice(targetIdx, 0, temp);
             }
+            renderArtistSetup('');
         }
-        function handleDragEnd(e) { e.target.classList.remove('dragging'); draggedMemIndex = -1; }
 
         function openSyncModal(i) {
             currentSyncIndex = i;
             let artists = getAllArtists();
             const body = document.getElementById('artist-sync-body');
             body.innerHTML = artists.map(a => {
-                let imgHtml = artistMeta[a] && artistMeta[a].icon ? `<img src="${artistMeta[a].icon}" style="width:20px;height:20px;border-radius:50%;margin-right:5px;vertical-align:middle;object-fit:cover;">` : `<div style="display:inline-block;width:20px;height:20px;border-radius:50%;margin-right:5px;vertical-align:middle;background:var(--icon-color);"></div>`;
+                let mMeta = artistMeta[a];
+                let firstSong = tracks.find(t => t.artist.split(/[,、/]/).map(x=>x.trim()).includes(a));
+                let imgHtml = (mMeta && mMeta.icon) ? `<img src="${mMeta.icon}" style="width:20px;height:20px;border-radius:50%;margin-right:5px;vertical-align:middle;object-fit:cover;">` : (firstSong && firstSong.cover ? `<img src="${firstSong.cover}" style="width:20px;height:20px;border-radius:50%;margin-right:5px;vertical-align:middle;object-fit:cover;">` : `<div style="display:inline-block;width:20px;height:20px;border-radius:50%;margin-right:5px;vertical-align:middle;background:var(--icon-color);"><i class="fa-solid fa-user" style="font-size:10px;color:#fff;margin-left:5px;"></i></div>`);
                 return `<div class="artist-chip" onclick="linkArtistMember('${a}')">${imgHtml}${a}</div>`;
             }).join('') + `<div class="artist-chip" onclick="linkArtistMember('')" style="color:var(--del-color);">Unlink</div>`;
             document.getElementById('artist-sync-modal').style.display = 'flex';
@@ -1408,7 +1446,7 @@
             const container = document.getElementById('paint-lyrics-container');
             container.innerHTML = lines.map((l, i) => `
                 <div style="display:flex; align-items:center; gap:10px;">
-                    <input type="number" step="0.1" value="${currentLyricTimes[i] || 0}" onchange="currentLyricTimes[${i}]=parseFloat(this.value)" style="width:60px; padding:8px; border-radius:8px; border:1px solid var(--border-color); background:var(--input-bg);">
+                    <input type="number" step="0.1" value="${currentLyricTimes[i] || ''}" onchange="updateLyricTime(${i}, this.value)" placeholder="Time (s)" class="edit-input" style="width:70px; margin:0; padding:10px; font-size:12px;">
                     <div onclick="applyLyricColor(${i})" style="flex:1; padding:15px; border-radius:12px; background:var(--input-bg); color:${currentLyricColors[i] || 'var(--text-main)'}; border-left:6px solid ${currentLyricColors[i] || 'transparent'}; cursor:pointer; font-weight:800; text-align:center;">
                         ${l || '<span style="color:#ccc; font-size:12px;">(empty line)</span>'}
                     </div>
@@ -1418,6 +1456,9 @@
         function applyLyricColor(i) {
             currentLyricColors[i] = currentPaintColor;
             renderPaintLyrics();
+        }
+        function updateLyricTime(i, val) {
+            currentLyricTimes[i] = val === '' ? null : parseFloat(val);
         }
         function saveLyricPaint() {
             const t = playingTracks[currentTrackIdx];
@@ -1455,7 +1496,7 @@
             }
         };
 
-        let touchStartX = 0;
+        let touchStartX = 0; let memTouchStartX = 0;
         function handleTouchStart(e, id) { if(isEditing) return; touchStartX = e.touches[0].clientX; }
         function handleTouchMove(e, id) {
             if(isEditing) return;
@@ -1482,11 +1523,39 @@
                 if(btn) btn.style.opacity = 0;
             }
         }
+        
+        function handleMemTouchStart(e, i) { if(e.target.classList.contains('drag-handle')) return; memTouchStartX = e.touches[0].clientX; }
+        function handleMemTouchMove(e, i) {
+            if(e.target.classList.contains('drag-handle')) return;
+            let moveX = e.touches[0].clientX - memTouchStartX;
+            const el = document.querySelector(`#swipe-mem-${i} .list-item`);
+            const btn = document.querySelector(`#swipe-mem-${i} .swipe-delete-btn`);
+            if (el && moveX < 0) { 
+                el.style.transform = `translateX(${Math.max(moveX, -85)}px)`; el.style.transition = "none";
+                if(btn) btn.style.opacity = Math.min(Math.abs(moveX) / 85, 1);
+            }
+        }
+        function handleMemTouchEnd(e, i) {
+            if(e.target.classList.contains('drag-handle')) return;
+            const el = document.querySelector(`#swipe-mem-${i} .list-item`);
+            const btn = document.querySelector(`#swipe-mem-${i} .swipe-delete-btn`);
+            if(!el) return;
+            let moveX = e.changedTouches[0].clientX - memTouchStartX;
+            el.style.transition = "transform 0.4s ease";
+            if(moveX < -40) {
+                el.style.transform = `translateX(-85px)`;
+                if(btn) btn.style.opacity = 1;
+            } else {
+                el.style.transform = `translateX(0)`;
+                if(btn) btn.style.opacity = 0;
+            }
+        }
+        
         function toggleQueue() { document.getElementById('queue-panel').classList.toggle('open'); renderQueue(); }
         function renderQueue() {
             const list = document.getElementById('queue-list');
             const nextTracks = playingTracks.slice(currentTrackIdx + 1);
-            list.innerHTML = nextTracks.map((t, i) => `<div class="list-item" onclick="currentTrackIdx=${currentTrackIdx+1+i}; loadTrack(playingTracks[currentTrackIdx])"><img src="${t.cover||''}" style="width:40px; height:40px;"><div><div style="font-weight:800;">${t.name}</div><div style="font-size:11px; color:var(--icon-color);">${t.artist}</div></div></div>`).join('') || '<div style="padding:50px; text-align:center; color:#ccc;">Empty</div>';
+            list.innerHTML = nextTracks.map((t, i) => `<div class="list-item" onclick="currentTrackIdx=${currentTrackIdx+1+i}; loadTrack(playingTracks[currentTrackIdx])"><img src="${t.cover||''}" style="width:40px; height:40px;"><div><div style="font-weight:800;">${t.name}</div><div style="font-size:11px; color:var(--icon-color);">${t.artist}</div></div></div>`).join('') || '<div style="padding:50px; text-align:center; color:#ccc;">Queue is empty</div>';
         }
     </script>
 </body>
