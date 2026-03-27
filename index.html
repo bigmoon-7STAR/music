@@ -307,10 +307,12 @@ body {
     gap: 4px;
     cursor: pointer;
     animation: fadeIn 0.3s ease;
-    padding: 5px 10px;
+    padding: 4px 10px 4px 4px;
     background: var(--card-bg);
     border-radius: 16px;
     border: 1px solid var(--border-color);
+    min-haght: 32px;
+    wigth: fit-content;
 }
 
 .bulk-artist-icon-chip img,
@@ -318,6 +320,7 @@ body {
     width: 10px;
     height: 10px;
     flex-shrink: 0;
+    aspect-ratio: 1 / 1;
     border-radius: 50%;
     object-fit: cover;
     background: var(--grad-primary);
