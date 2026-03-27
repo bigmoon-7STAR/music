@@ -302,28 +302,23 @@ body {
 
 .bulk-artist-icon-chip {
     flex-shrink: 0;
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 8px;
     cursor: pointer;
     animation: fadeIn 0.3s ease;
-    padding: 2px 10px 2px 2px;
+    padding: 5px 10px;
     background: var(--card-bg);
     border-radius: 20px;
     border: 1px solid var(--border-color);
-    height: 26px;
-    width: auto;
-    min-width: max-content;
 }
 
 .bulk-artist-icon-chip img,
 .bulk-artist-icon-chip .placeholder {
-    width: 12px;
-    height: 12px;
-    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
     object-fit: cover;
-    margin: 0 !important;
     background: var(--grad-primary);
     border: 1px solid var(--border-color);
     transition: 0.3s;
@@ -331,18 +326,17 @@ body {
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 8px;
-    overflow: hidden;
+    font-size: 10px;
 }
 
 .bulk-artist-icon-chip span {
-    font-size: 9px;
+    font-size: 11px;
     font-weight: 800;
     color: var(--icon-color);
+    max-width: 80px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    line-height: 1;
 }
 
 .view-container {
@@ -1895,12 +1889,8 @@ body {
         }
         
         function openArtist(n) {
-            currentArtist = n
-            currentView = 'artists,;
-            document.getElementById('search-input').value = ''; 
-            searchQueries.artistTracks = ''; 
+            currentArtist = n;
             render();
-            window.scrollTo(0, 0);
         }
 
         function handleHeaderLeft() {
