@@ -302,30 +302,30 @@ body {
 
 .bulk-artist-icon-chip {
     flex-shrink: 0;
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 4px;
+    gap: 8px;
     cursor: pointer;
     animation: fadeIn 0.3s ease;
-    padding: 2px 8px 2px 2px;
+    padding: 4px 12px 4px 4px;
     background: var(--card-bg);
-    border-radius: 12px;
+    border-radius: 20px;
     border: 1px solid var(--border-color);
-    height: 24px;
+    height: 32px;
     width: fit-content;
 }
 
 .bulk-artist-icon-chip img,
-.bulk-artist-icon-chip .placeholder {
-    width: 20px;
-    height: 20px;
+.bulk-artist-icon-chip .artist-icon-child
+.bulk-artist-icon-chip .artist-icon-parent{
+    width: 24px;
+    height: 24px;
     flex-shrink: 0;
-    aspect-ratio: 1 / 1;
     border-radius: 50%;
     object-fit: cover;
+    margin: 0 !important;
     background: var(--grad-primary);
     border: 1px solid var(--border-color);
-    display: block;
     transition: 0.3s;
     display: flex;
     align-items: center;
@@ -335,14 +335,14 @@ body {
 }
 
 .bulk-artist-icon-chip span {
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 800;
     color: var(--icon-color);
     max-width: 60px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    line-hight: 1;
+    line-height: 1;
 }
 
 .view-container {
